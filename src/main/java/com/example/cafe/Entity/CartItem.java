@@ -20,19 +20,14 @@ public class CartItem {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
-    @JsonBackReference
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Drink drink;
 
     @Column(name = "quantity")
     private Integer quantity;
-
-    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<CartItemTopping> cartItemToppings;
 
 }

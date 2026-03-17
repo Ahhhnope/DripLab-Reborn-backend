@@ -19,7 +19,6 @@ public class CartItemTopping {
 
     @ManyToOne
     @JoinColumn(name = "cart_item_id", referencedColumnName = "id")
-    @JsonBackReference
     private CartItem cartItem;
 
     @ManyToOne
