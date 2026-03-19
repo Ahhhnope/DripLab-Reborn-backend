@@ -36,34 +36,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart addItem(Integer userId, Integer drinkId, Integer quantity, List<Integer> toppingIDList) {
-        // get dat cart
+        //find the correct cart
         Cart cart = getCartByUserId(userId);
 
-        //find dat drink
-        Drink drink = drinkRepository.findById(drinkId).orElseThrow(() -> new CustomResourceNotFound("Drink not found ;-;"));
-
-        //*boom* -> a cart item
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setDrink(drink);
-        cartItem.setQuantity(quantity);
-
-        //check for toppings
-        if (toppingIDList != null && !toppingIDList.isEmpty()) {
-            for (int topping : toppingIDList) {
-                CartItemTopping cit = new CartItemTopping();
-                cit.setCartItem(cartItem);
-                cit.setTopping(toppingRepository.findById(topping).get());
-
-                cartItem.getCartItemToppings().add(cit);
-
-                cartItemToppingsRepository.save(cit);
-            }
-        }
+        Drink drink =
 
 
-        cartItemRepository.save(cartItem);
-        return cart;
+        return null;
     }
 
     @Override
