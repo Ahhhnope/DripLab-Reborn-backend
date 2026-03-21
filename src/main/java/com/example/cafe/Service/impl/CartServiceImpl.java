@@ -21,13 +21,17 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private final CartItemRepository cartItemRepository;
-
     @Autowired
     private final DrinkRepository drinkRepository;
     @Autowired
     private ToppingRepository toppingRepository;
     @Autowired
     private CartItemToppingsRepository cartItemToppingsRepository;
+
+    @Override
+    public List<Cart> getAllCarts() {
+        return cartRepository.findAll();
+    }
 
     @Override
     public Cart getCartByUserId(int userID) {
