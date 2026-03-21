@@ -67,12 +67,27 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart updateItem(Integer cartItemId, Integer quantity) {
-        return null;
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CustomResourceNotFound("Cart item not found: " + cartItemId));
+
+        cartItem.setQuantity(quantity);
+        cartItemRepository.save(cartItem);
+
+        return cartRepository.findByUserId(cartItem.getCart().getUser().getId());
     }
 
     @Override
     public Cart removeItem(Integer cartItemId) {
-        return null;
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CustomResourceNotFound("Cart item not found: " + cartItemId));
+
+        Integer userId = cartItem.getCart().getUser().getId();
+
+        // Delete toppings first (FK constraint)
+        cartItemToppingsRepository.deleteByCartItemId(cartItemId);
+        cartItemRepository.deleteById(cartItemId);
+
+        return cartRepository.findByUserId(userId);
     }
 
     @Override

@@ -18,12 +18,6 @@ public class CartController {
     @Autowired
     private final CartService cartService;
 
-    @Autowired
-    private final CartRepository cartRepository;
-
-    @Autowired
-    private final CartItemRepository cartItemRepository;
-
     @GetMapping("/{userID}")
     public ResponseEntity<Cart> getCart(@PathVariable Integer userID) {
         return new ResponseEntity<>(cartService.getCartByUserId(userID), HttpStatus.OK);
@@ -34,6 +28,16 @@ public class CartController {
     @PostMapping("/add")
     public ResponseEntity<Cart> addCartItem(@RequestBody CartItemRequest cartItemReq) {
         Cart cart = cartService.addItem(cartItemReq.getUserId(), cartItemReq.getDrinkId(), cartItemReq.getQuantity(), cartItemReq.getToppings());
-        return ResponseEntity.status(HttpStatus.CREATED).body(cart);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Cart> updateCartItem(@PathVariable Integer id, @RequestParam Integer quantity) {
+        return new ResponseEntity<>(cartService.updateItem(id, quantity), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Cart> deleteCartItem(@PathVariable Integer id) {
+        return new ResponseEntity<>(cartService.removeItem(id), HttpStatus.OK);
     }
 }
