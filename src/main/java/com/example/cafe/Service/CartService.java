@@ -1,5 +1,6 @@
 package com.example.cafe.Service;
 
+import com.example.cafe.DTO.CartItemRequest;
 import com.example.cafe.Entity.Cart;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface CartService {
 
     Cart addItem(Integer userId, Integer drinkId, Integer quantity, List<Integer> toppingIDList);
 
-    Cart updateItem(Integer cartItemId, Integer quantity);
+    Cart updateItem(Integer cartItemId, CartItemRequest cartItemRequest);
 
     Cart removeItem(Integer cartItemId);
 

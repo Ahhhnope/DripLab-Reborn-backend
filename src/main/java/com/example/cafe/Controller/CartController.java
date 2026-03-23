@@ -46,8 +46,8 @@ public class CartController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Cart> updateCartItem(@PathVariable Integer id, @RequestParam Integer quantity) {
-        return new ResponseEntity<>(cartService.updateItem(id, quantity), HttpStatus.OK);
+    public ResponseEntity<Cart> updateCartItem(@PathVariable Integer id, @RequestBody CartItemRequest cartItemRequest) {
+        return new ResponseEntity<>(cartService.updateItem(id, cartItemRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")

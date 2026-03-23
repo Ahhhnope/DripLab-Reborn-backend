@@ -1,5 +1,6 @@
 package com.example.cafe.Service.impl;
 
+import com.example.cafe.DTO.CartItemRequest;
 import com.example.cafe.Entity.Cart;
 import com.example.cafe.Entity.CartItem;
 import com.example.cafe.Entity.CartItemTopping;
@@ -10,7 +11,9 @@ import com.example.cafe.Service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,13 +72,30 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findByUserId(userId);
     }
 
+    @Transactional
     @Override
-    public Cart updateItem(Integer cartItemId, Integer quantity) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new CustomResourceNotFound("Cart item not found: " + cartItemId));
+    public Cart updateItem(Integer cartItemId, CartItemRequest cartItemRequest) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new CustomResourceNotFound("CartItem not found: " + cartItemId));
 
-        cartItem.setQuantity(quantity);
+        cartItem.setQuantity(cartItemRequest.getQuantity());
         cartItemRepository.save(cartItem);
+
+        // "update" toppings (more like replacing it lmao)
+
+        cartItemToppingsRepository.deleteByCartItemId((cartItemId)); // <-- require a @Transactional
+
+        List<Integer> newToppingIDList = cartItemRequest.getToppings();
+        if (newToppingIDList != null && !newToppingIDList.isEmpty()) {
+            for (Integer toppingID : newToppingIDList) {
+                toppingRepository.findById(toppingID).map(t -> {
+                    CartItemTopping cit = new CartItemTopping();
+                    cit.setCartItem(cartItem);
+                    cit.setTopping(t);
+
+                    return cit;
+                });
+            }
+        }
 
         return cartRepository.findByUserId(cartItem.getCart().getUser().getId());
     }
