@@ -30,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Order createOrder(Integer userID, String note) {
+
+        // Takes out all items in cart into a list
         Cart cart = cartRepository.findByUserId(userID);
         List<CartItem> items = cartItemRepository.findByCartId(cart.getId());
 
@@ -37,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomResourceNotFound("Cart is empty");
         }
 
-        // calc
+        // calc (Takes the price of the list of cart items above and crunch it all)
         double originalPrice = 0;
         for (CartItem item : items) {
 
