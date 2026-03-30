@@ -47,7 +47,11 @@ public class Order {
     @Column(name = "final_price")
     private Float finalPrice;
 
+    @Column(name = "note")
     private String note;
+
+    @Column(name = "status")
+    private String status;
 
     @Column(name = "created_at")
     private LocalDate createdAt;

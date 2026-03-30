@@ -100,6 +100,7 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findByUserId(cartItem.getCart().getUser().getId());
     }
 
+    @Transactional
     @Override
     public Cart removeItem(Integer cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
