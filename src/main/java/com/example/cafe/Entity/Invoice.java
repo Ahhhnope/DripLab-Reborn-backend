@@ -57,7 +57,7 @@ public class Invoice {
     private LocalDate createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     @ManyToOne

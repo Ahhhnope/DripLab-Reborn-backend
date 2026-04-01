@@ -8,28 +8,24 @@ import com.example.cafe.Entity.Drink;
 import com.example.cafe.Exception.CustomResourceNotFound;
 import com.example.cafe.Repository.*;
 import com.example.cafe.Service.CartService;
+import com.example.cafe.Service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
-    @Autowired
     private final CartRepository cartRepository;
-
-    @Autowired
     private final CartItemRepository cartItemRepository;
-    @Autowired
     private final DrinkRepository drinkRepository;
-    @Autowired
-    private ToppingRepository toppingRepository;
-    @Autowired
-    private CartItemToppingsRepository cartItemToppingsRepository;
+    private final ToppingRepository toppingRepository;
+    private final CartItemToppingRepository cartItemToppingsRepository;
+    private final OrderService orderService;
+
 
     @Override
     public List<Cart> getAllCarts() {
@@ -54,14 +50,15 @@ public class CartServiceImpl implements CartService {
         cartItem.setCart(cart);
         cartItem.setDrink(drink);
         cartItem.setQuantity(quantity);
-        cartItemRepository.save(cartItem);
+
+        CartItem savedCartItem = cartItemRepository.save(cartItem);
 
         // Add toppings if exist :o
-        if (toppingIDList != null && !toppingIDList.isEmpty()) {
+        if (toppingIDList != null) {
             for (Integer toppingId : toppingIDList) {
                 toppingRepository.findById(toppingId).ifPresent(topping -> {
                     CartItemTopping cit = new CartItemTopping();
-                    cit.setCartItem(cartItem);
+                    cit.setCartItem(savedCartItem);
                     cit.setTopping(topping);
                     cartItemToppingsRepository.save(cit);
                 });
@@ -76,23 +73,22 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart updateItem(Integer cartItemId, CartItemRequest cartItemRequest) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new CustomResourceNotFound("CartItem not found: " + cartItemId));
-
         cartItem.setQuantity(cartItemRequest.getQuantity());
-        cartItemRepository.save(cartItem);
+
+        CartItem savedCartItem = cartItemRepository.save(cartItem);
 
         // "update" toppings (more like replacing it lmao)
 
-        cartItemToppingsRepository.deleteByCartItemId((cartItemId)); // <-- require a @Transactional
+        cartItemToppingsRepository.deleteByCartItemId((cartItemId)); // <-- require a @Transactional lmao
 
         List<Integer> newToppingIDList = cartItemRequest.getToppings();
-        if (newToppingIDList != null && !newToppingIDList.isEmpty()) {
+        if (newToppingIDList != null) {
             for (Integer toppingID : newToppingIDList) {
-                toppingRepository.findById(toppingID).map(t -> {
+                toppingRepository.findById(toppingID).ifPresent(t -> {
                     CartItemTopping cit = new CartItemTopping();
-                    cit.setCartItem(cartItem);
+                    cit.setCartItem(savedCartItem);
                     cit.setTopping(t);
-
-                    return cit;
+                    cartItemToppingsRepository.save(cit);
                 });
             }
         }
@@ -117,7 +113,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void checkout(Integer userId) {
-
+        orderService.createOrder(userId, "Order from POS");
     }
 
 

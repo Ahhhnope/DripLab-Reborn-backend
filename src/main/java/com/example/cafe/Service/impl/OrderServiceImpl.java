@@ -17,10 +17,15 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderItemToppingRepository orderItemToppingsRepository;
+    private final InvoiceRepository invoiceRepository;
+
     private final CartRepository cartRepository;
-    private final CartItemToppingsRepository cartItemToppingsRepository;
+    private final CartItemToppingRepository cartItemToppingsRepository;
     private final CustomerRepository customerRepository;
     private final CartItemRepository cartItemRepository;
+    private final DrinkRepository drinkRepository;
 
     @Override
     public List<Order> getAllOrders() {
@@ -30,50 +35,60 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Order createOrder(Integer userID, String note) {
+        //Boi this is long asf
 
         // Takes out all items in cart into a list
         Cart cart = cartRepository.findByUserId(userID);
-        List<CartItem> items = cartItemRepository.findByCartId(cart.getId());
+        List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
 
-        if (items == null || items.isEmpty()) {
-            throw new CustomResourceNotFound("Cart is empty");
+        if (cartItems == null || cartItems.isEmpty()) {
+            throw new CustomResourceNotFound("Le cart is empty bruv");
         }
+
+        // Check if we have enough drinks in stock
+        for (CartItem cartItem : cartItems) {
+            if (cartItem.getDrink().getQuantity() < cartItem.getQuantity()) {
+                throw new CustomResourceNotFound("Insufficient stock for: " + cartItem.getDrink().getName() + " (Available: " + cartItem.getDrink().getQuantity() + ")");
+            }
+        }
+
 
         // calc (Takes the price of the list of cart items above and crunch it all)
-        double originalPrice = 0;
-        for (CartItem item : items) {
+        float originalPrice = 0;
+        for (CartItem cartItem : cartItems) {
+            float drinkPrice = cartItem.getDrink().getBasePrice();
+            List<CartItemTopping> toppings = cartItemToppingsRepository.findByCartItemId(cartItem.getId());
 
-            double itemPrice = item.getDrink().getBasePrice() * item.getQuantity();
-            List<CartItemTopping> toppings = cartItemToppingsRepository.findByCartItemId(item.getId());
-
+            // total drink price + total topping price
             for (CartItemTopping cit : toppings) {
-                itemPrice += cit.getTopping().getPrice() * item.getQuantity();
+                drinkPrice += cit.getTopping().getPrice();
             }
 
-            originalPrice += itemPrice;
+            originalPrice += (drinkPrice * cartItem.getQuantity());
         }
 
-        //Tax evasion typeshit
-        double taxAmount = originalPrice * 0.1;
-        double shippingFee = 0;
-        double discountAmount = 0;
+        // Tax evasion 100
+        double taxAmount = originalPrice * 0.1; // nuuuuu you can't avoid tax :)
+        double shippingFee = 0; // for now its just a POS system so no shipping fee ;-;
+        double discountAmount = 0; // no discount system yet ;-;
+
         double finalPrice = originalPrice + taxAmount + shippingFee - discountAmount;
 
-        // COMBINE IT ALL INTO ONE
+        // Put on all the infinity stones (damn that's a lot ;-;)
         Order order = new Order();
-        order.setOrderNumber((int)(System.currentTimeMillis() % 1000000));
+        order.setOrderNumber((int)(System.currentTimeMillis() % 1000000)); // random stuff ;-;
         order.setOrderDate(LocalDate.now());
         order.setCreatedAt(LocalDate.now());
         order.setUpdatedAt(LocalDate.now());
         order.setNote(note);
         order.setStatus("Chưa giải quyết");
-        order.setOriginalPrice((float) originalPrice);
+        order.setOriginalPrice(originalPrice);
         order.setTaxAmount((float) taxAmount);
         order.setShippingFee((float) shippingFee);
         order.setDiscountAmount((float) discountAmount);
         order.setFinalPrice((float) finalPrice);
 
-        // Link customer if exists
+        // Save customer on to ze order if there's any
         Customer customer = customerRepository.findByUserId(userID);
         if (customer != null) {
             order.setCustomer(customer);
@@ -82,16 +97,78 @@ public class OrderServiceImpl implements OrderService {
             order.setCustomerAddress(customer.getDefaultAddress());
         }
 
-        orderRepository.save(order);
+        // save that boi to get the ID for below
+        Order savedOrder = orderRepository.save(order);
 
-        // Clear cart
-        for (CartItem item : items) {
-            cartItemToppingsRepository.deleteByCartItemId(item.getId());
+
+
+        // Save the items for when displaying orders
+        for (CartItem cartItem : cartItems) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(savedOrder);
+            orderItem.setDrink(cartItem.getDrink());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setBasePriceAtPurchase(cartItem.getDrink().getBasePrice());
+
+            // same thing as savedOrder
+            OrderItem savedOrderItem = orderItemRepository.save(orderItem);
+
+            // Update quantity of drinks
+            Drink tempDrink = cartItem.getDrink();
+            tempDrink.setQuantity(tempDrink.getQuantity() - cartItem.getQuantity());
+            drinkRepository.save(tempDrink);
+
+            // Save le toppings to orderItemToppings table
+            List<CartItemTopping> toppings = cartItemToppingsRepository.findByCartItemId(cartItem.getId());
+            for (CartItemTopping cit : toppings) {
+                OrderItemTopping orderItemTopping = new OrderItemTopping();
+                orderItemTopping.setOrderItem(savedOrderItem);
+                orderItemTopping.setTopping(cit.getTopping());
+                orderItemTopping.setBasePriceAtPurchase(cit.getTopping().getPrice());
+
+                orderItemToppingsRepository.save(orderItemTopping);
+            }
         }
-        cartItemRepository.deleteAll(items);
+
+        // Clear all current cart_items from cart
+        cartItemRepository.deleteAll(cartItems);
+        for (CartItem cartItem : cartItems) {
+            cartItemToppingsRepository.deleteByCartItemId(cartItem.getId());
+        }
 
         return order;
     }
+
+    @Transactional
+    public Invoice generateInvoice(Order order) {
+        Invoice invoice = new Invoice();
+
+        invoice.setOrder(order);
+
+        // use "random bullshit go" for that unique invoice number
+        invoice.setInvoiceNumber((int)(System.currentTimeMillis() % 1000000));
+
+        invoice.setInvoiceDate(LocalDate.now());
+        invoice.setOriginalPrice(order.getOriginalPrice());
+        invoice.setTaxAmount(order.getTaxAmount());
+        invoice.setShippingFee(order.getShippingFee());
+        invoice.setDiscountAmount(order.getDiscountAmount());
+        invoice.setFinalPrice(order.getFinalPrice());
+
+        // customer stuff
+        invoice.setCustomerName(order.getCustomerName());
+        invoice.setCustomerPhone(order.getCustomerPhone());
+        invoice.setCustomerAddress(order.getCustomerAddress());
+
+        // payment status
+        invoice.setPaymentMethod("Tiền mặt"); // or momo idk
+        invoice.setPaymentStatus("Đã trả");
+
+        return invoiceRepository.save(invoice);
+    }
+
+
+
 
     @Override
     public Order getOrderById(Integer orderId) {

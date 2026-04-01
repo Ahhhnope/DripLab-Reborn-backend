@@ -21,18 +21,23 @@ public class DrinkController {
         return new ResponseEntity<>(drinkRepository.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @GetMapping("/{id}")
+    public ResponseEntity<Drink> getDrinkById(@PathVariable int id) {
+        return new ResponseEntity<>(drinkRepository.findById(id).get(), HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
     public Drink addDrink(@RequestBody Drink drink) {
         return drinkRepository.save(drink);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Drink updateDrink(@PathVariable Integer id, @RequestBody Drink drink) {
         drink.setId(id);
         return drinkRepository.save(drink);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/remove/{id}")
     public void deleteDrink(@PathVariable Integer id) {
         drinkRepository.deleteById(id);
     }
