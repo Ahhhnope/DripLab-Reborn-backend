@@ -12,8 +12,9 @@ create table users (
 	id int identity(1,1) primary key,
 	full_name nvarchar(50),
 	email varchar(50),
-	password nvarchar(50),
-	phone varchar(10)
+	password nvarchar(max),
+	phone varchar(10),
+	avatar nvarchar(max)
 );
 
 create table customers (
@@ -186,9 +187,11 @@ insert into workers (full_name, account, password) values
 (N'americano', 'abc123', 'lmao'),
 (N'robusta', 'kikiki', 'lol')
 
-insert into users (full_name, email, password, phone) values
-('admin', 'admin@gmail.com', '12345', '0123456789'),
-('POS system', 'posSystem@gmail.com', 'lmaoPOS', null)
+
+
+insert into users (full_name, email, password, phone, avatar) values
+('admin', 'admin@gmail.com', '12345a', '0123456789', N'nah'),
+('POS system', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'no')
 
 insert into customers (full_name, loyalty_point, default_address, date_of_birth, phone, user_id) values
 ('admin', 200000000, '*default address*', '2024-11-21', '0123457689', 1),
@@ -196,7 +199,6 @@ insert into customers (full_name, loyalty_point, default_address, date_of_birth,
 
 insert into carts (user_id) values ('2')
 -- 2 là hệ thống POS
-
 
 
 insert into instructions (name, instructions) values
@@ -241,7 +243,8 @@ WHERE cart_id = (SELECT id FROM carts WHERE user_id = 2);
 select * from carts
 select * from drinks
 select * from milks
-
+select * from users
 select * from orders
 select ci1_0.id,ci1_0.cart_id,ci1_0.product_id,ci1_0.quantity from cart_items ci1_0 where ci1_0.cart_id=1
 
+select u1_0.id,u1_0.avatar,u1_0.email,u1_0.full_name,u1_0.password,u1_0.phone from users u1_0 where u1_0.email='posSystem@gmail.com'

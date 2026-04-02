@@ -42,7 +42,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     private Class<? extends BaseIngredient> getEntityClass(String type) {
         return switch (type) {
-            case "beans" -> CoffeeBean.class;
+            case "coffee-beans" -> CoffeeBean.class;
             case "milk" -> Milk.class;
             case "creams" -> HeavyCream.class;
             case "ice-creams" -> IceCream.class;

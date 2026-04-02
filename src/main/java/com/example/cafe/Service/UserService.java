@@ -16,5 +16,6 @@ public interface UserService {
     UserResponse delete(Integer id);
     UserResponse login(LoginRequest req);
 
-
+    User findByEmail(String email);
+    UserResponse add(User user);
 }
