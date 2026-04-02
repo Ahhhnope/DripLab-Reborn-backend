@@ -1,7 +1,7 @@
 package com.example.cafe.Controller;
 
 
-import com.example.cafe.Entity.Order;
+import com.example.cafe.Entity.Order.Order;
 import com.example.cafe.Service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

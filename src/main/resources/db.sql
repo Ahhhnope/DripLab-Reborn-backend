@@ -3,10 +3,9 @@ go
 use CafeDB
 go
 
---use master
---go
---drop database CafeDB
-
+--USE master;
+--ALTER DATABASE CafeDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+--DROP DATABASE CafeDB;
 
 ------------------------------------------
 create table users (
@@ -28,6 +27,14 @@ create table customers (
 	user_id int foreign key references users (id)
 );
 
+create table workers (
+    id int identity(1,1) primary key,
+    full_name nvarchar(50) not null,
+    account varchar(50) not null unique,
+    password nvarchar(50) not null,
+    created_at date default getdate()
+);
+
 create table promo_codes (
 	id int identity(1,1) primary key,
 	name nvarchar(50),
@@ -36,23 +43,72 @@ create table promo_codes (
 );
 
 
-
 -------------------------------------------
+create table toppings (
+	id int identity(1,1) primary key,
+	name nvarchar(50) not null,
+	price float not null default 0,
+	quantity int,
+	created_at date default getdate()
+);
+
+create table coffee_beans (
+	id int primary key identity(1,1),
+	name nvarchar(255) not null,
+	price float not null default 0,
+	quantity int,
+	created_at date default getdate()
+);
+
+create table milks (
+	id int primary key identity(1,1),
+	name nvarchar(255) not null,
+	price float not null default 0,
+	quantity int,
+	created_at date default getdate()
+);
+
+create table heavy_creams (
+	id int primary key identity(1,1),
+	name nvarchar(255) not null,
+	price float not null default 0,
+	quantity int,
+	created_at date default getdate()
+);
+
+create table ice_creams (
+	id int primary key identity(1,1),
+	name nvarchar(255) not null,
+	price float not null default 0,
+	quantity int,
+	created_at date default getdate()
+);
+
+create table instructions (
+	id int primary key identity(1,1),
+	name nvarchar(255) not null,
+	instructions nvarchar(max),
+	created_at date default getdate()
+);
+
 create table drinks (
 	id int identity(1,1) primary key,
 	name nvarchar(50),
+	category nvarchar(50) default N'Cà phê',
+	
+	coffee_bean_id int foreign key references coffee_beans (id),
+	milk_id int foreign key references milks (id),
+	heavy_cream_id int foreign key references heavy_creams (id),
+	ice_cream_id int foreign key references ice_creams (id),
+	instruction_id int foreign key references instructions (id),
+	
 	description nvarchar(50),
 	base_price float,
-	quantity int,
-	image_url nvarchar(max)
+	image_url nvarchar(max),
+	active bit default 1
 );
 
-create table toppings (
-	id int identity(1,1) primary key,
-	name nvarchar(50),
-	price float
-);
-
+-------------------------------------------
 create table carts (
 	id int identity(1,1) primary key,
 	user_id int unique foreign key references users (id)
@@ -126,6 +182,10 @@ create table invoices (
 	customer_id int foreign key references customers (id)
 );
 -------------------------------------------
+insert into workers (full_name, account, password) values
+(N'americano', 'abc123', 'lmao'),
+(N'robusta', 'kikiki', 'lol')
+
 insert into users (full_name, email, password, phone) values
 ('admin', 'admin@gmail.com', '12345', '0123456789'),
 ('POS system', 'posSystem@gmail.com', 'lmaoPOS', null)
@@ -135,13 +195,32 @@ insert into customers (full_name, loyalty_point, default_address, date_of_birth,
 ('POS system', 0, '*restaurant address*', null, null, 2)
 
 insert into carts (user_id) values ('2')
+-- 2 là hệ thống POS
 
-insert into drinks (name, description, base_price, quantity, image_url) values
-('Matcha Tea', null, 45000, 100, N'/IMG/tên_ảnh.png'),
-('Tea 1', null, 25000, 100, N'/IMG/tên_ảnh.png'),
-('Tea 2', null, 35000, 100, N'/IMG/tên_ảnh.png'),
-('Tea 3', null, 45000, 100, N'/IMG/tên_ảnh.png'),
-('Tea 4', null, 55000, 100, N'/IMG/tên_ảnh.png')
+
+
+insert into instructions (name, instructions) values
+(N'Pha Máy', N'Chiết xuất Espresso tiêu chuẩn 30ml'),
+(N'Pha Phin', N'Ủ 2 phút với 20ml nước, sau đó rót thêm 40ml'),
+(N'Ủ Lạnh', N'Ủ bột cà phê trong nước lạnh 16 tiếng')
+
+insert into coffee_beans (name, price, quantity) values
+(N'Arabica Highland', 0, 500),
+(N'Robusta Special', 0, 500)
+
+insert into heavy_creams (name, price, quantity) values 
+(N'Kem Béo Rich', 0, 50);
+
+insert into milks (name, price, quantity, created_at) values 
+(N'Sữa Đặc Larosee', 0, 100, GETDATE()),
+(N'Sữa Tươi Vinamilk', 0, 100, GETDATE());
+
+insert into drinks (name, category, base_price, active, image_url, coffee_bean_id, instruction_id, milk_id) values
+(N'Matcha Latte', N'Trà', 45000, 1, N'/IMG/matcha.png', null, null, 2),
+(N'Trà Đào', N'Trà', 25000, 1, N'/IMG/tra-dao.png', null, null, null),
+(N'Cà Phê Sữa Đá', N'Cà phê', 35000, 1, N'/IMG/cf-sua.png', 2, 2, 1),
+(N'Cà Phê Muối', N'Cà phê', 45000, 1, N'/IMG/cf-muoi.png', 1, 1, 1),
+(N'Bạc Xỉu', N'Cà phê', 55000, 1, N'/IMG/bac-xiu.png', 2, 1, 1)
 
 insert into toppings (name, price) values
 (N'Trân châu đen', 5000),
@@ -151,15 +230,18 @@ insert into toppings (name, price) values
 (N'Kem béo', 6000),
 (N'Whipping cream', 8000)
 
+
 insert into orders (order_number, customer_name, customer_phone, customer_address, original_price, discount_amount, shipping_fee, tax_amount, final_price, note, customer_id) values
 ('1', 'customer name', '0123456789', 'customer address', 260000, 0, 20000, 26000, (260000-20000-26000), 'this is a test lmao', 1)
 
 select * FROM cart_items 
 WHERE cart_id = (SELECT id FROM carts WHERE user_id = 2);
 
-select * from orders
 
 select * from carts
 select * from drinks
+select * from milks
+
 select * from orders
 select ci1_0.id,ci1_0.cart_id,ci1_0.product_id,ci1_0.quantity from cart_items ci1_0 where ci1_0.cart_id=1
+

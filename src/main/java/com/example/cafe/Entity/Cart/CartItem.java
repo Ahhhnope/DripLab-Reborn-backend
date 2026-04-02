@@ -1,5 +1,6 @@
-package com.example.cafe.Entity;
+package com.example.cafe.Entity.Cart;
 
+import com.example.cafe.Entity.Drink.Drink;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

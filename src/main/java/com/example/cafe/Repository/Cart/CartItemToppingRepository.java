@@ -1,6 +1,6 @@
-package com.example.cafe.Repository;
+package com.example.cafe.Repository.Cart;
 
-import com.example.cafe.Entity.CartItemTopping;
+import com.example.cafe.Entity.Cart.CartItemTopping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

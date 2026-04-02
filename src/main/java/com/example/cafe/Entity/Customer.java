@@ -33,6 +33,9 @@ public class Customer {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

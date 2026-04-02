@@ -1,10 +1,9 @@
 package com.example.cafe.Controller;
 
 import com.example.cafe.DTO.CartItemRequest;
-import com.example.cafe.Entity.Cart;
-import com.example.cafe.Entity.CartItem;
-import com.example.cafe.Repository.CartItemRepository;
-import com.example.cafe.Repository.CartRepository;
+import com.example.cafe.Entity.Cart.Cart;
+import com.example.cafe.Entity.Cart.CartItem;
+import com.example.cafe.Repository.Cart.CartItemRepository;
 import com.example.cafe.Service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

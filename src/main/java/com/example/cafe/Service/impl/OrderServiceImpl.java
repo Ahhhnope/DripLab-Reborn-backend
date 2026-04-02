@@ -1,8 +1,31 @@
 package com.example.cafe.Service.impl;
 
 import com.example.cafe.Entity.*;
+import com.example.cafe.Entity.Cart.Cart;
+import com.example.cafe.Entity.Cart.CartItem;
+import com.example.cafe.Entity.Cart.CartItemTopping;
+import com.example.cafe.Entity.Drink.Ingredient.CoffeeBean;
+import com.example.cafe.Entity.Drink.Ingredient.HeavyCream;
+import com.example.cafe.Entity.Drink.Ingredient.IceCream;
+import com.example.cafe.Entity.Drink.Ingredient.Milk;
+import com.example.cafe.Entity.Order.Order;
+import com.example.cafe.Entity.Order.OrderItem;
+import com.example.cafe.Entity.Order.OrderItemTopping;
+import com.example.cafe.Entity.Drink.Drink;
 import com.example.cafe.Exception.CustomResourceNotFound;
 import com.example.cafe.Repository.*;
+import com.example.cafe.Repository.Cart.CartItemRepository;
+import com.example.cafe.Repository.Cart.CartItemToppingRepository;
+import com.example.cafe.Repository.Cart.CartRepository;
+import com.example.cafe.Repository.Drink.Ingredient.CoffeeBeanRepository;
+import com.example.cafe.Repository.Drink.Ingredient.HeavyCreamRepository;
+import com.example.cafe.Repository.Drink.Ingredient.IceCreamRepository;
+import com.example.cafe.Repository.Drink.Ingredient.MilkRepository;
+import com.example.cafe.Repository.Drink.InstructionRepository;
+import com.example.cafe.Repository.Order.OrderItemRepository;
+import com.example.cafe.Repository.Order.OrderItemToppingRepository;
+import com.example.cafe.Repository.Order.OrderRepository;
+import com.example.cafe.Repository.Drink.DrinkRepository;
 import com.example.cafe.Service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +48,13 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemToppingRepository cartItemToppingsRepository;
     private final CustomerRepository customerRepository;
     private final CartItemRepository cartItemRepository;
+
     private final DrinkRepository drinkRepository;
+    private final CoffeeBeanRepository coffeeBeanRepository;
+    private final MilkRepository milkRepository;
+    private final HeavyCreamRepository heavyCreamRepository;
+    private final IceCreamRepository iceCreamRepository;
+    private final InstructionRepository instructionRepository;
 
     @Override
     public List<Order> getAllOrders() {
@@ -45,17 +74,10 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomResourceNotFound("Le cart is empty bruv");
         }
 
-        // Check if we have enough drinks in stock
-        for (CartItem cartItem : cartItems) {
-            if (cartItem.getDrink().getQuantity() < cartItem.getQuantity()) {
-                throw new CustomResourceNotFound("Insufficient stock for: " + cartItem.getDrink().getName() + " (Available: " + cartItem.getDrink().getQuantity() + ")");
-            }
-        }
-
-
-        // calc (Takes the price of the list of cart items above and crunch it all)
+        // calc (Takes the price of the ingredients inside each cart items above and crunch ze numbers)
         float originalPrice = 0;
         for (CartItem cartItem : cartItems) {
+
             float drinkPrice = cartItem.getDrink().getBasePrice();
             List<CartItemTopping> toppings = cartItemToppingsRepository.findByCartItemId(cartItem.getId());
 
@@ -104,6 +126,44 @@ public class OrderServiceImpl implements OrderService {
 
         // Save the items for when displaying orders
         for (CartItem cartItem : cartItems) {
+
+            //check quantity for ingredients -> if nothing's wrong then deduct quantity
+            Drink drink = cartItem.getDrink();
+            int quantity = cartItem.getQuantity();
+
+            if (drink.getCategory().equalsIgnoreCase("Cà phê")) {
+                if (drink.getCoffeeBean().getQuantity() < quantity) throw new CustomResourceNotFound("Hết hạt cà phê: "+drink.getCoffeeBean().getName());
+
+                CoffeeBean coffeeBean = drink.getCoffeeBean();
+                coffeeBean.setQuantity(coffeeBean.getQuantity() - quantity);
+                coffeeBeanRepository.save(coffeeBean);
+            }
+            if (drink.getMilk() != null) {
+                if (drink.getMilk().getQuantity() < quantity) throw new CustomResourceNotFound("Hết sữa: "+drink.getMilk().getName());
+
+                Milk milk = drink.getMilk();
+                milk.setQuantity(milk.getQuantity() - quantity);
+                milkRepository.save(milk);
+            }
+            if (drink.getHeavyCream() != null) {
+                if (drink.getHeavyCream().getQuantity() < quantity) throw new CustomResourceNotFound("Hết kem béo: " + drink.getHeavyCream().getName());
+
+                HeavyCream heavyCream = drink.getHeavyCream();
+                heavyCream.setQuantity(heavyCream.getQuantity() - quantity);
+                heavyCreamRepository.save(heavyCream);
+            }
+            if (drink.getIceCream() != null) {
+                if (drink.getIceCream().getQuantity() < quantity) throw new CustomResourceNotFound("Hết kem lạnh: " + drink.getIceCream().getName());
+
+                IceCream iceCream = drink.getIceCream();
+                iceCream.setQuantity(iceCream.getQuantity() - quantity);
+                iceCreamRepository.save(iceCream);
+            }
+
+            //that's alot of checking ;-;
+            //anyway if it passes all lat then we ball
+
+
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(savedOrder);
             orderItem.setDrink(cartItem.getDrink());
@@ -113,10 +173,6 @@ public class OrderServiceImpl implements OrderService {
             // same thing as savedOrder
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
 
-            // Update quantity of drinks
-            Drink tempDrink = cartItem.getDrink();
-            tempDrink.setQuantity(tempDrink.getQuantity() - cartItem.getQuantity());
-            drinkRepository.save(tempDrink);
 
             // Save le toppings to orderItemToppings table
             List<CartItemTopping> toppings = cartItemToppingsRepository.findByCartItemId(cartItem.getId());

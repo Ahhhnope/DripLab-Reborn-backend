@@ -1,4 +1,5 @@
-package com.example.cafe.Entity;
+package com.example.cafe.Entity.Order;
+import com.example.cafe.Entity.Drink.Topping;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

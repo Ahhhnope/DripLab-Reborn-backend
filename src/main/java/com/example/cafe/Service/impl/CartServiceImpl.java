@@ -1,16 +1,19 @@
 package com.example.cafe.Service.impl;
 
 import com.example.cafe.DTO.CartItemRequest;
-import com.example.cafe.Entity.Cart;
-import com.example.cafe.Entity.CartItem;
-import com.example.cafe.Entity.CartItemTopping;
-import com.example.cafe.Entity.Drink;
+import com.example.cafe.Entity.Cart.Cart;
+import com.example.cafe.Entity.Cart.CartItem;
+import com.example.cafe.Entity.Cart.CartItemTopping;
+import com.example.cafe.Entity.Drink.Drink;
 import com.example.cafe.Exception.CustomResourceNotFound;
-import com.example.cafe.Repository.*;
+import com.example.cafe.Repository.Cart.CartItemRepository;
+import com.example.cafe.Repository.Cart.CartItemToppingRepository;
+import com.example.cafe.Repository.Cart.CartRepository;
+import com.example.cafe.Repository.Drink.DrinkRepository;
+import com.example.cafe.Repository.Drink.ToppingRepository;
 import com.example.cafe.Service.CartService;
 import com.example.cafe.Service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +47,11 @@ public class CartServiceImpl implements CartService {
 
         //find the correct drink
         Drink drink = drinkRepository.findById(drinkId).orElseThrow(() -> new CustomResourceNotFound("Drink not found: " + drinkId));
+
+        //check if the drink is "active"
+        if (!drink.isActive()) {
+            throw new CustomResourceNotFound("Đồ uống này hiện không có trong thực đơn");
+        }
 
         //combine into a CartItem
         CartItem cartItem = new CartItem();

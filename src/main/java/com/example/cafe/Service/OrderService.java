@@ -1,6 +1,6 @@
 package com.example.cafe.Service;
 
-import com.example.cafe.Entity.Order;
+import com.example.cafe.Entity.Order.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
