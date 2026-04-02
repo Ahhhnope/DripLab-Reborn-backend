@@ -192,7 +192,8 @@ public class OrderServiceImpl implements OrderService {
             cartItemToppingsRepository.deleteByCartItemId(cartItem.getId());
         }
 
-        return order;
+        generateInvoice(savedOrder);
+        return savedOrder;
     }
 
     @Transactional

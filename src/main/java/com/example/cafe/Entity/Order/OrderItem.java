@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "order_items")
 @Data
@@ -16,7 +18,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
@@ -29,4 +31,7 @@ public class OrderItem {
 
     @Column(name = "base_price_at_purchase")
     private Float basePriceAtPurchase;
+
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemTopping> orderItemToppings;
 }
