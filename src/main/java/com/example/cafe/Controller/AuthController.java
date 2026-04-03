@@ -1,67 +1,60 @@
-package com.example.cafe.Controller;
-
-import com.example.cafe.DTO.LoginRequest;
-import com.example.cafe.DTO.UserRequest;
-import com.example.cafe.DTO.UserResponse;
-import com.example.cafe.Entity.User;
-import com.example.cafe.Exception.CustomResourceNotFound;
-import com.example.cafe.Security.JwtUtils;
-import com.example.cafe.Service.UserService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+//package com.example.cafe.Controller;
+//
+//import com.example.cafe.DTO.LoginRequest;
+//import com.example.cafe.DTO.UserRequest;
+//import com.example.cafe.DTO.UserResponse;
+//import com.example.cafe.Entity.User;
+//import com.example.cafe.Exception.CustomResourceNotFound;
+//import com.example.cafe.Repository.UserRepository;
+//import com.example.cafe.Security.JwtService;
+//import com.example.cafe.Service.UserService;
+//import jakarta.validation.Valid;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.ResponseEntity;
 //import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.HashMap;
+//import java.util.Map;
+//
 //@RestController
 //@RequestMapping("/api/auth")
-//@RequiredArgsConstructor
-public class AuthController {
-//    private final JwtUtils jwtUtils;
-//    private final UserService userService;
-//    private final PasswordEncoder passwordEncoder;
+//public class AuthController {
+//
+//    @Autowired
+//    private JwtService jwtService; // Ensure you have your JWT Service set up
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private UserRepository userRepository;
 //
 //    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-//        // 1. Find user in Database
-//        User user = userService.findByEmail(loginRequest.getEmail());
+//    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+//        String email = request.get("email");
+//        String password = request.get("password");
 //
-//        if (user == null) {
-//            throw new CustomResourceNotFound("Không tìm thấy email: " + loginRequest.getEmail());
+//        // 1. Find user by email in DB
+//        User user = userRepository.findByEmail(email)
+//                .orElse(null);
+//
+//        // 2. Check if user exists AND password matches
+//        // Note: We use passwordEncoder.matches(raw, encoded) because DB passwords should be hashed!
+//        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+//
+//            String token = jwtService.generateToken(user.getEmail());
+//
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("token", token);
+//            response.put("user", Map.of(
+//                    "fullName", user.getFullName(),
+//                    "email", user.getEmail(),
+//                    "role", user.getRole() // Good for your Gate Boiz!
+//            ));
+//
+//            return ResponseEntity.ok(response);
 //        }
 //
-//        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-//            throw new RuntimeException("Mật khẩu sai");
-//        }
-//
-//        String token = jwtUtils.generateToken(user.getFullName());
-//
-//        return ResponseEntity.ok(new UserResponse(
-//                user.getFullName(),
-//                user.getEmail(),
-//                user.getAvatar(),
-//                user.getPhone(),
-//                token
-//        ));
+//        return ResponseEntity.status(401).body(Map.of("message", "Email hoặc mật khẩu không chính xác"));
 //    }
-//
-//    @PostMapping("/register")
-//    public ResponseEntity<?> register(@Valid @RequestBody UserRequest userRequest) {
-//        if (userService.findByEmail(userRequest.getEmail()) != null) {
-//            throw new RuntimeException("Email đã được sử dụng!");
-//        }
-//
-//        User user = new User();
-//        user.setFullName(userRequest.getFullName());
-//        user.setEmail(userRequest.getEmail());
-//        user.setPhone(userRequest.getPhone());
-//        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-//        user.setAvatar("default-avatar.png");
-//
-//        UserResponse response = userService.add(user);
-//        return ResponseEntity.ok(response);
-//    }
-}
+//}

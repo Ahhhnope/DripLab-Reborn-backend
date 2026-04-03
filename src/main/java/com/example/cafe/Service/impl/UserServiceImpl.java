@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse login(LoginRequest req) {
 
-            User user = userRepository.findByEmail(req.getEmail());
+            User user = userRepository.findByEmail(req.getEmail()).orElseThrow(() -> new CustomResourceNotFound("Không tìm thấy: "+req.getEmail()));
 
             if(user == null){
                 throw new RuntimeException("User not found");
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElseThrow( () -> new CustomResourceNotFound("Không tìm thấy user với email: "+email));
     }
 
     @Override

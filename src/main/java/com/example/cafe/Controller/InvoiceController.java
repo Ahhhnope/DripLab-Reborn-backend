@@ -33,4 +33,13 @@ public class InvoiceController {
     public ResponseEntity<Invoice> getInvoiceByOrderId(@PathVariable int id) {
         return new ResponseEntity<>(invoiceRepository.findByOrderId(id), HttpStatus.OK);
     }
+
+    @GetMapping("/number/{invoiceNumber}")
+    public ResponseEntity<Invoice> getByInvoiceNumber(@PathVariable int invoiceNumber) {
+        return new ResponseEntity<>(
+                invoiceRepository.findByInvoiceNumber(invoiceNumber)
+                        .orElseThrow(() -> new CustomResourceNotFound("Không tìm thấy hóa đơn: " + invoiceNumber)),
+                HttpStatus.OK
+        );
+    }
 }
