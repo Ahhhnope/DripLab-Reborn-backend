@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -99,9 +100,9 @@ public class OrderServiceImpl implements OrderService {
         // Put on all the infinity stones (damn that's a lot ;-;)
         Order order = new Order();
         order.setOrderNumber((int)(System.currentTimeMillis() % 1000000)); // random stuff ;-;
-        order.setOrderDate(LocalDate.now());
-        order.setCreatedAt(LocalDate.now());
-        order.setUpdatedAt(LocalDate.now());
+        order.setOrderDate(LocalDateTime.now());
+        order.setCreatedAt(LocalDateTime.now());
+        order.setUpdatedAt(LocalDateTime.now());
         order.setNote(note);
         order.setStatus("Chưa giải quyết");
         order.setOriginalPrice(originalPrice);
@@ -112,12 +113,7 @@ public class OrderServiceImpl implements OrderService {
 
         // Save customer on to ze order if there's any
         Customer customer = customerRepository.findByUserId(userID);
-        if (customer != null) {
-            order.setCustomer(customer);
-            order.setCustomerName(customer.getFullName());
-            order.setCustomerPhone(customer.getPhone());
-            order.setCustomerAddress(customer.getDefaultAddress());
-        }
+        if (customer != null) order.setCustomer(customer);
 
         // save that boi to get the ID for below
         Order savedOrder = orderRepository.save(order);
@@ -212,14 +208,8 @@ public class OrderServiceImpl implements OrderService {
         invoice.setDiscountAmount(order.getDiscountAmount());
         invoice.setFinalPrice(order.getFinalPrice());
 
-        // customer stuff
-        invoice.setCustomerName(order.getCustomerName());
-        invoice.setCustomerPhone(order.getCustomerPhone());
-        invoice.setCustomerAddress(order.getCustomerAddress());
-
         // payment status
         invoice.setPaymentMethod("Tiền mặt"); // or momo idk
-        invoice.setPaymentStatus("Đã trả");
 
         return invoiceRepository.save(invoice);
     }
@@ -238,7 +228,7 @@ public class OrderServiceImpl implements OrderService {
     public Order updateOrderStatus(Integer orderId, String status) {
         Order order = getOrderById(orderId);
         order.setStatus(status);
-        order.setUpdatedAt(LocalDate.now());
+        order.setUpdatedAt(LocalDateTime.now());
         return orderRepository.save(order);
     }
 

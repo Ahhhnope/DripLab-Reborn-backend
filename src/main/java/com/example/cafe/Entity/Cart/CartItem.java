@@ -1,6 +1,7 @@
 package com.example.cafe.Entity.Cart;
 
 import com.example.cafe.Entity.Drink.Drink;
+import com.example.cafe.Entity.Drink.Size;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class CartItem {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "size_id", referencedColumnName = "id")
+    private Size size;
 
     @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

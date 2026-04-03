@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "milks")
+@Table(name = "ice_creams")
 @Data
 public class IceCream extends BaseIngredient{
 }

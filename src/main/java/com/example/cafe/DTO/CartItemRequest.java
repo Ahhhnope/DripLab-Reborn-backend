@@ -13,5 +13,8 @@ public class CartItemRequest {
     private Integer userId;
     private Integer drinkId;
     private Integer quantity;
+    private Integer sizeId;
     private List<Integer> toppings;
+
+    //ze payload
 }

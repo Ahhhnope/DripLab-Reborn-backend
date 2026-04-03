@@ -34,6 +34,11 @@ public class Drink {
     @Column(name = "image_url")
     private String imageUrl;
 
+    //deleting with so many foreign key is a pain in the ass so...
+    //just don't delete it ;-;
+    @Column(name = "active")
+    private Boolean active = true;
+
     //damn, that's a lot of keys...
     @ManyToOne
     @JoinColumn(name = "coffee_bean_id", referencedColumnName = "id")
@@ -54,9 +59,4 @@ public class Drink {
     @ManyToOne
     @JoinColumn(name = "instruction_id", referencedColumnName = "id")
     private Instruction instruction;
-
-    //deleting with so many foreign key is a pain in the ass so...
-    //just don't delete it ;-;
-    @Column(name = "active")
-    private boolean active = true;
 }

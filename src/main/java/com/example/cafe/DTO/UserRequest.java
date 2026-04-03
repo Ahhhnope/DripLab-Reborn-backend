@@ -19,5 +19,7 @@ public class UserRequest {
     private String phone;
     @NotNull(message = "Error")
     private String password;
+    @Size(max = 50, message = "pls keep it under 50 characters")
+    private String defaultAddress;
     private String avatar;
 }

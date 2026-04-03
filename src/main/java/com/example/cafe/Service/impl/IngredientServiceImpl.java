@@ -43,8 +43,8 @@ public class IngredientServiceImpl implements IngredientService {
     private Class<? extends BaseIngredient> getEntityClass(String type) {
         return switch (type) {
             case "coffee-beans" -> CoffeeBean.class;
-            case "milk" -> Milk.class;
-            case "creams" -> HeavyCream.class;
+            case "milks" -> Milk.class;
+            case "heavy-creams" -> HeavyCream.class;
             case "ice-creams" -> IceCream.class;
             case "toppings" -> Topping.class;
             default -> throw new IllegalArgumentException("Unknown type: " + type);

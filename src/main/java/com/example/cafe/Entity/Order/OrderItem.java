@@ -1,6 +1,7 @@
 package com.example.cafe.Entity.Order;
 
 import com.example.cafe.Entity.Drink.Drink;
+import com.example.cafe.Entity.Drink.Size;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,11 +27,16 @@ public class OrderItem {
     @JoinColumn(name = "drink_id", referencedColumnName = "id")
     private Drink drink;
 
+    @ManyToOne
+    @JoinColumn(name = "size_id", referencedColumnName = "id")
+    private Size size;
+
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "base_price_at_purchase")
     private Float basePriceAtPurchase;
+
 
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemTopping> orderItemToppings;

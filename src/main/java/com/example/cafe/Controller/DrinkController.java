@@ -24,7 +24,9 @@ public class DrinkController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Drink> getDrinkById(@PathVariable int id) {
-        return new ResponseEntity<>(drinkRepository.findById(id).get(), HttpStatus.OK);
+        return drinkRepository.findById(id)
+                .map(drink -> new ResponseEntity<>(drink, HttpStatus.OK))
+                .orElseThrow(() -> new CustomResourceNotFound("Drink not found id: "+id));
     }
 
     @PostMapping("/add")

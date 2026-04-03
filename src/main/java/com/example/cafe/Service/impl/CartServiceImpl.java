@@ -49,7 +49,7 @@ public class CartServiceImpl implements CartService {
         Drink drink = drinkRepository.findById(drinkId).orElseThrow(() -> new CustomResourceNotFound("Drink not found: " + drinkId));
 
         //check if the drink is "active"
-        if (!drink.isActive()) {
+        if (!drink.getActive()) {
             throw new CustomResourceNotFound("Đồ uống này hiện không có trong thực đơn");
         }
 

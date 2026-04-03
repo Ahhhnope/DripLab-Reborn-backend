@@ -31,7 +31,7 @@ public class OrderController {
     //didn't even know this existed lmao
     //apparently it's mainly used for updating just a part in a row instead of replacing the entire row
     @PatchMapping("/update/{id}/status")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable int id, @RequestParam String status) {
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable int id, @RequestBody String status) {
         return new ResponseEntity<>(orderService.updateOrderStatus(id, status), HttpStatus.OK);
     }
 

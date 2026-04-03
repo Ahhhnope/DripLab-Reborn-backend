@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class IngredientDTO {
     private Integer id;
     private String name;
-    private Double price;
+    private Float price;
     private Integer quantity;
     private LocalDate createdAt;
 }

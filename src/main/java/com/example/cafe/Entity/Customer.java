@@ -22,10 +22,7 @@ public class Customer {
     private String fullName;
 
     @Column(name = "loyalty_point")
-    private Integer loyaltyPoint;
-
-    @Column(name = "default_address")
-    private String defaultAddress;
+    private Float loyaltyPoint;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;

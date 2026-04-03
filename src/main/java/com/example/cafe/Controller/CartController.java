@@ -17,10 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/carts")
 public class CartController {
-    @Autowired
     private final CartService cartService;
-    @Autowired
-    private CartItemRepository cartItemRepository;
+    private final CartItemRepository cartItemRepository;
 
     @GetMapping
     public ResponseEntity<List<Cart>> getAllCarts() {

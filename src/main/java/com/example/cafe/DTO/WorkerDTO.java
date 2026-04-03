@@ -6,7 +6,6 @@ import lombok.Data;
 public class WorkerDTO {
     private Integer id;
     private String fullName;
-    private String email;
+    private String account;
     private String password;
-    private String phone;
 }

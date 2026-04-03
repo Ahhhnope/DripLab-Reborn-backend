@@ -1,31 +1,26 @@
-package com.example.cafe.Entity.Drink.Ingredient;
+package com.example.cafe.Entity.Drink;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 
+@Table(name = "sizes")
+@Entity
 @Data
-@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseIngredient {
+public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name")
     private String name;
-
     @Column(name = "price")
     private Float price;
-
-    @Column(name = "quantity")
-    private Integer quantity;
-
     @Column(name = "created_at")
     private LocalDate createdAt = LocalDate.now();
 }
