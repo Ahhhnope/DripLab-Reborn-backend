@@ -1,7 +1,8 @@
 package com.example.cafe.Controller;
 
-import com.example.cafe.Entity.Drink;
-import com.example.cafe.Repository.DrinkRepository;
+import com.example.cafe.Entity.Drink.Drink;
+import com.example.cafe.Exception.CustomResourceNotFound;
+import com.example.cafe.Repository.Drink.DrinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +19,33 @@ public class DrinkController {
 
     @GetMapping
     public ResponseEntity<List<Drink>> getAllDrink() {
-        return new ResponseEntity<>(drinkRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(drinkRepository.findAllByActiveTrue(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public Drink addDrink(@RequestBody Drink drink) {
-        return drinkRepository.save(drink);
+    @GetMapping("/{id}")
+    public ResponseEntity<Drink> getDrinkById(@PathVariable int id) {
+        return drinkRepository.findById(id)
+                .map(drink -> new ResponseEntity<>(drink, HttpStatus.OK))
+                .orElseThrow(() -> new CustomResourceNotFound("Drink not found id: "+id));
     }
 
-    @PutMapping("/{id}")
-    public Drink updateDrink(@PathVariable Integer id, @RequestBody Drink drink) {
+    @PostMapping("/add")
+    public ResponseEntity<Drink> addDrink(@RequestBody Drink drink) {
+        drink.setActive(true);
+        Drink savedDrink = drinkRepository.save(drink);
+        return new ResponseEntity<>(savedDrink, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Drink> updateDrink(@PathVariable Integer id, @RequestBody Drink drink) {
         drink.setId(id);
-        return drinkRepository.save(drink);
+        return new ResponseEntity<>(drinkRepository.save(drink), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/remove/{id}")
     public void deleteDrink(@PathVariable Integer id) {
-        drinkRepository.deleteById(id);
+        Drink drink = drinkRepository.findById(id).orElseThrow(() -> new CustomResourceNotFound("No drink found: " + id));
+        drink.setActive(false);
+        drinkRepository.save(drink);
     }
 }

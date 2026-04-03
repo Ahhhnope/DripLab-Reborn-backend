@@ -1,6 +1,6 @@
-package com.example.cafe.Repository;
+package com.example.cafe.Repository.Drink;
 
-import com.example.cafe.Entity.Topping;
+import com.example.cafe.Entity.Drink.Topping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

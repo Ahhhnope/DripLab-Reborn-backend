@@ -22,16 +22,16 @@ public class Customer {
     private String fullName;
 
     @Column(name = "loyalty_point")
-    private Integer loyaltyPoint;
-
-    @Column(name = "default_address")
-    private String defaultAddress;
+    private Float loyaltyPoint;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "created_at")
+    private LocalDate createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

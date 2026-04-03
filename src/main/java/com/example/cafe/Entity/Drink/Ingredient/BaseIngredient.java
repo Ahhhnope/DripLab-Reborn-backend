@@ -1,16 +1,18 @@
-package com.example.cafe.Entity;
+package com.example.cafe.Entity.Drink.Ingredient;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
-@Entity
-@Table(name = "drinks")
+import java.time.LocalDate;
+
 @Data
+@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-public class Drink {
+public class BaseIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,16 +20,12 @@ public class Drink {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "price")
+    private Float price;
+
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "base_price")
-    private Float basePrice;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
+    @Column(name = "created_at")
+    private LocalDate createdAt = LocalDate.now();
 }

@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse add(UserRequest userRequest) {
         User em = modelMapper.map(userRequest, User.class);
-        userRepository.save(em);
-        return modelMapper.map(userRequest, UserResponse.class);
+        User saved =userRepository.save(em);
+        return modelMapper.map(saved, UserResponse.class);
     }
 
     @Override
@@ -63,6 +63,18 @@ public class UserServiceImpl implements UserService {
             }
 
             return new UserResponse(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public UserResponse add(User user) {
+        User savedUser = userRepository.save(user);
+
+        return modelMapper.map(savedUser, UserResponse.class);
     }
 
 }

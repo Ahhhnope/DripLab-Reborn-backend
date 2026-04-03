@@ -1,5 +1,6 @@
 package com.example.cafe.Entity;
 
+import com.example.cafe.Entity.Order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,14 +24,7 @@ public class Invoice {
     @Column(name = "invoice_date")
     private LocalDate invoiceDate;
 
-    @Column(name = "customer_name")
-    private String customerName;
 
-    @Column(name = "customer_phone")
-    private String customerPhone;
-
-    @Column(name = "customer_address")
-    private String customerAddress;
 
     @Column(name = "original_price")
     private Float originalPrice;
@@ -50,14 +44,15 @@ public class Invoice {
     @Column(name = "payment_method")
     private String paymentMethod;
 
-    @Column(name = "payment_status")
-    private String paymentStatus;
+    @Column(name = "receipt_type")
+    private String receiptType;
+
 
     @Column(name = "created_at")
     private LocalDate createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     @ManyToOne

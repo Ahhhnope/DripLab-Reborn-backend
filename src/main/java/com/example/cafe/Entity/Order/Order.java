@@ -1,11 +1,13 @@
-package com.example.cafe.Entity;
+package com.example.cafe.Entity.Order;
 
+import com.example.cafe.Entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table(name = "orders")
 @Entity
@@ -21,16 +23,11 @@ public class Order {
     private Integer orderNumber;
 
     @Column(name = "order_date")
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
-    @Column(name = "customer_name")
-    private String customerName;
+    @Column(name = "shipping_address")
+    private String shippingAddress;
 
-    @Column(name = "customer_phone")
-    private String customerPhone;
-
-    @Column(name = "customer_address")
-    private String customerAddress;
 
     @Column(name = "original_price")
     private Float originalPrice;
@@ -47,6 +44,8 @@ public class Order {
     @Column(name = "final_price")
     private Float finalPrice;
 
+
+
     @Column(name = "note")
     private String note;
 
@@ -54,10 +53,10 @@ public class Order {
     private String status;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")

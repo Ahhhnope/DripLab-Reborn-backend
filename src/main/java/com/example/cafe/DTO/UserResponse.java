@@ -13,12 +13,16 @@ import lombok.Setter;
 public class UserResponse {
     private String fullName;
     private String email;
-    private String password;
     private String phone;
+    private String defaultAddress;
+    private String avatar;
+    private String token;
 
     public UserResponse(User user){
         this.fullName = user.getFullName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
+        this.defaultAddress = user.getDefaultAddress();
+        this.avatar = user.getAvatar();
     }
 }
