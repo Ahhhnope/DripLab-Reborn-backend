@@ -2,6 +2,8 @@ package com.example.cafe.Entity.Order;
 
 import com.example.cafe.Entity.Drink.Drink;
 import com.example.cafe.Entity.Drink.Size;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JsonBackReference
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -39,5 +42,6 @@ public class OrderItem {
 
 
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItemTopping> orderItemToppings;
 }

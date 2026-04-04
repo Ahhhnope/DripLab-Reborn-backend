@@ -57,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     private final IceCreamRepository iceCreamRepository;
     private final InstructionRepository instructionRepository;
 
+
     @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -165,6 +166,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setDrink(cartItem.getDrink());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setBasePriceAtPurchase(cartItem.getDrink().getBasePrice());
+            orderItem.setSize(cartItem.getSize());
 
             // same thing as savedOrder
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
@@ -183,10 +185,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Clear all current cart_items from cart
-        cartItemRepository.deleteAll(cartItems);
         for (CartItem cartItem : cartItems) {
             cartItemToppingsRepository.deleteByCartItemId(cartItem.getId());
         }
+        cartItemRepository.deleteAll(cartItems);
+
 
         generateInvoice(savedOrder);
         return savedOrder;
@@ -201,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
         // use "random bullshit go" for that unique invoice number
         invoice.setInvoiceNumber((int)(System.currentTimeMillis() % 1000000));
 
-        invoice.setInvoiceDate(LocalDate.now());
+        invoice.setInvoiceDate(LocalDateTime.now());
         invoice.setOriginalPrice(order.getOriginalPrice());
         invoice.setTaxAmount(order.getTaxAmount());
         invoice.setShippingFee(order.getShippingFee());

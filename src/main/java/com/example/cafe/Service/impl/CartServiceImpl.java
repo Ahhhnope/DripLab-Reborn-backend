@@ -11,6 +11,7 @@ import com.example.cafe.Repository.Cart.CartItemToppingRepository;
 import com.example.cafe.Repository.Cart.CartRepository;
 import com.example.cafe.Repository.Drink.DrinkRepository;
 import com.example.cafe.Repository.Drink.ToppingRepository;
+import com.example.cafe.Repository.SizeRepository;
 import com.example.cafe.Service.CartService;
 import com.example.cafe.Service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
     private final DrinkRepository drinkRepository;
     private final ToppingRepository toppingRepository;
+    private final SizeRepository sizeRepository;
     private final CartItemToppingRepository cartItemToppingsRepository;
     private final OrderService orderService;
 
@@ -41,7 +43,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addItem(Integer userId, Integer drinkId, Integer quantity, List<Integer> toppingIDList) {
+    public Cart addItem(Integer userId, Integer drinkId, Integer quantity, Integer sizeId, List<Integer> toppingIDList) {
         //find the correct cart
         Cart cart = getCartByUserId(userId);
 
@@ -57,6 +59,7 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setDrink(drink);
+        cartItem.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new CustomResourceNotFound("Size not found: " + sizeId)));
         cartItem.setQuantity(quantity);
 
         CartItem savedCartItem = cartItemRepository.save(cartItem);

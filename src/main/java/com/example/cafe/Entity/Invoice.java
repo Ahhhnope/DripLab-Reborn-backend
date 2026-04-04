@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table(name = "invoices")
 @Entity
@@ -22,7 +23,7 @@ public class Invoice {
     private Integer invoiceNumber;
 
     @Column(name = "invoice_date")
-    private LocalDate invoiceDate;
+    private LocalDateTime invoiceDate;
 
 
 

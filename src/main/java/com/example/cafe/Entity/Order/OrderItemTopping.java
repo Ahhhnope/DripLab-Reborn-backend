@@ -1,5 +1,6 @@
 package com.example.cafe.Entity.Order;
 import com.example.cafe.Entity.Drink.Topping;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class OrderItemTopping {
 
     @ManyToOne
     @JoinColumn(name = "order_item_id", referencedColumnName = "id")
+    @JsonBackReference
     private OrderItem orderItem;
 
     @ManyToOne
