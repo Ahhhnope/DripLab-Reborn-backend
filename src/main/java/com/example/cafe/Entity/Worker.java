@@ -16,15 +16,11 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "full_name")
     private String fullName;
 
-    @Column(name = "account")
     private String account;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "created_at")
     private LocalDate createdAt;
 }

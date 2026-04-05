@@ -10,6 +10,7 @@ import com.example.cafe.Service.UserService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponse> getAll() {
@@ -41,7 +43,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse update(UserRequest userRequest, Integer id) {
-        return null;
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new CustomResourceNotFound("User not found: " + id));
+
+        if (userRequest.getFullName() != null) user.setFullName(userRequest.getFullName());
+        if (userRequest.getPhone() != null) user.setPhone(userRequest.getPhone());
+        if (userRequest.getDefaultAddress() != null) user.setDefaultAddress(userRequest.getDefaultAddress());
+        if (userRequest.getAvatar() != null) user.setAvatar(userRequest.getAvatar());
+        if (userRequest.getPassword() != null) user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+
+        return modelMapper.map(userRepository.save(user), UserResponse.class);
     }
 
     @Override
