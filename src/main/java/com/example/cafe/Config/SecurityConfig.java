@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/ingredients/**").hasRole("ADMIN")
                 .requestMatchers("/api/instructions/**").hasRole("ADMIN")
                 .requestMatchers("/api/workers/**").hasRole("ADMIN")
-                .requestMatchers("/api/dashboard/**").authenticated()
+                .requestMatchers("/api/dashboard/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/drinks/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/drinks/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/drinks/**").hasRole("ADMIN")
