@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PromoCode {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,7 +28,7 @@ public class PromoCode {
     private String description;
 
     @Column(columnDefinition = "nvarchar(255)")
-    private String category;
+    private String category;   // "PHẦN TRĂM" hoặc "TRỪ TIỀN"
 
     private Float value;
 
