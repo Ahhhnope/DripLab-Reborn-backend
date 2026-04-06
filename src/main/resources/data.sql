@@ -76,7 +76,7 @@ insert into toppings (name, price) values
 (N'Whipping cream', 8000),
 (N'Lmao special', 10000);
 
--- promo_codes
+
 -- promo_codes
 insert into promo_codes (code, category, name, value, quantity, start_date, end_date, status) values
 ('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%',    10.00,     100, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1),
