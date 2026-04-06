@@ -35,6 +35,9 @@ public class DrinkController {
 
     @GetMapping
     public ResponseEntity<List<Drink>> getAllDrink() {
+        for (Drink drink : drinkRepository.findAllByActiveTrue()) {
+            System.out.println(drink.getName());
+        }
         return new ResponseEntity<>(drinkRepository.findAllByActiveTrue(), HttpStatus.OK);
     }
 

@@ -17,12 +17,11 @@ public class Instruction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(columnDefinition = "nvarchar(255)")
     private String name;
 
-    @Column(name = "instructions")
+    @Column(columnDefinition = "nvarchar(255)")
     private String instructions;
 
-    @Column(name = "created_at")
     private LocalDate created_at = LocalDate.now();
 }

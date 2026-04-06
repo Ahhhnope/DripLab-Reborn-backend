@@ -1,11 +1,11 @@
 -- workers
 insert into workers (full_name, account, password) values
-('americano', 'abc123', 'lmao'),
-('robusta', 'kikiki', 'lol');
+(N'americano', 'abc123', 'lmao'),
+(N'robusta', 'kikiki', 'lol');
 
 -- momo_users
--- insert into momo_users (full_name, phone) values
--- ('Nguyễn Huy Bình', '0987654321');
+insert into momo_users (full_name, phone) values
+('Nguyễn Huy Bình', '0987654321');
 
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
@@ -22,8 +22,9 @@ insert into customers (full_name, loyalty_point, date_of_birth, phone, user_id) 
 ('POS system', 0, null, null, 2),
 ('Nguyễn Văn A', 150.0, '2026-03-20', '0988888888', 3);
 
--- carts (POS system cart)
-insert into carts (user_id) values (2);
+-- carts
+insert into carts (user_id) values
+(2); --(POS system cart)
 
 -- instructions
 insert into instructions (name, instructions) values
@@ -59,11 +60,11 @@ insert into sizes (name, price) values
 
 -- drinks
 insert into drinks (name, category, base_price, image_url, coffee_bean_id, instruction_id, milk_id, active) values
-('Matcha Latte', 'Trà', 45000, '/IMG/MistakesWereMade.jpg', null, null, 2, 1),
-('Trà Đào', 'Trà', 25000, '/IMG/MistakesWereMade.jpg', null, null, null, 1),
-('Cà Phê Sữa Đá', 'Cà phê', 35000, '/IMG/MistakesWereMade.jpg', 2, 2, 1, 1),
-('Cà Phê Muối', 'Cà phê', 45000, '/IMG/MistakesWereMade.jpg', 1, 1, 1, 1),
-('Bạc Xỉu', 'Cà phê', 55000, '/IMG/MistakesWereMade.jpg', 2, 1, 1, 1);
+(N'Matcha Latte', 'Trà', 45000, '/IMG/MistakesWereMade.jpg', null, null, 2, 1),
+(N'Trà Đào', 'Trà', 25000, '/IMG/MistakesWereMade.jpg', null, null, null, 1),
+(N'Cà Phê Sữa Đá', 'Cà phê', 35000, '/IMG/MistakesWereMade.jpg', 2, 2, 1, 1),
+(N'Cà Phê Muối', 'Cà phê', 45000, '/IMG/MistakesWereMade.jpg', 1, 1, 1, 1),
+(N'Bạc Xỉu', 'Cà phê', 55000, '/IMG/MistakesWereMade.jpg', 2, 1, 1, 1);
 
 -- toppings
 insert into toppings (name, price) values

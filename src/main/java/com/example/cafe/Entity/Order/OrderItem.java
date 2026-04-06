@@ -34,10 +34,8 @@ public class OrderItem {
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Size size;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "base_price_at_purchase")
     private Float basePriceAtPurchase;
 
 

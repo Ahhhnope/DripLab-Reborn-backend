@@ -17,33 +17,27 @@ public class PromoCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "code")
+    @Column(columnDefinition = "nvarchar(255)")
     private String code;
 
-    @Column(name = "name")
+    @Column(columnDefinition = "nvarchar(255)")
     private String name;
 
-    @Column(name = "description")
+    @Column(columnDefinition = "nvarchar(255)")
     private String description;
 
-    @Column(name = "category")
+    @Column(columnDefinition = "nvarchar(255)")
     private String category;
 
-    @Column(name = "value")
     private Float value;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "start_date")
     private LocalDateTime startDate;
 
-    @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Column(name = "status")
     private Boolean status;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -25,18 +25,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "nvarchar(255)")
     private String fullName;
 
+    @Column(columnDefinition = "nvarchar(255)")
     private String email;
 
+    @Column(columnDefinition = "nvarchar(255)")
     private String password;
 
+    @Column(columnDefinition = "nvarchar(10)")
     private String phone;
 
+    @Column(columnDefinition = "nvarchar(max)")
     private String defaultAddress;
 
+    @Column(columnDefinition = "nvarchar(max)")
     private String avatar;
 
+    @Column(columnDefinition = "nvarchar(25)")
     private String role;
 
     @Override

@@ -1,17 +1,17 @@
 package com.example.cafe.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Entity
-@Table(name = "workers")
+@Table(name = "momo_users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Worker {
+public class MomoUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,11 +19,6 @@ public class Worker {
     @Column(columnDefinition = "nvarchar(255)")
     private String fullName;
 
-    @Column(columnDefinition = "nvarchar(255)")
-    private String account;
-
-    @Column(columnDefinition = "nvarchar(255)")
-    private String password;
-
-    private LocalDate createdAt;
+    @Column(columnDefinition = "nvarchar(10)")
+    private String phone;
 }
