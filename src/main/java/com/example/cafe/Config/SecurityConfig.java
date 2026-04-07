@@ -47,6 +47,7 @@ public class SecurityConfig {
 
                         //for if you want to store images in this api
                         .requestMatchers("/IMG/**").permitAll()
+                        .requestMatchers("/api/upload/**").permitAll()
 
                         //admin can just do everything ;-;
                         .anyRequest().hasRole("ADMIN")
