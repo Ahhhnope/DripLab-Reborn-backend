@@ -25,6 +25,5 @@ public class OrderItemTopping {
     @JoinColumn(name = "topping_id", referencedColumnName = "id")
     private Topping topping;
 
-    @Column(name = "base_price_at_purchase")
     private Float basePriceAtPurchase;
 }

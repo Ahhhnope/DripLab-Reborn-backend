@@ -18,19 +18,16 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "full_name")
+    @Column(columnDefinition = "nvarchar(255)")
     private String fullName;
 
-    @Column(name = "loyalty_point")
     private Float loyaltyPoint;
 
-    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "phone")
+    @Column(columnDefinition = "nvarchar(10)")
     private String phone;
 
-    @Column(name = "created_at")
     private LocalDate createdAt;
 
     @ManyToOne

@@ -19,24 +19,22 @@ public class Drink {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(columnDefinition = "nvarchar(255)")
     private String name;
 
-    @Column(name = "category")
+    @Column(columnDefinition = "nvarchar(255)")
     private String category;
 
-    @Column(name = "base_price")
     private Float basePrice;
 
-    @Column(name = "description")
+    @Column(columnDefinition = "nvarchar(255)")
     private String description;
 
-    @Column(name = "image_url")
+    @Column(columnDefinition = "nvarchar(255)")
     private String imageUrl;
 
     //deleting with so many foreign key is a pain in the ass so...
     //just don't delete it ;-;
-    @Column(name = "active")
     private Boolean active = true;
 
     //damn, that's a lot of keys...

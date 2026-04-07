@@ -22,43 +22,34 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "order_number")
     private Integer orderNumber;
 
-    @Column(name = "order_date")
     private LocalDateTime orderDate;
 
-    @Column(name = "shipping_address")
+    @Column(columnDefinition = "nvarchar(255)")
     private String shippingAddress;
 
 
-    @Column(name = "original_price")
     private Float originalPrice;
 
-    @Column(name = "discount_amount")
     private Float discountAmount;
 
-    @Column(name = "shipping_fee")
     private Float shippingFee;
 
-    @Column(name = "tax_amount")
     private Float taxAmount;
 
-    @Column(name = "final_price")
     private Float finalPrice;
 
 
 
-    @Column(name = "note")
+    @Column(columnDefinition = "nvarchar(255)")
     private String note;
 
-    @Column(name = "status")
+    @Column(columnDefinition = "nvarchar(255)")
     private String status;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne

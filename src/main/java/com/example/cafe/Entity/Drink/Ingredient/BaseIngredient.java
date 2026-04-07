@@ -17,15 +17,12 @@ public class BaseIngredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(columnDefinition = "nvarchar(255)")
     private String name;
 
-    @Column(name = "price")
     private Float price;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "created_at")
     private LocalDate createdAt = LocalDate.now();
 }

@@ -28,7 +28,6 @@ public class CartItem {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Drink drink;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
     @ManyToOne

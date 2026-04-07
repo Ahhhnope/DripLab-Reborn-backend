@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
@@ -17,52 +20,59 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "full_name")
+    @Column(columnDefinition = "nvarchar(255)")
     private String fullName;
 
-    @Column(name = "email")
+    @Column(columnDefinition = "nvarchar(255)")
     private String email;
 
-    @Column(name = "password")
+    @Column(columnDefinition = "nvarchar(255)")
     private String password;
 
-    @Column(name = "phone")
+    @Column(columnDefinition = "nvarchar(10)")
     private String phone;
 
-    @Column(name = "default_address")
+    @Column(columnDefinition = "nvarchar(max)")
     private String defaultAddress;
 
-    @Column(name = "avatar")
+    @Column(columnDefinition = "nvarchar(max)")
     private String avatar;
 
-    @Column(name = "role")
+    @Column(columnDefinition = "nvarchar(25)")
     private String role;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role));
+    }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role));
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return this.email; // or whichever field you use for login
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() { return true; }
-//
-//    @Override
-//    public boolean isAccountNonLocked() { return true; }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() { return true; }
-//
-//    @Override
-//    public boolean isEnabled() { return true; }
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 }
