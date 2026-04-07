@@ -3,6 +3,7 @@ package com.example.cafe.Controller;
 import com.example.cafe.DTO.CustomerDTO;
 import com.example.cafe.Service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,11 @@ public class CustomerController {
     @GetMapping
     public List<CustomerDTO> getAll() {
         return customerService.getAll();
+    }
+
+    @PostMapping("/add")
+    public CustomerDTO add(@RequestBody CustomerDTO customerDTO) {
+        return customerService.save(customerDTO);
     }
 
     @DeleteMapping("/remove/{id}")

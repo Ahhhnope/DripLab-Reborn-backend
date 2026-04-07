@@ -23,6 +23,11 @@ public class WorkerController {
         return workerService.save(dto);
     }
 
+    @PutMapping("/update/{id}")
+    public WorkerDTO update(@PathVariable int id, @RequestBody WorkerDTO dto) {
+        return workerService.save(dto);
+    }
+
     @DeleteMapping("/remove/{id}")
     public void delete(@PathVariable Integer id) {
         workerService.delete(id);
