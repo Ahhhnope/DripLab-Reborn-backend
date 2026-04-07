@@ -76,11 +76,12 @@ insert into toppings (name, price) values
 (N'Whipping cream', 8000),
 (N'Lmao special', 10000);
 
+
 -- promo_codes
 insert into promo_codes (code, category, name, value, quantity, start_date, end_date, status) values
-(N'VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%', 10.00, 1, '2025-12-25', '2026-01-25', 1),
-(N'VIP30', N'PHẦN TRĂM', N'VIP giảm 30%', 30.00, 19, '2025-12-22', '2026-01-22', 1),
-(N'LMAO200', N'PHẦN TRĂM', N'Giảm 200k', 200000, 216, '2026-01-11', '2026-02-11', 1);
+('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%',    10.00,     100, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1),
+('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 30.00,     19,  '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1),
+('SAVE50K',   N'TRỪ TIỀN',  N'Giảm 50.000đ', 50000.00,  50,  '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1);
 
 -- orders
 insert into orders (order_number, customer_id, original_price, final_price, status, order_date) values
