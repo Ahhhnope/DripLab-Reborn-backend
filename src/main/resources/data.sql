@@ -5,22 +5,22 @@ insert into workers (full_name, account, password) values
 
 -- momo_users
 insert into momo_users (full_name, phone) values
-('Nguyễn Huy Bình', '0987654321');
+(N'Nguyễn Huy Bình', '0987654321');
 
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
 -- posSystem@gmail.com : bcrypt of "lmao"
 -- a@gmail.com         : bcrypt of "password"
 insert into users (full_name, email, password, phone, default_address, avatar, role) values
-('admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', 'Hà Nội', 'nah', 'ADMIN'),
-('POS system', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, 'POS', 'no', 'ADMIN'),
-('Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', 'Hà Nội', 'avatar_a.png', 'USER');
+(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', 'Hà Nội', 'nah', 'ADMIN'),
+(N'POS system', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, 'POS', 'no', 'ADMIN'),
+(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', 'Hà Nội', 'avatar_a.png', 'USER');
 
 -- customers
 insert into customers (full_name, loyalty_point, date_of_birth, phone, user_id) values
-('admin', 200000000, '2024-11-21', '0123457689', 1),
-('POS system', 0, null, null, 2),
-('Nguyễn Văn A', 150.0, '2026-03-20', '0988888888', 3);
+(N'admin', 200000000, '2024-11-21', '0123457689', 1),
+(N'POS system', 0, null, null, 2),
+(N'Nguyễn Văn A', 150.0, '2026-03-20', '0988888888', 3);
 
 -- carts
 insert into carts (user_id) values
@@ -78,10 +78,10 @@ insert into toppings (name, price) values
 
 
 -- promo_codes
-insert into promo_codes (code, category, name, value, quantity, start_date, end_date, status) values
-('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%',    10.00,     100, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1),
-('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 30.00,     19,  '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1),
-('SAVE50K',   N'TRỪ TIỀN',  N'Giảm 50.000đ', 50000.00,  50,  '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1);
+insert into promo_codes (code, category, name, value, start_date, end_date, status) values
+('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%',    10.00, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1),
+('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 30.00,  '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1),
+('SAVE50K',   N'TRỪ TIỀN',  N'Giảm 50.000đ', 50000.00,  '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1);
 
 -- orders
 insert into orders (order_number, customer_id, original_price, final_price, status, order_date) values
