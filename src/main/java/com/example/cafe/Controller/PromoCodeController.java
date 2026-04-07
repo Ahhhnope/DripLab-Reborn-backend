@@ -12,10 +12,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/promo-codes")
-@CrossOrigin(origins = "*")
 public class PromoCodeController {
 
-    @Autowired
     private PromoCodeRepository promoCodeRepository;
 
     // GET /api/promo-codes — Lấy tất cả voucher
@@ -31,6 +29,17 @@ public class PromoCodeController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/active/{code}")
+    public ResponseEntity<PromoCode> getByCode(@PathVariable String code) {
+        return promoCodeRepository.findAll().stream().filter(pc ->
+                code.equals(pc.getCode())
+                && pc.getStatus()
+                && LocalDateTime.now().isAfter(pc.getStartDate())
+                && LocalDateTime.now().isBefore(pc.getEndDate())
+        ).findFirst().map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
 
     // POST /api/promo-codes/add — Thêm voucher mới
     @PostMapping("/add")
@@ -52,7 +61,6 @@ public class PromoCodeController {
             existing.setDescription(body.getDescription());
             existing.setCategory(body.getCategory());
             existing.setValue(body.getValue());
-            existing.setQuantity(body.getQuantity());
             existing.setStartDate(body.getStartDate());
             existing.setEndDate(body.getEndDate());
             existing.setStatus(body.getStatus());
@@ -68,21 +76,5 @@ public class PromoCodeController {
         }
         promoCodeRepository.deleteById(id);
         return ResponseEntity.ok().build();
-    }
-
-    // PUT /api/promo-codes/use/{id} — Giảm quantity khi user copy mã
-    @PutMapping("/use/{id}")
-    public ResponseEntity<PromoCode> use(@PathVariable Integer id) {
-        return promoCodeRepository.findById(id).map(v -> {
-            if (v.getQuantity() != null && v.getQuantity() > 0) {
-                v.setQuantity(v.getQuantity() - 1);
-                // Nếu hết lượt thì tắt status
-                if (v.getQuantity() == 0) {
-                    v.setStatus(false);
-                }
-                promoCodeRepository.save(v);
-            }
-            return ResponseEntity.ok(v);
-        }).orElse(ResponseEntity.notFound().build());
     }
 }

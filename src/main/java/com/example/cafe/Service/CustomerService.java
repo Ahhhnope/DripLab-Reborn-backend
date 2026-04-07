@@ -21,7 +21,7 @@ public class CustomerService {
     }
 
     public CustomerDTO getById(int id) {
-        return customerRepo.findById(id).map(c -> modelMapper.map(c, CustomerDTO.class)).orElseThrow(() -> throw new CustomResourceNotFound("Customer not found: "+id));
+        return customerRepo.findById(id).map(c -> modelMapper.map(c, CustomerDTO.class)).orElseThrow(() -> new CustomResourceNotFound("Customer not found: "+id));
     }
 
     public CustomerDTO save (CustomerDTO customerDTO) {

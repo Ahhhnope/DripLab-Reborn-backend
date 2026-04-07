@@ -32,8 +32,6 @@ public class PromoCode {
 
     private Float value;
 
-    private Integer quantity;
-
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
