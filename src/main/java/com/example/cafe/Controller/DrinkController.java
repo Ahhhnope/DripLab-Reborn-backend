@@ -2,11 +2,6 @@ package com.example.cafe.Controller;
 
 import com.example.cafe.DTO.DrinkDTO;
 import com.example.cafe.Entity.Drink.Drink;
-import com.example.cafe.Entity.Drink.Ingredient.CoffeeBean;
-import com.example.cafe.Entity.Drink.Ingredient.HeavyCream;
-import com.example.cafe.Entity.Drink.Ingredient.IceCream;
-import com.example.cafe.Entity.Drink.Ingredient.Milk;
-import com.example.cafe.Entity.Drink.Instruction;
 import com.example.cafe.Exception.CustomResourceNotFound;
 import com.example.cafe.Repository.Drink.DrinkRepository;
 import com.example.cafe.Repository.Drink.Ingredient.CoffeeBeanRepository;
@@ -33,12 +28,25 @@ public class DrinkController {
     private final IceCreamRepository iceCreamRepository;
     private final InstructionRepository instructionRepository;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Drink>> getAllDrink() {
-        for (Drink drink : drinkRepository.findAllByActiveTrue()) {
+        return new ResponseEntity<>(drinkRepository.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<Drink>> getActiveDrink() {
+        for (Drink drink : drinkRepository.findAllByActive(true)) {
             System.out.println(drink.getName());
         }
-        return new ResponseEntity<>(drinkRepository.findAllByActiveTrue(), HttpStatus.OK);
+        return new ResponseEntity<>(drinkRepository.findAllByActive(true), HttpStatus.OK);
+    }
+
+    @GetMapping("/inactive")
+    public ResponseEntity<List<Drink>> getAllDrinkDeactivated() {
+        for (Drink drink : drinkRepository.findAllByActive(false)) {
+            System.out.println(drink.getName());
+        }
+        return new ResponseEntity<>(drinkRepository.findAllByActive(false), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -63,11 +71,11 @@ public class DrinkController {
         return new ResponseEntity<>(drinkRepository.save(drink), HttpStatus.OK);
     }
 
-    @DeleteMapping("/remove/{id}")
-    public void deleteDrink(@PathVariable Integer id) {
+    @PutMapping("/toggle/{id}")
+    public void toggleDrink(@PathVariable Integer id) {
         Drink drink = drinkRepository.findById(id)
                 .orElseThrow(() -> new CustomResourceNotFound("No drink found: " + id));
-        drink.setActive(false);
+        drink.setActive(!drink.getActive());
         drinkRepository.save(drink);
     }
 

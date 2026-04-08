@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface DrinkRepository extends JpaRepository<Drink, Integer> {
-    List<Drink> findAllByActiveTrue();
+    List<Drink> findAllByActive(Boolean type);
 }

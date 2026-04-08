@@ -59,12 +59,22 @@ insert into sizes (name, price) values
 ('L', 10000);
 
 -- drinks
-insert into drinks (name, category, base_price, image_url, coffee_bean_id, instruction_id, milk_id, active) values
-(N'Matcha Latte', N'Trà', 45000, '/IMG/MistakesWereMade.jpg', null, null, 2, 1),
-(N'Trà Đào', N'Trà', 25000, '/IMG/MistakesWereMade.jpg', null, null, null, 1),
-(N'Cà Phê Sữa Đá', N'Cà phê', 35000, '/IMG/MistakesWereMade.jpg', 2, 2, 1, 1),
-(N'Cà Phê Muối', N'Cà phê', 45000, '/IMG/MistakesWereMade.jpg', 1, 1, 1, 1),
-(N'Bạc Xỉu', N'Cà phê', 55000, '/IMG/MistakesWereMade.jpg', 2, 1, 1, 1);
+insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy_cream_id, ice_cream_id, milk_id, instruction_id, active) values
+(N'Matcha Latte', N'Trà', 45000, '/IMG/MistakesWereMade.jpg', null, null, 3, 1, 2, 1),
+(N'Trà Đào', N'Trà', 25000, '/IMG/MistakesWereMade.jpg', null, 1, 1, 1, 1, 1),
+(N'Cà Phê Sữa Đá', N'Cà phê', 35000, '/IMG/MistakesWereMade.jpg', 2, 1, 2, 2, 1, 1),
+(N'Cà Phê Muối', N'Cà phê', 45000, '/IMG/MistakesWereMade.jpg', 1, null, null, 1, 1, 1),
+(N'Bạc Xỉu', N'Cà phê', 55000, '/IMG/MistakesWereMade.jpg', 2, null, null, 1, 1, 0),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+(N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1);
+
 
 -- toppings
 insert into toppings (name, price) values
