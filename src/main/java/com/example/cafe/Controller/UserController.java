@@ -41,7 +41,7 @@ public class UserController {
     }
 
 
-    // user's account page stuff
+    // user's account page stuff - this is also how the different ports know what the current logged in account is
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getMyInfo(@AuthenticationPrincipal User currentUser) {
         return ResponseEntity.ok(userService.findById(currentUser.getId()));

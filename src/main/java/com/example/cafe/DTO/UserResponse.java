@@ -17,6 +17,7 @@ public class UserResponse {
     private String defaultAddress;
     private String avatar;
     private String token;
+    private String role;
 
     public UserResponse(User user){
         this.fullName = user.getFullName();
@@ -24,5 +25,6 @@ public class UserResponse {
         this.phone = user.getPhone();
         this.defaultAddress = user.getDefaultAddress();
         this.avatar = user.getAvatar();
+        this.role = user.getRole();
     }
 }

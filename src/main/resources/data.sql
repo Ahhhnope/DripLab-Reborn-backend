@@ -12,9 +12,9 @@ insert into momo_users (full_name, phone) values
 -- posSystem@gmail.com : bcrypt of "lmao"
 -- a@gmail.com         : bcrypt of "password"
 insert into users (full_name, email, password, phone, default_address, avatar, role) values
-(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', 'Hà Nội', 'nah', 'ADMIN'),
-(N'POS system', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, 'POS', 'no', 'ADMIN'),
-(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', 'Hà Nội', 'avatar_a.png', 'USER');
+(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', 'nah', N'ADMIN'),
+(N'POS system', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', 'no', N'ADMIN'),
+(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', 'avatar_a.png', N'USER');
 
 -- customers
 insert into customers (full_name, loyalty_point, date_of_birth, phone, user_id) values
@@ -28,9 +28,9 @@ insert into carts (user_id) values
 
 -- instructions
 insert into instructions (name, instructions) values
-(N'Pha Máy', 'Chiết xuất Espresso tiêu chuẩn 30ml'),
-(N'Pha Phin', 'Ủ 2 phút với 20ml nước, sau đó rót thêm 40ml'),
-(N'Ủ Lạnh', 'Ủ bột cà phê trong nước lạnh 16 tiếng');
+(N'Pha Máy', N'Chiết xuất Espresso tiêu chuẩn 30ml'),
+(N'Pha Phin', N'Ủ 2 phút với 20ml nước, sau đó rót thêm 40ml'),
+(N'Ủ Lạnh', N'Ủ bột cà phê trong nước lạnh 16 tiếng');
 
 -- coffee_beans
 insert into coffee_beans (name, price, quantity) values
