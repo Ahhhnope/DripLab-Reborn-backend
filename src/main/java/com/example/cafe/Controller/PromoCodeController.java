@@ -2,6 +2,7 @@ package com.example.cafe.Controller;
 
 import com.example.cafe.Entity.PromoCode;
 import com.example.cafe.Repository.PromoCodeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/promo-codes")
+@RequiredArgsConstructor
 public class PromoCodeController {
 
-    private PromoCodeRepository promoCodeRepository;
+    private final PromoCodeRepository promoCodeRepository;
 
     // GET /api/promo-codes — Lấy tất cả voucher
     @GetMapping

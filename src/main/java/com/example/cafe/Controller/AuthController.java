@@ -8,6 +8,8 @@ import com.example.cafe.Repository.UserRepository;
 import com.example.cafe.Security.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -33,16 +35,24 @@ public class AuthController {
 
         String token = jwtService.generateToken(user.getEmail());
 
-        return ResponseEntity.ok(Map.of(
-                "token", token,
-                "user", Map.of(
-                        "id", user.getId(),
-                        "fullName", user.getFullName(),
-                        "email", user.getEmail(),
-                        "role", user.getRole(),
-                        "avatar", user.getAvatar() != null ? user.getAvatar() : ""
-                )
-        ));
+
+        //save that token to a cookie =w=
+        ResponseCookie tokenCookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .path("/")
+                .domain("localhost")
+                .maxAge(60 * 60) // 1 hour
+                .build();
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, tokenCookie.toString()).body(Map.of(
+                        "user", Map.of(
+                                "id", user.getId(),
+                                "fullName", user.getFullName(),
+                                "email", user.getEmail(),
+                                "role", user.getRole(),
+                                "avatar", user.getAvatar() != null ? user.getAvatar() : "null"
+                        )
+                ));
     }
 
     @PostMapping("/register")
@@ -62,15 +72,38 @@ public class AuthController {
         User saved = userRepository.save(user);
         String token = jwtService.generateToken(saved.getEmail());
 
-        return ResponseEntity.status(201).body(Map.of(
-                "token", token,
-                "user", Map.of(
-                        "id", saved.getId(),
-                        "fullName", saved.getFullName(),
-                        "email", saved.getEmail(),
-                        "role", saved.getRole(),
-                        "avatar", ""
-                )
-        ));
+        ResponseCookie tokenCookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .path("/")
+                .domain("localhost")
+                .maxAge(60 * 60) //1 hour
+                .build();
+
+        return ResponseEntity.status(201)
+                .header(HttpHeaders.SET_COOKIE, tokenCookie.toString())
+                .body(Map.of(
+                        "user", Map.of(
+                                "id", saved.getId(),
+                                "fullName", saved.getFullName(),
+                                "email", saved.getEmail(),
+                                "role", saved.getRole(),
+                                "avatar", saved.getAvatar() != null ? saved.getAvatar() : "null"
+                        )
+                ));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        //create an expired cookie to clear the token on client
+        ResponseCookie tokenCookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .path("/")
+                .domain("localhost")
+                .maxAge(0) //immediately expires lmao
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, tokenCookie.toString())
+                .body(Map.of("message", "Logged out successfully"));
     }
 }

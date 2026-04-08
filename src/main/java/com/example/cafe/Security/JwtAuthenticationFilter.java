@@ -3,6 +3,7 @@ package com.example.cafe.Security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +26,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            // redirect if one of the 2 conditions trigger
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String jwt= authHeader.substring(7); //token after "Bearer "
+        String jwt = null;
+
+        // First try to get token from Authorization header
+        final String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7); // token after "Bearer "
+        } else {
+            // Fallback to cookie
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("token".equals(cookie.getName())) {
+                        jwt = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (jwt == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             final String userEmail = jwtService.getUsername(jwt);
-            //if the user is not logged in
+            // if the user is not logged in
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
                 System.out.println("Loaded user: " + userDetails.getUsername());
@@ -48,14 +68,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails, null, userDetails.getAuthorities()
                     );
 
-                    //save that loggin to ... somewhere I got no idea
+                    // save that login to SecurityContext
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-
             }
-
         } catch (Exception e) {
-
+            // Invalid token - just continue without authentication
         }
 
         filterChain.doFilter(request, response);

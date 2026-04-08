@@ -1,5 +1,6 @@
 package com.example.cafe.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
@@ -21,4 +22,9 @@ public class MomoUser {
 
     @Column(columnDefinition = "nvarchar(10)")
     private String phone;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }
