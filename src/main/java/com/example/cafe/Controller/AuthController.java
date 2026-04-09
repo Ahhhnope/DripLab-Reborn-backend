@@ -2,8 +2,10 @@ package com.example.cafe.Controller;
 
 import com.example.cafe.DTO.LoginRequest;
 import com.example.cafe.DTO.UserRequest;
+import com.example.cafe.Entity.Cart.Cart;
 import com.example.cafe.Entity.User;
 import com.example.cafe.Exception.CustomResourceNotFound;
+import com.example.cafe.Repository.Cart.CartRepository;
 import com.example.cafe.Repository.UserRepository;
 import com.example.cafe.Security.JwtService;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ public class AuthController {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
@@ -70,6 +73,13 @@ public class AuthController {
         user.setRole("USER");
 
         User saved = userRepository.save(user);
+
+        //assign a cart to them :)
+        Cart cart = new Cart();
+        cart.setUser(saved);
+        cartRepository.save(cart);
+
+
         String token = jwtService.generateToken(saved.getEmail());
 
         ResponseCookie tokenCookie = ResponseCookie.from("token", token)

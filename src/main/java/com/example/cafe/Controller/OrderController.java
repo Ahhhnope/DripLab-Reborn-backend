@@ -1,6 +1,7 @@
 package com.example.cafe.Controller;
 
 
+import com.example.cafe.DTO.OrderUpdateDTO;
 import com.example.cafe.Entity.Order.Order;
 import com.example.cafe.Service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,14 +32,15 @@ public class OrderController {
     //new thing ?!?!?
     //didn't even know this existed lmao
     //apparently it's mainly used for updating just a part in a row instead of replacing the entire row
-    @PatchMapping("/update/{id}/status")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable int id, @RequestBody String status) {
-        return new ResponseEntity<>(orderService.updateOrderStatus(id, status), HttpStatus.OK);
+    @PatchMapping("/update/{id}/")
+    public ResponseEntity<?> updateOrder(@PathVariable int id, @RequestBody OrderUpdateDTO dto) {
+        orderService.updateOrder(id, dto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Order> createOrder(@RequestParam Integer userId, @RequestParam(required = false) String note) {
-        return new ResponseEntity<>(orderService.createOrder(userId, note), HttpStatus.CREATED);
+    public ResponseEntity<?> createOrder(@RequestParam Integer userId, @RequestParam(required = false) String note, @RequestParam(defaultValue = "Tiền mặt") String paymentMethod) {
+        return new ResponseEntity<>(orderService.createOrder(userId, note, paymentMethod), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/remove/{id}")
@@ -47,8 +50,10 @@ public class OrderController {
     }
 
     @PostMapping("/checkout/{id}")
-    public ResponseEntity<Order> checkoutOrder(@PathVariable Integer id) {
-        return new ResponseEntity<>(orderService.createOrder(id, "Order from POS"), HttpStatus.OK);
+    public ResponseEntity<Order> checkoutOrder(@PathVariable Integer id, @RequestBody Map<String, String> payload) {
+        String note = payload.getOrDefault("note", "Online Order");
+        String method = payload.getOrDefault("paymentMethod", "Tiền mặt");
+        return new ResponseEntity<>(orderService.createOrder(id, note, method), HttpStatus.OK);
     }
 
 }

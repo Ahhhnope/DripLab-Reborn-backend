@@ -30,7 +30,7 @@ public class Drink {
     @Column(columnDefinition = "nvarchar(255)")
     private String description;
 
-    @Column(columnDefinition = "nvarchar(255)")
+    @Column(name = "image_url", columnDefinition = "nvarchar(255)")
     private String imageUrl;
 
     //deleting with so many foreign key is a pain in the ass so...
