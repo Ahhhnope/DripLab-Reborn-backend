@@ -1,5 +1,6 @@
 package com.example.cafe.Service.impl;
 
+import com.example.cafe.DTO.OrderUpdateDTO;
 import com.example.cafe.Entity.*;
 import com.example.cafe.Entity.Cart.Cart;
 import com.example.cafe.Entity.Cart.CartItem;
@@ -65,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order createOrder(Integer userID, String note) {
+    public Order createOrder(Integer userID, String note, String paymentMethod) {
         //Boi this is long asf
 
         // Takes out all items in cart into a list
@@ -104,13 +105,23 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setCreatedAt(LocalDateTime.now());
         order.setUpdatedAt(LocalDateTime.now());
+        order.setPaymentMethod(paymentMethod);
         order.setNote(note);
-        order.setStatus("Chưa giải quyết");
+        order.setStatus("Chờ xác nhận");
         order.setOriginalPrice(originalPrice);
         order.setTaxAmount((float) taxAmount);
         order.setShippingFee((float) shippingFee);
         order.setDiscountAmount((float) discountAmount);
         order.setFinalPrice((float) finalPrice);
+
+        if ("Online Order".equalsIgnoreCase(note)) {
+            order.setStatus("Chờ xác nhận");
+            order.setType("Online");
+        } else {
+            order.setStatus("Đã giao");
+            order.setType("POS");
+        }
+
 
         // Save customer on to ze order if there's any
         Customer customer = customerRepository.findByUserId(userID);
@@ -128,34 +139,35 @@ public class OrderServiceImpl implements OrderService {
             Drink drink = cartItem.getDrink();
             int quantity = cartItem.getQuantity();
 
-            if (drink.getCategory().equalsIgnoreCase("Cà phê")) {
-                if (drink.getCoffeeBean().getQuantity() < quantity) throw new CustomResourceNotFound("Hết hạt cà phê: "+drink.getCoffeeBean().getName());
-
-                CoffeeBean coffeeBean = drink.getCoffeeBean();
-                coffeeBean.setQuantity(coffeeBean.getQuantity() - quantity);
-                coffeeBeanRepository.save(coffeeBean);
-            }
-            if (drink.getMilk() != null) {
-                if (drink.getMilk().getQuantity() < quantity) throw new CustomResourceNotFound("Hết sữa: "+drink.getMilk().getName());
-
-                Milk milk = drink.getMilk();
-                milk.setQuantity(milk.getQuantity() - quantity);
-                milkRepository.save(milk);
-            }
-            if (drink.getHeavyCream() != null) {
-                if (drink.getHeavyCream().getQuantity() < quantity) throw new CustomResourceNotFound("Hết kem béo: " + drink.getHeavyCream().getName());
-
-                HeavyCream heavyCream = drink.getHeavyCream();
-                heavyCream.setQuantity(heavyCream.getQuantity() - quantity);
-                heavyCreamRepository.save(heavyCream);
-            }
-            if (drink.getIceCream() != null) {
-                if (drink.getIceCream().getQuantity() < quantity) throw new CustomResourceNotFound("Hết kem lạnh: " + drink.getIceCream().getName());
-
-                IceCream iceCream = drink.getIceCream();
-                iceCream.setQuantity(iceCream.getQuantity() - quantity);
-                iceCreamRepository.save(iceCream);
-            }
+            //Apperently we dont need to deduct ingredients for normal ordering system ;-;
+//            if (drink.getCategory().equalsIgnoreCase("Cà phê")) {
+//                if (drink.getCoffeeBean().getQuantity() < quantity) throw new CustomResourceNotFound("Hết hạt cà phê: "+drink.getCoffeeBean().getName());
+//
+//                CoffeeBean coffeeBean = drink.getCoffeeBean();
+//                coffeeBean.setQuantity(coffeeBean.getQuantity() - quantity);
+//                coffeeBeanRepository.save(coffeeBean);
+//            }
+//            if (drink.getMilk() != null) {
+//                if (drink.getMilk().getQuantity() < quantity) throw new CustomResourceNotFound("Hết sữa: "+drink.getMilk().getName());
+//
+//                Milk milk = drink.getMilk();
+//                milk.setQuantity(milk.getQuantity() - quantity);
+//                milkRepository.save(milk);
+//            }
+//            if (drink.getHeavyCream() != null) {
+//                if (drink.getHeavyCream().getQuantity() < quantity) throw new CustomResourceNotFound("Hết kem béo: " + drink.getHeavyCream().getName());
+//
+//                HeavyCream heavyCream = drink.getHeavyCream();
+//                heavyCream.setQuantity(heavyCream.getQuantity() - quantity);
+//                heavyCreamRepository.save(heavyCream);
+//            }
+//            if (drink.getIceCream() != null) {
+//                if (drink.getIceCream().getQuantity() < quantity) throw new CustomResourceNotFound("Hết kem lạnh: " + drink.getIceCream().getName());
+//
+//                IceCream iceCream = drink.getIceCream();
+//                iceCream.setQuantity(iceCream.getQuantity() - quantity);
+//                iceCreamRepository.save(iceCream);
+//            }
 
             //that's alot of checking ;-;
             //anyway if it passes all lat then we ball
@@ -191,7 +203,10 @@ public class OrderServiceImpl implements OrderService {
         cartItemRepository.deleteAll(cartItems);
 
 
-        generateInvoice(savedOrder);
+        if ("Đã giao".equals(savedOrder.getStatus())) {
+            generateInvoice(savedOrder);
+        }
+
         return savedOrder;
     }
 
@@ -202,7 +217,9 @@ public class OrderServiceImpl implements OrderService {
         invoice.setOrder(order);
 
         // use "random bullshit go" for that unique invoice number
-        invoice.setInvoiceNumber((int)(System.currentTimeMillis() % 1000000));
+        // Using the ID ensures it's actually unique
+        // Just use the Order ID or a safe offset
+        invoice.setInvoiceNumber(order.getId() + 1000);
 
         invoice.setInvoiceDate(LocalDateTime.now());
         invoice.setOriginalPrice(order.getOriginalPrice());
@@ -212,7 +229,8 @@ public class OrderServiceImpl implements OrderService {
         invoice.setFinalPrice(order.getFinalPrice());
 
         // payment status
-        invoice.setPaymentMethod("Tiền mặt"); // or momo idk
+        invoice.setPaymentMethod(order.getPaymentMethod()); // or momo idk
+        invoice.setReceiptType(order.getType());
 
         return invoiceRepository.save(invoice);
     }
@@ -235,6 +253,31 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
+    @Override
+    public void updateOrder(Integer id, OrderUpdateDTO dto) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        String oldStatus = order.getStatus();
+        String newStatus = dto.getStatus();
+        order.setStatus(newStatus);
+        order.setUpdatedAt(LocalDateTime.now());
+
+        // Trigger invoice generation when order is marked as Delivered
+        if (!"Đã giao".equals(oldStatus) && "Đã giao".equals(newStatus)) {
+            // Double check to prevent duplicate invoices
+            boolean alreadyHasInvoice = invoiceRepository.existsByOrderId(id);
+            if (!alreadyHasInvoice) {
+                generateInvoice(order);
+            }
+        }
+
+        orderRepository.save(order);
+    }
+
+
+
     @Override
     public void deleteOrder(Integer orderId) {
         if (!orderRepository.existsById(orderId)) {
@@ -243,6 +286,9 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.deleteById(orderId);
     }
+
+
+
 
 
     //genuinely tweaking out rn

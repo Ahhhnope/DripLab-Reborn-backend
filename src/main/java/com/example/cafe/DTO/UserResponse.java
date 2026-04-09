@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+    private Integer id;
     private String fullName;
     private String email;
     private String phone;
@@ -20,6 +21,7 @@ public class UserResponse {
     private String role;
 
     public UserResponse(User user){
+        this.id = user.getId();
         this.fullName = user.getFullName();
         this.email = user.getEmail();
         this.phone = user.getPhone();

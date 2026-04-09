@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/me").permitAll()
 
                         //after login for users
-                        .requestMatchers(HttpMethod.GET, "/api/carts/**").authenticated()
+                        .requestMatchers("/api/carts/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/orders/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/invoices/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/users/me").authenticated()

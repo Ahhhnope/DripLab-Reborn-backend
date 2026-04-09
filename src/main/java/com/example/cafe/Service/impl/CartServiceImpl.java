@@ -5,6 +5,7 @@ import com.example.cafe.Entity.Cart.Cart;
 import com.example.cafe.Entity.Cart.CartItem;
 import com.example.cafe.Entity.Cart.CartItemTopping;
 import com.example.cafe.Entity.Drink.Drink;
+import com.example.cafe.Entity.Order.Order;
 import com.example.cafe.Exception.CustomResourceNotFound;
 import com.example.cafe.Repository.Cart.CartItemRepository;
 import com.example.cafe.Repository.Cart.CartItemToppingRepository;
@@ -44,6 +45,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart addItem(Integer userId, Integer drinkId, Integer quantity, Integer sizeId, List<Integer> toppingIDList) {
+        System.out.println("Processing add for User: " + userId + " Drink: " + drinkId);
         //find the correct cart
         Cart cart = getCartByUserId(userId);
 
@@ -124,7 +126,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void checkout(Integer userId) {
-        orderService.createOrder(userId, "Order from POS");
+        Cart cart = cartRepository.findByUserId(userId);
+        List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
+
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Giỏ hàng trống");
+        }
+        Order order = orderService.createOrder(userId, "Online Order", "Tiền mặt");
+        //WIP
     }
 
 
