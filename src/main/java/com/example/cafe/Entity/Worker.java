@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "workers")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Worker {
@@ -25,5 +26,5 @@ public class Worker {
     @Column(columnDefinition = "nvarchar(255)")
     private String password;
 
-    private LocalDate createdAt;
+    private LocalDate createdAt = LocalDate.now();
 }
