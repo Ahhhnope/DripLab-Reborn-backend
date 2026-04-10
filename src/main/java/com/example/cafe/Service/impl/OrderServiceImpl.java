@@ -82,6 +82,9 @@ public class OrderServiceImpl implements OrderService {
         for (CartItem cartItem : cartItems) {
 
             float drinkPrice = cartItem.getDrink().getBasePrice();
+            if (cartItem.getSize() != null) {
+                drinkPrice += cartItem.getSize().getPrice();
+            }
             List<CartItemTopping> toppings = cartItemToppingsRepository.findByCartItemId(cartItem.getId());
 
             // total drink price + total topping price
@@ -93,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Tax evasion 100
-        double taxAmount = originalPrice * 0.1; // nuuuuu you can't avoid tax :)
+        double taxAmount = originalPrice * 1;
         double shippingFee = 0; // for now its just a POS system so no shipping fee ;-;
         double discountAmount = 0; // no discount system yet ;-;
 
