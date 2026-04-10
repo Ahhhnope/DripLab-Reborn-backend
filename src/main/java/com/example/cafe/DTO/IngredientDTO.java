@@ -10,5 +10,5 @@ public class IngredientDTO {
     private String name;
     private Float price;
     private Integer quantity;
-    private LocalDate createdAt;
+    private LocalDate createdAt = LocalDate.now();
 }

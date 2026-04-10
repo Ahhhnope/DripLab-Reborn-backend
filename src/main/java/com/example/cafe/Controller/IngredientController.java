@@ -15,12 +15,12 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     @GetMapping("/{type}")
-    private ResponseEntity<?> getAll(@PathVariable String type) {
+    public ResponseEntity<?> getAll(@PathVariable String type) {
         return new ResponseEntity<>(ingredientService.getAllIngredients(type), HttpStatus.OK);
     }
 
     @GetMapping("/{type}/{id}")
-    private ResponseEntity<?> findIngredientById(@PathVariable String type, @PathVariable Integer id) {
+    public ResponseEntity<?> findIngredientById(@PathVariable String type, @PathVariable Integer id) {
         return new ResponseEntity<>(ingredientService.getIngredientById(type, id), HttpStatus.OK);
     }
 
