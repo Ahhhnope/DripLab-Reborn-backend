@@ -110,7 +110,11 @@ insert into orders (order_number, customer_id, original_price, final_price, stat
 (1004, 1, 210000, 210000, N'Đã giao',          N'POS',    '2026-03-31 11:45:00'),
 (1005, 1, 750000, 750000, N'Đã giao',          N'POS',    '2026-04-01 16:20:00'),
 (1006, 1, 420000, 420000, N'Đã giao',          N'POS',    '2026-04-02 13:10:00'),
-(1007, 1, 600000, 600000, N'Đã giao',          N'POS',    '2026-04-03 10:00:00');
+(1007, 1, 600000, 600000, N'Đã giao',          N'POS',    '2026-04-03 10:00:00'),
+--test order for status in user's order page (admin@gmail.com)
+(888000111, 1, 125000, 125000, N'Đang xử lý', N'Online', current_timestamp),
+--test order for status in user's order page (a@gmail.com)
+(999000222, 3, 55000, 55000, N'Chờ xác nhận', N'Online', current_timestamp);
 
 -- order 1 (Chờ xác nhận)
 insert into order_items (order_id, drink_id, size_id, quantity, base_price_at_purchase) values
@@ -163,8 +167,14 @@ insert into order_items (order_id, drink_id, size_id, quantity, base_price_at_pu
 -- Order 11 → 600,000
 (11, 1, 3, 6, 55000), -- 330k
 (11, 4, 3, 3, 55000), -- 165k
-(11, 2, 2, 3, 35000); -- 105k → total 600k
+(11, 2, 2, 3, 35000), -- 105k → total 600k
 
+-- Order 12 (admin@gmail.com)
+(12, 1, 3, 2, 45000),
+(12, 4, 1, 1, 35000),
+
+-- Order 13 (a@gmail.com)
+(13, 5, 2, 1, 55000);
 
 insert into order_item_toppings (order_item_id, topping_id, base_price_at_purchase) values
 -- Order 1
@@ -205,7 +215,10 @@ insert into order_item_toppings (order_item_id, topping_id, base_price_at_purcha
 
 -- Order 11
 (17, 6, 8000),
-(18, 4, 8000);
+(18, 4, 8000),
+
+-- Order 13
+(30, 1, 5000);
 
 
 -- invoices
