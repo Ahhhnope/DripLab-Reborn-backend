@@ -14,4 +14,6 @@ public interface OrderService {
     Order updateOrderStatus(Integer orderId, String status);
     void updateOrder(Integer id, OrderUpdateDTO order);
     void deleteOrder(Integer orderId);
+    List<Order> findActiveOrdersByUserId(Integer userId);
+    List<Order> findOrderHistoryByUserId(Integer userId);
 }

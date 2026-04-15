@@ -29,6 +29,19 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/active/{userId}")
+    public ResponseEntity<List<Order>> getActiveOrdersByUserId(@PathVariable Integer userId) {
+        List<Order> activeOrders = orderService.findActiveOrdersByUserId(userId);
+        return new ResponseEntity<>(activeOrders, HttpStatus.OK);
+    }
+
+    @GetMapping("/history/{userId}")
+    public ResponseEntity<List<Order>> getOrderHistoryByUserId(@PathVariable Integer userId) {
+        // Logic: find orders where status is 'Đã giao' or 'Đã huỷ'
+        List<Order> history = orderService.findOrderHistoryByUserId(userId);
+        return new ResponseEntity<>(history, HttpStatus.OK);
+    }
+
     //new thing ?!?!?
     //didn't even know this existed lmao
     //apparently it's mainly used for updating just a part in a row instead of replacing the entire row
