@@ -89,11 +89,15 @@ insert into toppings (name, price) values
 (N'Lmao special', 10000);
 
 
+-- ══════════════════════════════════════════════
+--  BƯỚC 2: Tạo bảng kho mã của khách hàng
+-- ══════════════════════════════════════════════
+
 -- promo_codes
-insert into promo_codes (code, category, name, value, start_date, end_date, status) values
-('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%',    10.00, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1),
-('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 30.00,  '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1),
-('SAVE50K',   N'TRỪ TIỀN',  N'Giảm 50.000đ', 50000.00,  '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1);
+insert into promo_codes (code, category, name, min_order_value, value, start_date, end_date, status) values
+('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%', 50000,    10.00, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1),
+('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 100000, 30.00,  '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1),
+('SAVE50K',   N'TRỪ TIỀN',  N'Giảm 50.000đ', 0, 50000.00,  '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1);
 
 -- orders
 alter table orders add constraint DF_Orders_CreatedAt default getdate() for created_at;

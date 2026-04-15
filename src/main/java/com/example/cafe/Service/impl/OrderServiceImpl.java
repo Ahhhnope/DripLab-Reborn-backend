@@ -100,6 +100,11 @@ public class OrderServiceImpl implements OrderService {
         double shippingFee = 0; // for now its just a POS system so no shipping fee ;-;
         double discountAmount = 0; // no discount system yet ;-;
 
+        if ("Online Order".equalsIgnoreCase(note)) {
+            shippingFee = (originalPrice < 100000) ? 20000 : 0;
+        }
+
+
         double finalPrice = originalPrice + taxAmount + shippingFee - discountAmount;
 
         // Put on all the infinity stones (damn that's a lot ;-;)

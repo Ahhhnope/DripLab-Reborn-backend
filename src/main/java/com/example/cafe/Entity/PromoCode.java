@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +17,7 @@ public class PromoCode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(columnDefinition = "nvarchar(255)")
     private String code;
@@ -28,9 +29,13 @@ public class PromoCode {
     private String description;
 
     @Column(columnDefinition = "nvarchar(255)")
-    private String category;   // "PHẦN TRĂM" hoặc "TRỪ TIỀN"
+    private String category;
 
-    private Float value;
+    @Column(name = "min_order_value", nullable = false)
+
+    private BigDecimal minOrderValue = BigDecimal.ZERO;
+
+    private BigDecimal value;
 
     private LocalDateTime startDate;
 
@@ -39,4 +44,8 @@ public class PromoCode {
     private Boolean status;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    private Integer quantity;
+
+
 }
