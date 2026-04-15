@@ -111,6 +111,18 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
+    public Cart updateQuantity(Integer cartItemId, Integer quantity) {
+        CartItem item = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CustomResourceNotFound("Item not found"));
+
+        item.setQuantity(quantity);
+        cartItemRepository.save(item); // Update just the quantity column
+
+        return item.getCart();
+    }
+
+    @Transactional
+    @Override
     public Cart removeItem(Integer cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new CustomResourceNotFound("Cart item not found: " + cartItemId));
