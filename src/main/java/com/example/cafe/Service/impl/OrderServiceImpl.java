@@ -96,9 +96,14 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Tax evasion 100
-        double taxAmount = originalPrice * 1;
+        double taxAmount = 0;
         double shippingFee = 0; // for now its just a POS system so no shipping fee ;-;
         double discountAmount = 0; // no discount system yet ;-;
+
+        if ("Online Order".equalsIgnoreCase(note)) {
+            shippingFee = (originalPrice < 100000) ? 20000 : 0;
+        }
+
 
         double finalPrice = originalPrice + taxAmount + shippingFee - discountAmount;
 
@@ -281,17 +286,31 @@ public class OrderServiceImpl implements OrderService {
 
 
 
+    @Transactional
     @Override
     public void deleteOrder(Integer orderId) {
-        if (!orderRepository.existsById(orderId)) {
-            throw new CustomResourceNotFound("Order not found: " + orderId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomResourceNotFound("Order not found"));
+
+        if (order.getInvoice() != null) {
+            invoiceRepository.delete(order.getInvoice());
         }
 
-        orderRepository.deleteById(orderId);
+        orderRepository.delete(order);
     }
 
+    @Override
+    public List<Order> findActiveOrdersByUserId(Integer userId) {
+        List<Order> activeOrders = orderRepository.findActiveOrders(userId);
+        activeOrders.sort((a, b) -> b.getId().compareTo(a.getId()));
+        return activeOrders;
+    }
 
-
+    @Override
+    public List<Order> findOrderHistoryByUserId(Integer userId) {
+        List<String> historyStatuses = List.of("Đã giao", "Đã huỷ");
+        return orderRepository.findByCustomer_User_IdAndStatusInOrderByOrderDateDesc(userId, historyStatuses);
+    }
 
 
     //genuinely tweaking out rn

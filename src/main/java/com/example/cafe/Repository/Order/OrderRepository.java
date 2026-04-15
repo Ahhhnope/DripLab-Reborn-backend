@@ -3,6 +3,7 @@ package com.example.cafe.Repository.Order;
 import com.example.cafe.Entity.Order.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.awt.print.Pageable;
@@ -27,5 +28,13 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "ORDER BY day ASC", nativeQuery = true)
     List<Object[]> getRevenueByDay();
 
+    @Query("SELECT DISTINCT o FROM Order o " +
+            "LEFT JOIN FETCH o.items i " +
+            "LEFT JOIN FETCH i.drink " +
+            "WHERE o.customer.user.id = :userId " +
+            "AND o.status NOT IN ('Đã giao', 'Đã huỷ')")
+    List<Order> findActiveOrders(@Param("userId") Integer userId);
+
+    List<Order> findByCustomer_User_IdAndStatusInOrderByOrderDateDesc(Integer userId, List<String> statuses);
 
 }

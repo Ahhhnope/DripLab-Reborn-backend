@@ -42,6 +42,12 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
+    @PutMapping("/items/{id}/quantity")
+    public ResponseEntity<Cart> updateQuantity(@PathVariable Integer id, @RequestBody CartItemRequest req) {
+        // We only need the quantity from the DTO here
+        return new ResponseEntity<>(cartService.updateQuantity(id, req.getQuantity()), HttpStatus.OK);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Cart> updateCartItem(@PathVariable Integer id, @RequestBody CartItemRequest cartItemRequest) {
         return new ResponseEntity<>(cartService.updateItem(id, cartItemRequest), HttpStatus.OK);

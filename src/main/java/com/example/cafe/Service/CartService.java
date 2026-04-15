@@ -14,6 +14,8 @@ public interface CartService {
 
     Cart updateItem(Integer cartItemId, CartItemRequest cartItemRequest);
 
+    Cart updateQuantity(Integer cartItemId, Integer quantity);
+
     Cart removeItem(Integer cartItemId);
 
     void checkout(Integer userId);
