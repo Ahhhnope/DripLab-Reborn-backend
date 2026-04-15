@@ -1,6 +1,7 @@
 package com.example.cafe.Entity.Order;
 
 import com.example.cafe.Entity.Customer;
+import com.example.cafe.Entity.Invoice;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -65,6 +66,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<OrderItem> items;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Invoice invoice;
 
     @PrePersist
     protected void onCreate() {

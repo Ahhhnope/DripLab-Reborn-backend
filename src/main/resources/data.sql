@@ -114,7 +114,7 @@ insert into orders (order_number, customer_id, original_price, final_price, stat
 --test order for status in user's order page (admin@gmail.com)
 (888000111, 1, 125000, 125000, N'Đang xử lý', N'Online', current_timestamp),
 --test order for status in user's order page (a@gmail.com)
-(999000222, 3, 55000, 55000, N'Chờ xác nhận', N'Online', current_timestamp);
+(999000222, 3, 55000, 60000, N'Chờ xác nhận', N'Online', current_timestamp);
 
 -- order 1 (Chờ xác nhận)
 insert into order_items (order_id, drink_id, size_id, quantity, base_price_at_purchase) values
