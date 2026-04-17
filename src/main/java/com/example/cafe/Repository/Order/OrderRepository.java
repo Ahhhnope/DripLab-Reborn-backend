@@ -17,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT COUNT(o) FROM Order o")
     Long getTotalOrdersCount();
 
-    @Query("SELECT COUNT(DISTINCT o.customer.id) FROM Order o")
+    @Query("SELECT COUNT(DISTINCT o.user.id) FROM Order o")
     Long getTotalUniqueCustomers();
 
     @Query(value = "SELECT CAST(order_date AS DATE) as day, SUM(final_price) " +
@@ -31,10 +31,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT DISTINCT o FROM Order o " +
             "LEFT JOIN FETCH o.items i " +
             "LEFT JOIN FETCH i.drink " +
-            "WHERE o.customer.user.id = :userId " +
+            "WHERE o.user.id = :userId " +
             "AND o.status NOT IN ('Đã giao', 'Đã huỷ')")
     List<Order> findActiveOrders(@Param("userId") Integer userId);
 
-    List<Order> findByCustomer_User_IdAndStatusInOrderByOrderDateDesc(Integer userId, List<String> statuses);
+    List<Order> findByUser_IdAndStatusInOrderByOrderDateDesc(Integer userId, List<String> statuses);
 
 }

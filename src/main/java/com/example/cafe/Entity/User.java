@@ -1,5 +1,7 @@
 package com.example.cafe.Entity;
 
+import com.example.cafe.Entity.Order.Order;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,8 +45,14 @@ public class User implements UserDetails {
     @Column(columnDefinition = "nvarchar(max)")
     private String avatar;
 
+    private Float loyaltyPoint;
+
     @Column(columnDefinition = "nvarchar(25)")
     private String role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -11,16 +11,16 @@ insert into momo_users (full_name, phone) values
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
 -- posSystem@gmail.com : bcrypt of "lmao"
 -- a@gmail.com         : bcrypt of "password"
-insert into users (full_name, email, password, phone, default_address, avatar, role) values
-(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', 'nah', N'ADMIN'),
-(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', 'no', N'ADMIN'),
-(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', 'avatar_a.png', N'USER');
+insert into users (full_name, email, password, phone, default_address, avatar, loyalty_point, role) values
+(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', 'nah', 200000, N'ADMIN'),
+(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', 'no', 0, N'ADMIN'),
+(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', 'avatar_a.png', 150, N'USER');
 
 -- customers
-insert into customers (full_name, loyalty_point, date_of_birth, phone, user_id) values
-(N'admin', 200000000, '2024-11-21', '0123457689', 1),
-(N'POS system', 0, null, null, 2),
-(N'Nguyễn Văn A', 150.0, '2026-03-20', '0988888888', 3);
+insert into customers (full_name, date_of_birth, phone, user_id) values
+(N'admin', '2024-11-21', '0123457689', 1),
+(N'POS system', null, null, 2),
+(N'Nguyễn Văn A', '2026-03-20', '0988888888', 3);
 
 -- carts
 insert into carts (user_id) values
@@ -103,7 +103,7 @@ insert into promo_codes (code, category, name, min_order_value, value, start_dat
 alter table orders add constraint DF_Orders_CreatedAt default getdate() for created_at;
 alter table orders add constraint DF_Orders_PaymentMethod default N'Tiền mặt' for payment_method;
 
-insert into orders (order_number, customer_id, original_price, final_price, status, type, order_date) values
+insert into orders (order_number, user_id, original_price, final_price, status, type, order_date) values
 (719523346, 1, 55000, 55000, N'Chờ xác nhận', N'Online', '2026-03-20 13:36:00'),
 (719523347, 1, 50000, 45000, N'Đã giao',       N'POS',    '2026-03-20 13:38:00'),
 (750602738, 1, 218000, 218000, N'Đang xử lý',  N'Online',  current_timestamp),
