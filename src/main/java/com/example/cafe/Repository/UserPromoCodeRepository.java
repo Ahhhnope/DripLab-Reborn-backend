@@ -9,10 +9,10 @@ import java.util.Optional;
 public interface UserPromoCodeRepository
         extends JpaRepository<UserPromoCode, Long> {
 
-    // Kiểm tra user đã lưu mã này chưa
+    // Kiểm tra user đã lưu/đổi mã này chưa
     boolean existsByUserIdAndPromoCodeId(Long userId, Long promoCodeId);
 
-    // Kho mã chưa dùng của user (dùng ở trang "Voucher của tôi")
+    // Kho mã chưa dùng của user (hiển thị ở "Voucher của tôi")
     List<UserPromoCode> findByUserIdAndIsUsedFalse(Long userId);
 
     // Tìm 1 bản ghi cụ thể để đánh dấu đã dùng khi checkout

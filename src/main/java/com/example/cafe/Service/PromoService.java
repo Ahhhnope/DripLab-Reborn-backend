@@ -22,9 +22,9 @@ public class PromoService {
     private final PromoCodeRepository     promoRepo;
     private final UserPromoCodeRepository userPromoRepo;
 
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
     //  ADMIN — CRUD
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
 
     @Transactional(readOnly = true)
     public List<PromoCodeDTO> getAll() {
@@ -38,9 +38,10 @@ public class PromoService {
         p.setCategory(dto.getCategory());
         p.setValue(dto.getValue());
         p.setQuantity(dto.getQuantity());
-        p.setMinOrderValue(
-                dto.getMinOrderValue() != null ? dto.getMinOrderValue() : BigDecimal.ZERO
-        );
+        p.setMinOrderValue(dto.getMinOrderValue() != null
+                ? dto.getMinOrderValue() : BigDecimal.ZERO);
+        p.setDisplayLocation(dto.getDisplayLocation() != null
+                ? dto.getDisplayLocation() : "trên web");
         p.setStartDate(dto.getStartDate());
         p.setEndDate(dto.getEndDate());
         p.setStatus(true);
@@ -50,14 +51,16 @@ public class PromoService {
     public PromoCodeDTO update(Long id, PromoCodeDTO dto) {
         PromoCode p = promoRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy voucher id=" + id));
+
         p.setCode(dto.getCode().toUpperCase().trim());
         p.setName(dto.getName());
         p.setCategory(dto.getCategory());
         p.setValue(dto.getValue());
         p.setQuantity(dto.getQuantity());
-        p.setMinOrderValue(
-                dto.getMinOrderValue() != null ? dto.getMinOrderValue() : BigDecimal.ZERO
-        );
+        p.setMinOrderValue(dto.getMinOrderValue() != null
+                ? dto.getMinOrderValue() : BigDecimal.ZERO);
+        p.setDisplayLocation(dto.getDisplayLocation() != null
+                ? dto.getDisplayLocation() : "trên web");
         p.setStartDate(dto.getStartDate());
         p.setEndDate(dto.getEndDate());
         p.setStatus(dto.getStatus());
@@ -68,22 +71,52 @@ public class PromoService {
         promoRepo.deleteById(id);
     }
 
-    // ─────────────────────────────────────────
-    //  KHÁCH HÀNG — Lưu mã vào kho
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
+    //  USER — Lấy mã theo display_location
+    // ════════════════════════════════════════════════════════
 
+    /**
+     * Trả về mã cho trang "Lưu mã" của user (display_location = 'trên web')
+     * Chỉ lấy mã còn hiệu lực, còn số lượng
+     */
+    @Transactional(readOnly = true)
+    public List<PromoCodeDTO> getWebPromos() {
+        return promoRepo.findByDisplayLocation("trên web").stream()
+                .filter(this::isActive)
+                .map(this::toDTO)
+                .toList();
+    }
+
+    /**
+     * Trả về mã cho trang "Đổi thưởng" của user (display_location = 'đổi thưởng')
+     * Chỉ lấy mã còn hiệu lực, còn số lượng
+     */
+    @Transactional(readOnly = true)
+    public List<PromoCodeDTO> getRewardPromos() {
+        return promoRepo.findByDisplayLocation("đổi thưởng").stream()
+                .filter(this::isActive)
+                .map(this::toDTO)
+                .toList();
+    }
+
+    // ════════════════════════════════════════════════════════
+    //  USER — Lưu / Đổi mã vào kho
+    // ════════════════════════════════════════════════════════
+
+    /**
+     * Khách bấm "Lưu mã" (trên web) hoặc "Đổi ngay" (đổi thưởng)
+     * → ghi vào user_promo_codes, trừ quantity
+     */
     public String savePromoForUser(Long userId, Long promoCodeId) {
         PromoCode promo = promoRepo.findById(promoCodeId)
                 .orElseThrow(() -> new RuntimeException("Mã không tồn tại"));
 
-        // Kiểm tra mã còn hiệu lực
         if (Boolean.FALSE.equals(promo.getStatus()) || promo.getQuantity() <= 0)
             throw new RuntimeException("Mã đã hết hoặc không còn hoạt động");
 
         if (promo.getEndDate() != null && promo.getEndDate().isBefore(LocalDateTime.now()))
             throw new RuntimeException("Mã đã hết hạn sử dụng");
 
-        // Mỗi user chỉ lưu 1 lần
         if (userPromoRepo.existsByUserIdAndPromoCodeId(userId, promoCodeId))
             throw new RuntimeException("Bạn đã lưu mã này rồi");
 
@@ -92,7 +125,6 @@ public class PromoService {
         if (affected == 0)
             throw new RuntimeException("Mã vừa hết số lượng, vui lòng thử mã khác");
 
-        // Ghi vào kho của user
         UserPromoCode upc = new UserPromoCode();
         upc.setUserId(userId);
         upc.setPromoCode(promo);
@@ -103,9 +135,9 @@ public class PromoService {
         return "Lưu mã thành công!";
     }
 
-    // ─────────────────────────────────────────
-    //  KHÁCH HÀNG — Xem kho mã của mình
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
+    //  USER — Kho mã đã lưu
+    // ════════════════════════════════════════════════════════
 
     @Transactional(readOnly = true)
     public List<PromoCodeDTO> getUserSavedPromos(Long userId) {
@@ -115,9 +147,9 @@ public class PromoService {
                 .toList();
     }
 
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
     //  CHECKOUT — Validate + đánh dấu đã dùng
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
 
     public record ValidateResult(BigDecimal discount, BigDecimal finalPrice) {}
 
@@ -125,7 +157,6 @@ public class PromoService {
         PromoCode promo = promoRepo.findByCode(code.toUpperCase().trim())
                 .orElseThrow(() -> new RuntimeException("Mã không tồn tại"));
 
-        // Phải có trong kho của user
         UserPromoCode upc = userPromoRepo
                 .findByUserIdAndPromoCodeId(userId, promo.getId())
                 .orElseThrow(() -> new RuntimeException("Bạn chưa lưu mã này vào kho"));
@@ -136,7 +167,6 @@ public class PromoService {
         if (promo.getEndDate() != null && promo.getEndDate().isBefore(LocalDateTime.now()))
             throw new RuntimeException("Mã đã hết hạn sử dụng");
 
-        // Kiểm tra đơn tối thiểu
         if (promo.getMinOrderValue() != null
                 && orderTotal.compareTo(promo.getMinOrderValue()) < 0) {
             throw new RuntimeException(
@@ -160,22 +190,30 @@ public class PromoService {
         return new ValidateResult(discount, finalPrice);
     }
 
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
     //  Helper
-    // ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
+
+    private boolean isActive(PromoCode p) {
+        if (Boolean.FALSE.equals(p.getStatus())) return false;
+        if (p.getQuantity() == null || p.getQuantity() <= 0) return false;
+        if (p.getEndDate() != null && p.getEndDate().isBefore(LocalDateTime.now())) return false;
+        return true;
+    }
 
     private PromoCodeDTO toDTO(PromoCode p) {
-        PromoCodeDTO d = new PromoCodeDTO();
-        d.setId(p.getId());
-        d.setCode(p.getCode());
-        d.setName(p.getName());
-        d.setCategory(p.getCategory());
-        d.setValue(p.getValue());
-        d.setQuantity(p.getQuantity());
-        d.setMinOrderValue(p.getMinOrderValue());
-        d.setStartDate(p.getStartDate());
-        d.setEndDate(p.getEndDate());
-        d.setStatus(p.getStatus());
-        return d;
+        return new PromoCodeDTO(
+                p.getId(),
+                p.getCode(),
+                p.getName(),
+                p.getCategory(),
+                p.getValue(),
+                p.getQuantity(),
+                p.getMinOrderValue(),
+                p.getDisplayLocation(),
+                p.getStartDate(),
+                p.getEndDate(),
+                p.getStatus()
+        );
     }
 }

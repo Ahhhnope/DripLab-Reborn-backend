@@ -7,12 +7,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PromoCodeRepository extends JpaRepository<PromoCode, Long> {
 
     Optional<PromoCode> findByCode(String code);
+
+    // Lấy mã theo display_location (dùng cho endpoint /web và /rewards)
+    List<PromoCode> findByDisplayLocation(String displayLocation);
+
     @Modifying
     @Query("""
         UPDATE PromoCode p

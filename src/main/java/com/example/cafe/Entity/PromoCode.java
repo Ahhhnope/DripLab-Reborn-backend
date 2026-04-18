@@ -19,33 +19,36 @@ public class PromoCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "nvarchar(255)")
+    @Column(nullable = false, unique = true)
     private String code;
 
-    @Column(columnDefinition = "nvarchar(255)")
     private String name;
 
-    @Column(columnDefinition = "nvarchar(255)")
-    private String description;
-
-    @Column(columnDefinition = "nvarchar(255)")
-    private String category;
-
-    @Column(name = "min_order_value", nullable = false)
-
-    private BigDecimal minOrderValue = BigDecimal.ZERO;
+    private String category;          // "PHẦN TRĂM" | "TRỪ TIỀN"
 
     private BigDecimal value;
 
+    private Integer quantity;
+
+    @Column(name = "min_order_value", nullable = false,
+            columnDefinition = "DECIMAL(18,2) DEFAULT 0")
+    private BigDecimal minOrderValue = BigDecimal.ZERO;
+
+    /**
+     * "trên web"   → hiện ở trang lưu mã (UserVoucher)
+     * "đổi thưởng" → hiện ở trang đổi điểm (UserPoints)
+     */
+    @Column(name = "display_location", nullable = false,
+            columnDefinition = "NVARCHAR(20) DEFAULT N'trên web'")
+    private String displayLocation = "trên web";
+
+    @Column(name = "start_date")
     private LocalDateTime startDate;
 
+    @Column(name = "end_date")
     private LocalDateTime endDate;
 
     private Boolean status;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    private Integer quantity;
 
 
 }
