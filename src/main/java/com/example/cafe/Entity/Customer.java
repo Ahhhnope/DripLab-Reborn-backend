@@ -21,8 +21,6 @@ public class Customer {
     @Column(columnDefinition = "nvarchar(255)")
     private String fullName;
 
-    private Float loyaltyPoint;
-
     private LocalDate dateOfBirth;
 
     @Column(columnDefinition = "nvarchar(10)")

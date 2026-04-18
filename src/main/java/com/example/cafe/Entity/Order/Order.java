@@ -2,6 +2,7 @@ package com.example.cafe.Entity.Order;
 
 import com.example.cafe.Entity.Customer;
 import com.example.cafe.Entity.Invoice;
+import com.example.cafe.Entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -59,9 +60,14 @@ public class Order {
 
     private LocalDateTime updatedAt;
 
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+//    private Customer customer;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Customer customer;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
