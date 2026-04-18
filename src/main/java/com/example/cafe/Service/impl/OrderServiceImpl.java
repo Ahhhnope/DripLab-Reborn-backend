@@ -57,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     private final HeavyCreamRepository heavyCreamRepository;
     private final IceCreamRepository iceCreamRepository;
     private final InstructionRepository instructionRepository;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -132,8 +133,13 @@ public class OrderServiceImpl implements OrderService {
 
 
         // Save customer on to ze order if there's any
-        Customer customer = customerRepository.findByUserId(userID);
-        if (customer != null) order.setCustomer(customer);
+//        Customer customer = customerRepository.findByUserId(userID);
+//        if (customer != null) order.setCustomer(customer);
+
+        //Save user on ze order if there's any
+        User user = userRepository.findById(userID).orElseThrow(() -> new CustomResourceNotFound("Không tìm thấy user id: "+userID));
+        if (user != null) order.setUser(user);
+
 
         // save that boi to get the ID for below
         Order savedOrder = orderRepository.save(order);
@@ -309,7 +315,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findOrderHistoryByUserId(Integer userId) {
         List<String> historyStatuses = List.of("Đã giao", "Đã huỷ");
-        return orderRepository.findByCustomer_User_IdAndStatusInOrderByOrderDateDesc(userId, historyStatuses);
+        return orderRepository.findByUser_IdAndStatusInOrderByOrderDateDesc(userId, historyStatuses);
     }
 
 
