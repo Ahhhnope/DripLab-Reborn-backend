@@ -16,11 +16,11 @@ public class UserPromoCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false, unique = true)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "promo_code_id", nullable = false, unique = true)
+    @JoinColumn(name = "promo_code_id", nullable = false)
     private PromoCode promoCode;
 
     @Column(name = "saved_at", nullable = false)
