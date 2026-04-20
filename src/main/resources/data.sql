@@ -12,9 +12,9 @@ insert into momo_users (full_name, phone) values
 -- posSystem@gmail.com : bcrypt of "lmao"
 -- a@gmail.com         : bcrypt of "password"
 insert into users (full_name, email, password, phone, default_address, avatar, loyalty_point, role) values
-(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', 'nah', 200000, N'ADMIN'),
-(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', 'no', 0, N'ADMIN'),
-(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', 'avatar_a.png', 150, N'USER');
+(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', '/IMG/lel.png', 200000, N'ADMIN'),
+(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', '/IMG/lel.png', 0, N'ADMIN'),
+(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', '/IMG/lel.png', 150, N'USER');
 
 -- customers
 insert into customers (full_name, date_of_birth, phone, user_id) values
