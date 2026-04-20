@@ -306,6 +306,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersByUserId(Integer userId) {
+        List<Order> orders = orderRepository.findAllByUserId(userId);
+        return orders;
+    }
+
+    @Override
     public List<Order> findActiveOrdersByUserId(Integer userId) {
         List<Order> activeOrders = orderRepository.findActiveOrders(userId);
         activeOrders.sort((a, b) -> b.getId().compareTo(a.getId()));

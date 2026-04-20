@@ -35,6 +35,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "AND o.status NOT IN ('Đã giao', 'Đã huỷ')")
     List<Order> findActiveOrders(@Param("userId") Integer userId);
 
+    List<Order> findAllByUserId(Integer userId);
+
     List<Order> findByUser_IdAndStatusInOrderByOrderDateDesc(Integer userId, List<String> statuses);
 
 }
