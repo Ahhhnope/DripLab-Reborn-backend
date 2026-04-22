@@ -12,6 +12,7 @@ public interface OrderService {
     Order createOrder(Integer userID, String note, String paymentMethod);
     Order getOrderById(Integer orderID);
     Order updateOrderStatus(Integer orderId, String status);
+    void cancelOrderForUser(Integer orderID, OrderUpdateDTO dto);
     void updateOrder(Integer id, OrderUpdateDTO order);
     void deleteOrder(Integer orderId);
     List<Order> getOrdersByUserId(Integer userId);
