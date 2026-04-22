@@ -50,9 +50,17 @@ public class OrderController {
     //new thing ?!?!?
     //didn't even know this existed lmao
     //apparently it's mainly used for updating just a part in a row instead of replacing the entire row
-    @PatchMapping("/update/{id}/")
+    //update for admin
+    @PatchMapping("/update/{id}")
     public ResponseEntity<?> updateOrder(@PathVariable int id, @RequestBody OrderUpdateDTO dto) {
         orderService.updateOrder(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    //cancel order for user
+    @PutMapping("/user/cancel/{id}")
+    public ResponseEntity<?> userUpdateOrder(@PathVariable Integer id, @RequestBody OrderUpdateDTO dto) {
+        orderService.cancelOrderForUser(id, dto);
         return ResponseEntity.ok().build();
     }
 

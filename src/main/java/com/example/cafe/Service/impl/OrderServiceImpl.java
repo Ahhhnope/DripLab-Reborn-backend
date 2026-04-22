@@ -250,8 +250,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
-
     @Override
     public Order getOrderById(Integer orderId) {
         return orderRepository.findById(orderId)
@@ -265,6 +263,21 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(status);
         order.setUpdatedAt(LocalDateTime.now());
         return orderRepository.save(order);
+    }
+
+    @Transactional
+    @Override
+    public void cancelOrderForUser(Integer orderID, OrderUpdateDTO dto) {
+        Order order = orderRepository.findById(orderID).orElseThrow(() -> new CustomResourceNotFound("Không tìm thấy order: "+orderID));
+
+        if (dto.getStatus().equals("Đã huỷ") && !order.getStatus().equals("Chờ xác nhận")) {
+            throw new IllegalArgumentException("Không thể hủy đơn hàng vì đã xác nhận hoặc đã được hủy");
+        }
+
+        order.setStatus(dto.getStatus());
+        if (dto.getNote() != null) order.setNote(dto.getNote());
+        order.setUpdatedAt(LocalDateTime.now());
+        orderRepository.save(order);
     }
 
     @Transactional
