@@ -251,3 +251,37 @@ values
 
 -- Matches Order 11 (600,000)
 (10008, 11, 1, '2026-04-03 10:15:00', 600000.0, 60000.0, 25000.0, 0.0, 685000.0, N'Momo', N'Online', '2026-04-03');
+
+-- 1. Tạo bảng test_atm_cards
+CREATE TABLE test_atm_cards (
+                                id          INT IDENTITY(1,1) PRIMARY KEY,
+                                card_number NVARCHAR(19)  NOT NULL UNIQUE,
+                                holder_name NVARCHAR(100) NOT NULL,        -- IN HOA, không dấu (khớp với input frontend)
+                                expiry_date NVARCHAR(5)   NOT NULL,        -- định dạng MM/YY
+                                phone       NVARCHAR(10)  NULL,
+                                bank_name   NVARCHAR(60)  NOT NULL,
+    -- ACTIVE       → thanh toán THÀNH CÔNG
+    -- BLOCKED      → thẻ bị KHOÁ
+    -- INSUFFICIENT → không đủ tiền
+    -- LIMIT        → đạt hạn mức thẻ
+                                card_status NVARCHAR(15)  NOT NULL DEFAULT 'ACTIVE',
+                                created_at  DATETIME      DEFAULT GETDATE()
+);
+
+-- 2. Chèn 5 thẻ test (giống format hình 5 trong đề bài)
+INSERT INTO test_atm_cards (card_number, holder_name, expiry_date, phone, bank_name, card_status) VALUES
+
+-- Thẻ 1: Thanh toán THÀNH CÔNG — Vietcombank
+('9704000000000018', 'NGUYEN VAN A', '03/07', '0987654321', N'Vietcombank',  'ACTIVE'),
+
+-- Thẻ 2: Thẻ bị KHOÁ — MBBank
+('9704000000000026', 'NGUYEN VAN A', '03/07', NULL,         N'MBBank',       'BLOCKED'),
+
+-- Thẻ 3: Nguồn tiền KHÔNG ĐỦ — Agribank
+('9704000000000034', 'NGUYEN VAN A', '03/07', '0901234567', N'Agribank',     'INSUFFICIENT'),
+
+-- Thẻ 4: ĐẠT HẠN MỨC — Techcombank
+('9704000000000042', 'NGUYEN VAN A', '03/07', NULL,         N'Techcombank',  'LIMIT'),
+
+-- Thẻ 5: Thanh toán THÀNH CÔNG — VPBank (tên chủ thẻ khác để test)
+('9704111111111111', 'TRAN THI B',   '06/08', '0912345678', N'VPBank',       'ACTIVE');

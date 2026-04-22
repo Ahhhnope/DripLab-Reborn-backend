@@ -1,22 +1,22 @@
 package com.example.cafe.Controller;
 
-import com.example.cafe.Entity.MomoUser;
-import com.example.cafe.Repository.MomoRepository;
+import com.example.cafe.DTO.MomoRequestDTO;
+import com.example.cafe.DTO.MomoResponseDTO;
+import com.example.cafe.Service.MomoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/momo")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class MomoController {
-    private final MomoRepository momoRepository;
+    private final MomoService momoService;
 
-    @GetMapping("/lookup/{phone}")
-    public ResponseEntity<MomoUser> lookUpUser(@PathVariable String phone) {
-        return momoRepository.findByPhone(phone).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @PostMapping("/atm-pay")
+    public ResponseEntity<MomoResponseDTO> atmPay(@RequestBody MomoRequestDTO request) {
+        MomoResponseDTO result = momoService.processAtmPayment(request);
+        return ResponseEntity.ok(result);
     }
 }

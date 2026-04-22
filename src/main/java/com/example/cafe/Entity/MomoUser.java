@@ -23,7 +23,7 @@ public class MomoUser {
     @Column(columnDefinition = "nvarchar(10)")
     private String phone;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
