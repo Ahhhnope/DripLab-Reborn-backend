@@ -22,8 +22,10 @@ public class PromoCode {
     @Column(nullable = false, unique = true)
     private String code;
 
+    @Column(columnDefinition = "nvarchar(50)")
     private String name;
 
+    @Column(columnDefinition = "nvarchar(50)")
     private String category;          // "PHẦN TRĂM" | "TRỪ TIỀN"
 
     private BigDecimal value;
