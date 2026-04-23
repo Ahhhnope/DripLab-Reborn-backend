@@ -25,15 +25,6 @@ public class MomoResponseDTO {
     /** Thông báo hiển thị cho user */
     private String message;
 
-    /**
-     * Mã lỗi khi thất bại:
-     *   CARD_NOT_FOUND       — Không tìm thấy thẻ
-     *   HOLDER_MISMATCH      — Tên không khớp
-     *   EXPIRED              — Ngày hết hạn sai/đã hết
-     *   CARD_BLOCKED         — Thẻ bị khoá
-     *   INSUFFICIENT_FUNDS   — Không đủ tiền
-     *   LIMIT_EXCEEDED       — Đã đạt hạn mức
-     */
     private String errorCode;
 
     /* ── Factory methods ── */
