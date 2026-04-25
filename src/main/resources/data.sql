@@ -1,9 +1,11 @@
 -- workers
+IF NOT EXISTS (SELECT 1 FROM workers)
 insert into workers (full_name, account, password) values
 (N'americano', 'abc123', 'lmao'),
 (N'robusta', 'kikiki', 'lol');
 
 -- momo_users
+IF NOT EXISTS (SELECT 1 FROM momo_users)
 insert into momo_users (full_name, phone) values
 (N'Nguyễn Huy Bình', '0987654321');
 
@@ -11,56 +13,66 @@ insert into momo_users (full_name, phone) values
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
 -- posSystem@gmail.com : bcrypt of "lmao"
 -- a@gmail.com         : bcrypt of "password"
+IF NOT EXISTS (SELECT 1 FROM users)
 insert into users (full_name, email, password, phone, default_address, avatar, loyalty_point, role) values
 (N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', '/IMG/lel.png', 200000, N'ADMIN'),
 (N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', '/IMG/lel.png', 0, N'ADMIN'),
 (N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', '/IMG/lel.png', 150, N'USER');
 
 -- customers
+IF NOT EXISTS (SELECT 1 FROM customers)
 insert into customers (full_name, date_of_birth, phone, user_id) values
 (N'admin', '2024-11-21', '0123457689', 1),
 (N'POS system', null, null, 2),
 (N'Nguyễn Văn A', '2026-03-20', '0988888888', 3);
 
 -- carts
+IF NOT EXISTS (SELECT 1 FROM carts)
 insert into carts (user_id) values
 (1),
 (2),
 (3); --(POS system cart)
 
 -- instructions
+IF NOT EXISTS (SELECT 1 FROM instructions)
 insert into instructions (name, instructions) values
 (N'Pha Máy', N'Chiết xuất Espresso tiêu chuẩn 30ml'),
 (N'Pha Phin', N'Ủ 2 phút với 20ml nước, sau đó rót thêm 40ml'),
 (N'Ủ Lạnh', N'Ủ bột cà phê trong nước lạnh 16 tiếng');
 
 -- coffee_beans
+IF NOT EXISTS (SELECT 1 FROM coffee_beans)
 insert into coffee_beans (name, price, quantity) values
 (N'Arabica Highland', 0, 500),
 (N'Robusta Special', 0, 500);
 
 -- heavy_creams
+IF NOT EXISTS (SELECT 1 FROM heavy_creams)
 insert into heavy_creams (name, price, quantity) values
 (N'Kem Béo Rich', 0, 50);
 
 -- ice_creams
+IF NOT EXISTS (SELECT 1 FROM ice_creams)
 insert into ice_creams (name, price, quantity) values
 (N'Cream', 10, 220),
 (N'SUPAAAAAAAA', 30, 50),
 (N'Creammmmm', 11, 50);
 
 -- milks
+IF NOT EXISTS (SELECT 1 FROM milks)
 insert into milks (name, price, quantity) values
 (N'Sữa Đặc Larosee', 0, 100),
 (N'Sữa Tươi Vinamilk', 0, 100);
 
 -- sizes
+IF NOT EXISTS (SELECT 1 FROM sizes)
 insert into sizes (name, price) values
 ('S', 0),
 ('M', 5000),
 ('L', 10000);
 
 -- drinks
+IF NOT EXISTS (SELECT 1 FROM drinks)
 insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy_cream_id, ice_cream_id, milk_id, instruction_id, active) values
 (N'Matcha Latte', N'Trà', 45000, '/IMG/geisha.png', null, null, null, null, 2, 1),
 (N'Trà Đào', N'Trà', 25000, '/IMG/hong-tra-sua.jpg', null, 1, 1, 1, 1, 1),
@@ -79,6 +91,7 @@ insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy
 
 
 -- toppings
+IF NOT EXISTS (SELECT 1 FROM toppings)
 insert into toppings (name, price) values
 (N'Trân châu đen', 5000),
 (N'Thạch cà phê', 5000),
@@ -90,6 +103,7 @@ insert into toppings (name, price) values
 
 
 
+IF NOT EXISTS (SELECT 1 FROM promo_codes)
 insert into promo_codes (code, category, name, min_order_value, value, start_date, end_date, status, display_location, quantity) values
   ('VOUCHER10', N'PHẦN TRĂM', N'Giảm 10%',     50000,     10.00, '2025-12-25 00:00:00', '2026-12-25 23:59:59', 1, N'trên web', 999),
   ('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 100000,    30.00, '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1, N'trên web', 67),
@@ -97,9 +111,12 @@ insert into promo_codes (code, category, name, min_order_value, value, start_dat
 
 
 -- orders
+IF NOT EXISTS (SELECT 1 FROM sys.default_constraints WHERE name = 'DF_Orders_CreatedAt')
 alter table orders add constraint DF_Orders_CreatedAt default getdate() for created_at;
+IF NOT EXISTS (SELECT 1 FROM sys.default_constraints WHERE name = 'DF_Orders_PaymentMethod')
 alter table orders add constraint DF_Orders_PaymentMethod default N'Tiền mặt' for payment_method;
 
+IF NOT EXISTS (SELECT 1 FROM orders WHERE order_number = 719523346)
 insert into orders (order_number, user_id, original_price, final_price, status, type, order_date) values
 (719523346, 1, 55000, 55000, N'Chờ xác nhận', N'Online', '2026-03-20 13:36:00'),
 (719523347, 1, 50000, 45000, N'Đã giao',       N'POS',    '2026-03-20 13:38:00'),
@@ -118,6 +135,7 @@ insert into orders (order_number, user_id, original_price, final_price, status, 
 (999000222, 3, 55000, 60000, N'Chờ xác nhận', N'Online', current_timestamp);
 
 -- order 1 (Chờ xác nhận)
+IF NOT EXISTS (SELECT 1 FROM order_items WHERE order_id = 1)
 insert into order_items (order_id, drink_id, size_id, quantity, base_price_at_purchase) values
 -- Order 1 → 55,000
 (1, 1, 2, 1, 50000),  -- Matcha Latte M
@@ -177,6 +195,7 @@ insert into order_items (order_id, drink_id, size_id, quantity, base_price_at_pu
 -- Order 13 (a@gmail.com)
 (13, 5, 2, 1, 55000);
 
+IF NOT EXISTS (SELECT 1 FROM order_item_toppings WHERE order_item_id = 1)
 insert into order_item_toppings (order_item_id, topping_id, base_price_at_purchase) values
 -- Order 1
 (1, 1, 5000),
@@ -223,8 +242,10 @@ insert into order_item_toppings (order_item_id, topping_id, base_price_at_purcha
 
 
 -- invoices
+IF NOT EXISTS (SELECT 1 FROM sys.default_constraints WHERE name = 'DF_Invoices_ReceiptType')
 alter table invoices add constraint DF_Invoices_ReceiptType default N'Tại quầy' for receipt_type;
 
+IF NOT EXISTS (SELECT 1 FROM invoices WHERE invoice_number = 10001)
 insert into invoices
 (invoice_number, order_id, customer_id, invoice_date, original_price, tax_amount, shipping_fee, discount_amount, final_price, payment_method, receipt_type, created_at)
 values
@@ -256,14 +277,14 @@ values
 IF OBJECT_ID('test_atm_cards', 'U') IS NULL
 BEGIN
 CREATE TABLE test_atm_cards (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    card_number NVARCHAR(19)  NOT NULL UNIQUE,
-    holder_name NVARCHAR(100) NOT NULL,
-    expiry_date NVARCHAR(5)   NOT NULL,
-    phone       NVARCHAR(10)  NULL,
-    bank_name   NVARCHAR(60)  NOT NULL,
-    card_status NVARCHAR(15)  NOT NULL DEFAULT 'ACTIVE',
-    created_at  DATETIME      DEFAULT GETDATE()
+                                id INT IDENTITY(1,1) PRIMARY KEY,
+                                card_number NVARCHAR(19)  NOT NULL UNIQUE,
+                                holder_name NVARCHAR(100) NOT NULL,
+                                expiry_date NVARCHAR(5)   NOT NULL,
+                                phone       NVARCHAR(10)  NULL,
+                                bank_name   NVARCHAR(60)  NOT NULL,
+                                card_status NVARCHAR(15)  NOT NULL DEFAULT 'ACTIVE',
+                                created_at  DATETIME      DEFAULT GETDATE()
 )
 END;
 -- Thẻ 1
