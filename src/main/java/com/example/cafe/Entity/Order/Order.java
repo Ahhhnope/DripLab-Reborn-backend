@@ -74,7 +74,7 @@ public class Order {
     private List<OrderItem> items;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private Invoice invoice;
 
     @PrePersist

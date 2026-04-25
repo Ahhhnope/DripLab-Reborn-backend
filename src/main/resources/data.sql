@@ -9,15 +9,24 @@ IF NOT EXISTS (SELECT 1 FROM momo_users)
 insert into momo_users (full_name, phone) values
 (N'Nguyễn Huy Bình', '0987654321');
 
+-- tiers
+IF NOT EXISTS (SELECT 1 FROM tiers)
+insert into tiers (name, min_point) values
+('NOOB', 0),
+('PRO', 100),
+('HACKER', 500),
+('GOD', 1000);
+
+
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
 -- posSystem@gmail.com : bcrypt of "lmao"
 -- a@gmail.com         : bcrypt of "password"
 IF NOT EXISTS (SELECT 1 FROM users)
-insert into users (full_name, email, password, phone, default_address, avatar, loyalty_point, role) values
-(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', '/IMG/lel.png', 200000, N'ADMIN'),
-(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', '/IMG/lel.png', 0, N'ADMIN'),
-(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', '/IMG/lel.png', 150, N'USER');
+insert into users (full_name, email, password, phone, default_address, avatar, loyalty_point, used_point, tier_id, role) values
+(N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', '/IMG/lel.png', 200000, 0, 3, N'ADMIN'),
+(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', '/IMG/lel.png', 9000000, 0, 3, N'ADMIN'),
+(N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', '/IMG/lel.png', 99, 0, 1, N'USER');
 
 -- customers
 IF NOT EXISTS (SELECT 1 FROM customers)

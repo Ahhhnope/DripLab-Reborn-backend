@@ -1,5 +1,6 @@
 package com.example.cafe.DTO;
 
+import com.example.cafe.Entity.Tier;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +22,6 @@ public class UserRequest {
     private String password;
     @Size(max = 50, message = "pls keep it under 50 characters")
     private String defaultAddress;
+    private Tier tier;
     private String avatar;
 }

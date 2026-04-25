@@ -47,6 +47,13 @@ public class User implements UserDetails {
 
     private Float loyaltyPoint;
 
+    private Float usedPoint;
+
+    @ManyToOne
+    @JoinColumn(name = "tier_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private Tier tier;
+
     @Column(columnDefinition = "nvarchar(25)")
     private String role;
 

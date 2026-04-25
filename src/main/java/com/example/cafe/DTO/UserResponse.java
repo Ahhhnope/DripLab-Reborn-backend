@@ -1,5 +1,6 @@
 package com.example.cafe.DTO;
 
+import com.example.cafe.Entity.Tier;
 import com.example.cafe.Entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,9 @@ public class UserResponse {
     private String phone;
     private String defaultAddress;
     private String avatar;
-    private String token;
+    private Float loyaltyPoint;
+    private Float usedPoint;
+    private Tier tier;
     private String role;
 
     public UserResponse(User user){
@@ -27,6 +30,9 @@ public class UserResponse {
         this.phone = user.getPhone();
         this.defaultAddress = user.getDefaultAddress();
         this.avatar = user.getAvatar();
+        this.loyaltyPoint = user.getLoyaltyPoint();
+        this.usedPoint = user.getUsedPoint();
+        this.tier = user.getTier();
         this.role = user.getRole();
     }
 }

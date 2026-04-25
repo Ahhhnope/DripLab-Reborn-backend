@@ -2,6 +2,7 @@ package com.example.cafe.Entity;
 
 import com.example.cafe.Entity.Order.Order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,7 +48,7 @@ public class Invoice {
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private Order order;
 
     @ManyToOne
