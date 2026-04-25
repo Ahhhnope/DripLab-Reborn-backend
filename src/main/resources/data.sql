@@ -277,14 +277,14 @@ values
 IF OBJECT_ID('test_atm_cards', 'U') IS NULL
 BEGIN
 CREATE TABLE test_atm_cards (
-                                id INT IDENTITY(1,1) PRIMARY KEY,
-                                card_number NVARCHAR(19)  NOT NULL UNIQUE,
-                                holder_name NVARCHAR(100) NOT NULL,
-                                expiry_date NVARCHAR(5)   NOT NULL,
-                                phone       NVARCHAR(10)  NULL,
-                                bank_name   NVARCHAR(60)  NOT NULL,
-                                card_status NVARCHAR(15)  NOT NULL DEFAULT 'ACTIVE',
-                                created_at  DATETIME      DEFAULT GETDATE()
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    card_number NVARCHAR(19)  NOT NULL UNIQUE,
+    holder_name NVARCHAR(100) NOT NULL,
+    expiry_date NVARCHAR(5)   NOT NULL,
+    phone       NVARCHAR(10)  NULL,
+    bank_name   NVARCHAR(60)  NOT NULL,
+    card_status NVARCHAR(15)  NOT NULL DEFAULT 'ACTIVE',
+    created_at  DATETIME      DEFAULT GETDATE()
 )
 END;
 -- Thẻ 1
@@ -312,163 +312,92 @@ IF NOT EXISTS (SELECT 1 FROM test_atm_cards WHERE card_number = '970411111111111
 INSERT INTO test_atm_cards VALUES
 ('9704111111111111', 'TRAN THI B', '06/08', '0912345678', N'VPBank', 'ACTIVE', DEFAULT);
 
--- =============================================
 -- STORES TABLE
--- =============================================
 IF OBJECT_ID('stores', 'U') IS NULL
 BEGIN
 CREATE TABLE stores (
-                        id            INT IDENTITY(1,1) PRIMARY KEY,
-                        code          NVARCHAR(100)  NOT NULL,
-                        address       NVARCHAR(300)  NOT NULL,
-                        image_url     NVARCHAR(300)  NOT NULL DEFAULT '/IMG/HinhAnh1Coffee.png',
-                        lat           FLOAT          NOT NULL,
-                        lng           FLOAT          NOT NULL,
-                        open_time     NVARCHAR(5)    NOT NULL DEFAULT '08:00',
-                        close_time    NVARCHAR(5)    NOT NULL DEFAULT '22:00',
-                        maps_url      NVARCHAR(500)  NULL,
-                        amenities     NVARCHAR(500)  NULL,
-                        created_at    DATETIME       DEFAULT GETDATE()
+    id            INT IDENTITY(1,1) PRIMARY KEY,
+    code          NVARCHAR(100)  NOT NULL,
+    address       NVARCHAR(300)  NOT NULL,
+    image_url     NVARCHAR(300)  NOT NULL,
+    lat           FLOAT          NOT NULL,
+    lng           FLOAT          NOT NULL,
+    open_time     NVARCHAR(5)    NOT NULL DEFAULT '08:00',
+    close_time    NVARCHAR(5)    NOT NULL DEFAULT '22:00',
+    maps_url      NVARCHAR(500)  NULL,
+    amenities     NVARCHAR(500)  NULL,
+    created_at    DATETIME       DEFAULT GETDATE()
 )
 END;
 
--- =============================================
 -- STORE_REVIEWS TABLE
--- =============================================
 IF OBJECT_ID('store_reviews', 'U') IS NULL
 BEGIN
 CREATE TABLE store_reviews (
-                               id          INT IDENTITY(1,1) PRIMARY KEY,
-                               store_id    INT            NOT NULL REFERENCES stores(id),
-                               user_id     INT            NULL REFERENCES users(id),  -- NULL = anonymous/seeded
-                               initials    NVARCHAR(5)    NOT NULL,
-                               reviewer_name NVARCHAR(100) NOT NULL,
-                               stars       TINYINT        NOT NULL CHECK (stars BETWEEN 1 AND 5),
-                               review_text NVARCHAR(1000) NOT NULL,
-                               review_date DATETIME       DEFAULT GETDATE(),
-                               created_at  DATETIME       DEFAULT GETDATE()
+    id            INT IDENTITY(1,1) PRIMARY KEY,
+    store_id      INT            NOT NULL REFERENCES stores(id),
+    user_id       INT            NULL REFERENCES users(id),
+    initials      NVARCHAR(5)    NOT NULL,
+    reviewer_name NVARCHAR(100)  NOT NULL,
+    stars         TINYINT        NOT NULL CHECK (stars BETWEEN 1 AND 5),
+    review_text   NVARCHAR(1000) NOT NULL,
+    review_date   DATETIME       DEFAULT GETDATE(),
+    created_at    DATETIME       DEFAULT GETDATE()
 )
 END;
 
--- =============================================
--- SEED STORES (5 locations matching ChooseStores.js)
--- =============================================
+-- SEED STORES
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Vincom Bà Triệu')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Vincom Bà Triệu',
- N'191 Bà Triệu, Lê Đại Hành, Hai Bà Trưng, Hà Nội',
- '/IMG/HinhAnh1Coffee.png',
- 21.0134, 105.8497, '08:00', '22:00',
- 'https://maps.app.goo.gl/example1',
- N'["Wi-Fi Miễn Phí","Chỗ Ngồi Ngoài Trời","Thú Cưng","Lớp Latte Art"]');
+(N'Drip Lab-Vincom Bà Triệu', N'191 Bà Triệu, Lê Đại Hành, Hai Bà Trưng, Hà Nội', '/IMG/HinhAnh1Coffee.png', 21.0134, 105.8497, '08:00', '22:00', 'https://maps.app.goo.gl/example1', N'["Wi-Fi Miễn Phí","Chỗ Ngồi Ngoài Trời","Thú Cưng","Lớp Latte Art"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Thái Hà')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Thái Hà',
- N'Tòa nhà Viet Tower, 1 Thái Hà, Trung Liệt, Đống Đa, Hà Nội',
- '/IMG/HinhAnh2Coffee.png',
- 21.0197, 105.8363, '08:00', '22:00',
- 'https://maps.app.goo.gl/example2',
- N'["Wi-Fi Miễn Phí","Đặt Chỗ Trước","Chỗ Đậu Xe"]');
+(N'Drip Lab-Thái Hà', N'Tòa nhà Viet Tower, 1 Thái Hà, Trung Liệt, Đống Đa, Hà Nội', '/IMG/HinhAnh2Coffee.png', 21.0197, 105.8363, '08:00', '22:00', 'https://maps.app.goo.gl/example2', N'["Wi-Fi Miễn Phí","Đặt Chỗ Trước","Chỗ Đậu Xe"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Indochina Plaza')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Indochina Plaza',
- N'241 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội',
- '/IMG/HinhAnh3Coffee.jpg',
- 21.0380, 105.7846, '08:00', '22:00',
- 'https://maps.app.goo.gl/example3',
- N'["Wi-Fi Miễn Phí","Tầng Lầu","Nhạc Sống Cuối Tuần"]');
+(N'Drip Lab-Indochina Plaza', N'241 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội', '/IMG/HinhAnh3Coffee.jpg', 21.0380, 105.7846, '08:00', '22:00', 'https://maps.app.goo.gl/example3', N'["Wi-Fi Miễn Phí","Tầng Lầu","Nhạc Sống Cuối Tuần"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Aeon Mall Hà Đông')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Aeon Mall Hà Đông',
- N'Khu Dân cư Hoàng Văn Thụ, Dương Nội, Hà Đông, Hà Nội',
- '/IMG/HinhAnh4Coffee.webp',
- 20.9812, 105.7469, '09:00', '21:30',
- 'https://maps.app.goo.gl/example4',
- N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Chỗ Đậu Xe Rộng"]');
+(N'Drip Lab-Aeon Mall Hà Đông', N'Khu Dân cư Hoàng Văn Thụ, Dương Nội, Hà Đông, Hà Nội', '/IMG/HinhAnh4Coffee.webp', 20.9812, 105.7469, '09:00', '21:30', 'https://maps.app.goo.gl/example4', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Chỗ Đậu Xe Rộng"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Aeon Mall Long Biên')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Aeon Mall Long Biên',
- N'27 Cổ Linh, Long Biên, Hà Nội',
- '/IMG/HinhAnh5Coffee.jpg',
- 21.0486, 105.9001, '09:00', '21:30',
- 'https://maps.app.goo.gl/example5',
- N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Khu Vui Chơi Trẻ Em"]');
+(N'Drip Lab-Aeon Mall Long Biên', N'27 Cổ Linh, Long Biên, Hà Nội', '/IMG/HinhAnh5Coffee.jpg', 21.0486, 105.9001, '09:00', '21:30', 'https://maps.app.goo.gl/example5', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Khu Vui Chơi Trẻ Em"]');
 
--- =============================================
--- SEED REVIEWS — Store 1 (Vincom Bà Triệu)
--- =============================================
+-- SEED REVIEWS Store 1
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 1 AND reviewer_name = N'Nguyễn Thanh')
 INSERT INTO store_reviews (store_id, initials, reviewer_name, stars, review_text, review_date) VALUES
-(1, N'NT', N'Nguyễn Thanh', 5,
- N'Không khí ở đây tuyệt vời. Tôi đặc biệt thích ly pour-over từ cà phê Ethiopia single-origin. Nhân viên rất chuyên nghiệp và am hiểu về cà phê.',
- DATEADD(DAY, -2, GETDATE())),
-(1, N'LH', N'Lê Hoàng', 4,
- N'Latte art đẹp lắm! Hơi đông vào cuối tuần nhưng chờ xứng đáng. Tôi gợi ý dòng blend đặc trưng nếu bạn thích vị bùi bùi.',
- DATEADD(DAY, -7, GETDATE())),
-(1, N'PD', N'Phạm Dũng', 5,
- N'Cold brew ngon nhất khu vực, không chỗ nào bì được. Thiết kế industrial chic rất thu hút.',
- DATEADD(DAY, -14, GETDATE()));
+(1, N'NT', N'Nguyễn Thanh', 5, N'Không khí ở đây tuyệt vời. Tôi đặc biệt thích ly pour-over từ cà phê Ethiopia single-origin. Nhân viên rất chuyên nghiệp và am hiểu về cà phê.', DATEADD(DAY, -2, GETDATE())),
+(1, N'LH', N'Lê Hoàng', 4, N'Latte art đẹp lắm! Hơi đông vào cuối tuần nhưng chờ xứng đáng. Tôi gợi ý dòng blend đặc trưng nếu bạn thích vị bùi bùi.', DATEADD(DAY, -7, GETDATE())),
+(1, N'PD', N'Phạm Dũng', 5, N'Cold brew ngon nhất khu vực, không chỗ nào bì được. Thiết kế industrial chic rất thu hút.', DATEADD(DAY, -14, GETDATE()));
 
--- =============================================
--- SEED REVIEWS — Store 2 (Thái Hà)
--- =============================================
+-- SEED REVIEWS Store 2
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 2 AND reviewer_name = N'Trần Minh')
 INSERT INTO store_reviews (store_id, initials, reviewer_name, stars, review_text, review_date) VALUES
-(2, N'TM', N'Trần Minh', 5,
- N'Cơ sở Thái Hà rất yên tĩnh, thích hợp làm việc. Espresso đậm vị, không bị đắng. Sẽ quay lại nhiều lần.',
- DATEADD(DAY, -3, GETDATE())),
-(2, N'HN', N'Hà Ngân', 4,
- N'Không gian thoáng, nhạc nền nhẹ nhàng. Matcha latte ở đây khá chuẩn vị Nhật. Nhân viên thân thiện.',
- DATEADD(DAY, -10, GETDATE())),
-(2, N'BT', N'Bảo Trân', 5,
- N'Góc chụp ảnh siêu đẹp ở tầng 2. Flat white rất ngon, cân bằng giữa sữa và espresso hoàn hảo.',
- DATEADD(DAY, -18, GETDATE()));
+(2, N'TM', N'Trần Minh', 5, N'Cơ sở Thái Hà rất yên tĩnh, thích hợp làm việc. Espresso đậm vị, không bị đắng. Sẽ quay lại nhiều lần.', DATEADD(DAY, -3, GETDATE())),
+(2, N'HN', N'Hà Ngân', 4, N'Không gian thoáng, nhạc nền nhẹ nhàng. Matcha latte ở đây khá chuẩn vị Nhật. Nhân viên thân thiện.', DATEADD(DAY, -10, GETDATE())),
+(2, N'BT', N'Bảo Trân', 5, N'Góc chụp ảnh siêu đẹp ở tầng 2. Flat white rất ngon, cân bằng giữa sữa và espresso hoàn hảo.', DATEADD(DAY, -18, GETDATE()));
 
--- =============================================
--- SEED REVIEWS — Store 3 (Indochina Plaza)
--- =============================================
+-- SEED REVIEWS Store 3
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 3 AND reviewer_name = N'Vũ Hùng')
 INSERT INTO store_reviews (store_id, initials, reviewer_name, stars, review_text, review_date) VALUES
-(3, N'VH', N'Vũ Hùng', 4,
- N'Gần ĐH Quốc gia nên hay ghé. Giá hợp lý, cà phê chất lượng tốt. Cuối tuần hơi đông sinh viên.',
- DATEADD(DAY, -1, GETDATE())),
-(3, N'LT', N'Lan Trinh', 5,
- N'Rang xay tại chỗ nên hương thơm rất đặc trưng. Cold brew ngâm 16 tiếng vị mượt không cần thêm đường.',
- DATEADD(DAY, -5, GETDATE())),
-(3, N'KN', N'Khánh Nam', 4,
- N'Decor hiện đại, ánh sáng tự nhiên tốt. Ổ cắm điện đầy đủ cho dân làm việc remote.',
- DATEADD(DAY, -12, GETDATE()));
+(3, N'VH', N'Vũ Hùng', 4, N'Gần ĐH Quốc gia nên hay ghé. Giá hợp lý, cà phê chất lượng tốt. Cuối tuần hơi đông sinh viên.', DATEADD(DAY, -1, GETDATE())),
+(3, N'LT', N'Lan Trinh', 5, N'Rang xay tại chỗ nên hương thơm rất đặc trưng. Cold brew ngâm 16 tiếng vị mượt không cần thêm đường.', DATEADD(DAY, -5, GETDATE())),
+(3, N'KN', N'Khánh Nam', 4, N'Decor hiện đại, ánh sáng tự nhiên tốt. Ổ cắm điện đầy đủ cho dân làm việc remote.', DATEADD(DAY, -12, GETDATE()));
 
--- =============================================
--- SEED REVIEWS — Store 4 (Aeon Mall Hà Đông)
--- =============================================
+-- SEED REVIEWS Store 4
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 4 AND reviewer_name = N'Mai Anh')
 INSERT INTO store_reviews (store_id, initials, reviewer_name, stars, review_text, review_date) VALUES
-(4, N'MA', N'Mai Anh', 5,
- N'Thuận tiện vì nằm trong Aeon Mall, ghé mua sắm xong vào nghỉ chân là chuẩn. Trà đào ở đây ngon hơn nhiều nơi.',
- DATEADD(DAY, -4, GETDATE())),
-(4, N'QT', N'Quốc Toản', 4,
- N'Phục vụ nhanh dù đông khách mall. Bạc xỉu vị vừa phải, không quá ngọt. Sẽ quay lại.',
- DATEADD(DAY, -9, GETDATE())),
-(4, N'DL', N'Diệu Linh', 5,
- N'Mang con đến đây rất ổn vì rộng rãi và thoải mái. Nhân viên vui vẻ, hỗ trợ nhiệt tình.',
- DATEADD(DAY, -20, GETDATE()));
+(4, N'MA', N'Mai Anh', 5, N'Thuận tiện vì nằm trong Aeon Mall, ghé mua sắm xong vào nghỉ chân là chuẩn. Trà đào ở đây ngon hơn nhiều nơi.', DATEADD(DAY, -4, GETDATE())),
+(4, N'QT', N'Quốc Toản', 4, N'Phục vụ nhanh dù đông khách mall. Bạc xỉu vị vừa phải, không quá ngọt. Sẽ quay lại.', DATEADD(DAY, -9, GETDATE())),
+(4, N'DL', N'Diệu Linh', 5, N'Mang con đến đây rất ổn vì rộng rãi và thoải mái. Nhân viên vui vẻ, hỗ trợ nhiệt tình.', DATEADD(DAY, -20, GETDATE()));
 
--- =============================================
--- SEED REVIEWS — Store 5 (Aeon Mall Long Biên)
--- =============================================
+-- SEED REVIEWS Store 5
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 5 AND reviewer_name = N'Đức Anh')
 INSERT INTO store_reviews (store_id, initials, reviewer_name, stars, review_text, review_date) VALUES
-(5, N'ĐA', N'Đức Anh', 5,
- N'Cơ sở Long Biên mới mở nhưng chất lượng không thua các chi nhánh khác. Arabica Highland có vị hoa quả nhẹ rất thú vị.',
- DATEADD(DAY, -2, GETDATE())),
-(5, N'PT', N'Phương Thảo', 4,
- N'Không gian rộng, phù hợp cả gia đình. Cà phê muối ở đây thêm chút kem béo rất sáng tạo.',
- DATEADD(DAY, -6, GETDATE())),
-(5, N'HV', N'Hoàng Việt', 5,
- N'View nhìn ra khu vui chơi trẻ em rất dễ chịu. Drip coffee chuẩn vị, phục vụ nhanh.',
- DATEADD(DAY, -15, GETDATE()));
+(5, N'ĐA', N'Đức Anh', 5, N'Cơ sở Long Biên mới mở nhưng chất lượng không thua các chi nhánh khác. Arabica Highland có vị hoa quả nhẹ rất thú vị.', DATEADD(DAY, -2, GETDATE())),
+(5, N'PT', N'Phương Thảo', 4, N'Không gian rộng, phù hợp cả gia đình. Cà phê muối ở đây thêm chút kem béo rất sáng tạo.', DATEADD(DAY, -6, GETDATE())),
+(5, N'HV', N'Hoàng Việt', 5, N'View nhìn ra khu vui chơi trẻ em rất dễ chịu. Drip coffee chuẩn vị, phục vụ nhanh.', DATEADD(DAY, -15, GETDATE()));
