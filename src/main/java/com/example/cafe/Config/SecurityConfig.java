@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/toppings/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/sizes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/me").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/stores/**").permitAll()
 
                         //after login for users
                         .requestMatchers("/api/carts/**").authenticated()

@@ -1,5 +1,6 @@
 package com.example.cafe.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,26 +17,32 @@ public class StoreReview {
     private Integer id;
 
     @Column(name = "store_id", nullable = false)
+    @JsonProperty("store_id")
     private Integer storeId;
 
     @Column(name = "user_id")
+    @JsonProperty("user_id")
     private Integer userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(5)")
     private String initials;
 
-    @Column(name = "reviewer_name", nullable = false)
+    @Column(name = "reviewer_name", nullable = false, columnDefinition = "NVARCHAR(100)")
+    @JsonProperty("reviewer_name")
     private String reviewerName;
 
     @Column(nullable = false)
     private Integer stars;
 
-    @Column(name = "review_text", nullable = false)
+    @Column(name = "review_text", nullable = false, columnDefinition = "NVARCHAR(1000)")
+    @JsonProperty("review_text")
     private String reviewText;
 
     @Column(name = "review_date")
+    @JsonProperty("review_date")
     private LocalDateTime reviewDate;
 
     @Column(name = "created_at")
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
 }
