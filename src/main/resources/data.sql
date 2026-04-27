@@ -89,6 +89,7 @@ insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy
 (N'Cà Phê Muối', N'Cà phê', 45000, '/IMG/anh-1.jpg', 1, null, null, 1, 1, 1),
 (N'Bạc Xỉu', N'Cà phê', 55000, '/IMG/bac_xiu.jpg', 2, null, null, 1, 1, 1);
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
+   -- hoặc dùng db online
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
@@ -366,15 +367,15 @@ INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, m
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Indochina Plaza')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Indochina Plaza', N'241 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội', '/IMG/HinhAnh3Coffee.jpg', 21.0380, 105.7846, '08:00', '22:00', 'https://maps.app.goo.gl/example3', N'["Wi-Fi Miễn Phí","Tầng Lầu","Nhạc Sống Cuối Tuần"]');
+(N'Drip Lab-Indochina Plaza', N'241 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội', '/IMG/HinhAnh3Coffee.png   ', 21.0380, 105.7846, '08:00', '22:00', 'https://maps.app.goo.gl/example3', N'["Wi-Fi Miễn Phí","Tầng Lầu","Nhạc Sống Cuối Tuần"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Aeon Mall Hà Đông')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Aeon Mall Hà Đông', N'Khu Dân cư Hoàng Văn Thụ, Dương Nội, Hà Đông, Hà Nội', '/IMG/HinhAnh4Coffee.webp', 20.9812, 105.7469, '09:00', '21:30', 'https://maps.app.goo.gl/example4', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Chỗ Đậu Xe Rộng"]');
+(N'Drip Lab-Aeon Mall Hà Đông', N'Khu Dân cư Hoàng Văn Thụ, Dương Nội, Hà Đông, Hà Nội', '/IMG/HinhAnh4Coffee.png', 20.9812, 105.7469, '09:00', '21:30', 'https://maps.app.goo.gl/example4', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Chỗ Đậu Xe Rộng"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Aeon Mall Long Biên')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Aeon Mall Long Biên', N'27 Cổ Linh, Long Biên, Hà Nội', '/IMG/HinhAnh5Coffee.jpg', 21.0486, 105.9001, '09:00', '21:30', 'https://maps.app.goo.gl/example5', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Khu Vui Chơi Trẻ Em"]');
+(N'Drip Lab-Aeon Mall Long Biên', N'27 Cổ Linh, Long Biên, Hà Nội', '/IMG/HinhAnh5Coffee.png', 21.0486, 105.9001, '09:00', '21:30', 'https://maps.app.goo.gl/example5', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Khu Vui Chơi Trẻ Em"]');
 
 -- SEED REVIEWS Store 1
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 1 AND reviewer_name = N'Nguyễn Thanh')
