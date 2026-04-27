@@ -1,6 +1,7 @@
 package com.example.cafe.Controller;
 
 
+import com.example.cafe.DTO.CheckoutDTO;
 import com.example.cafe.DTO.OrderUpdateDTO;
 import com.example.cafe.Entity.Order.Order;
 import com.example.cafe.Service.OrderService;
@@ -76,9 +77,9 @@ public class OrderController {
     }
 
     @PostMapping("/checkout/{id}")
-    public ResponseEntity<Order> checkoutOrder(@PathVariable Integer id, @RequestBody Map<String, String> payload) {
-        String note = payload.getOrDefault("note", "Online Order");
-        String method = payload.getOrDefault("paymentMethod", "Tiền mặt");
+    public ResponseEntity<Order> checkoutOrder(@PathVariable Integer id, @RequestBody CheckoutDTO dto) {
+        String note = dto.getNote() == null ? "Online order" : dto.getNote();
+        String method = dto.getPaymentMethod() == null ? "Tiền mặt" : dto.getPaymentMethod();
         return new ResponseEntity<>(orderService.createOrder(id, note, method), HttpStatus.OK);
     }
 
