@@ -30,6 +30,11 @@ public class CartItem {
 
     private Integer quantity;
 
+
+    private Integer ice;
+
+    private Integer sugar;
+
     @ManyToOne
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Size size;

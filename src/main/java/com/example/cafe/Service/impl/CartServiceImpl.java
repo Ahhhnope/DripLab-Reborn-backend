@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +45,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addItem(Integer userId, Integer drinkId, Integer quantity, Integer sizeId, List<Integer> toppingIDList) {
+    public Cart addItem(Integer userId, CartItemRequest cartItemRequest) {
+        Integer drinkId = cartItemRequest.getDrinkId();
+        Integer sizeId = cartItemRequest.getSizeId();
+        Integer quantity = cartItemRequest.getQuantity();
+        Integer ice = cartItemRequest.getIce();
+        Integer sugar = cartItemRequest.getSugar();
+        List<Integer> toppingIDList = cartItemRequest.getToppings();
+
         System.out.println("Processing add for User: " + userId + " Drink: " + drinkId);
         //find the correct cart
         Cart cart = getCartByUserId(userId);
@@ -57,29 +65,61 @@ public class CartServiceImpl implements CartService {
             throw new CustomResourceNotFound("Đồ uống này hiện không có trong thực đơn");
         }
 
-        //combine into a CartItem
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setDrink(drink);
-        cartItem.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new CustomResourceNotFound("Size not found: " + sizeId)));
-        cartItem.setQuantity(quantity);
+        //check if an item like that already exist in the cart
+        List<CartItem> existingCartItems = cartItemRepository.findByCartId(cart.getId());
 
-        CartItem savedCartItem = cartItemRepository.save(cartItem);
+        CartItem existingCartItem = existingCartItems.stream()
+                .filter(item -> item.getDrink().getId().equals(drinkId))
+                .filter(item -> item.getSize().getId().equals(sizeId))
+                .filter(item -> item.getIce().equals(ice))
+                .filter(item -> item.getSugar().equals(sugar))
+                .filter(item -> isSameToppings(item.getId(), toppingIDList))
+                .findFirst().orElse(null);
 
-        // Add toppings if exist :o
-        if (toppingIDList != null) {
-            for (Integer toppingId : toppingIDList) {
-                toppingRepository.findById(toppingId).ifPresent(topping -> {
-                    CartItemTopping cit = new CartItemTopping();
-                    cit.setCartItem(savedCartItem);
-                    cit.setTopping(topping);
-                    cartItemToppingsRepository.save(cit);
-                });
+        if (existingCartItem != null) {
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+            cartItemRepository.save(existingCartItem);
+        } else {
+
+            //combine into a CartItem
+            CartItem cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setDrink(drink);
+            cartItem.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new CustomResourceNotFound("Size not found: " + sizeId)));
+            cartItem.setIce(ice);
+            cartItem.setSugar(sugar);
+            cartItem.setQuantity(quantity);
+
+            CartItem savedCartItem = cartItemRepository.save(cartItem);
+
+            // Add toppings if exist :o
+            if (toppingIDList != null) {
+                for (Integer toppingId : toppingIDList) {
+                    toppingRepository.findById(toppingId).ifPresent(topping -> {
+                        CartItemTopping cit = new CartItemTopping();
+                        cit.setCartItem(savedCartItem);
+                        cit.setTopping(topping);
+                        cartItemToppingsRepository.save(cit);
+                    });
+                }
             }
         }
 
         // Return cart with item
         return cartRepository.findByUserId(userId);
+    }
+
+    private boolean isSameToppings(Integer cartItemId, List<Integer> requestToppingIds) {
+        List<Integer> existingToppings = cartItemToppingsRepository.findAll().stream()
+                .filter(cit -> cit.getCartItem().getId().equals(cartItemId)) // Get the cart item from the cartItemId
+                .map(cit -> cit.getTopping().getId()) // Get the toppings of the above cart item
+                .toList();
+
+        List<Integer> sortedToppingIds = null;
+        if (requestToppingIds != null) {
+            sortedToppingIds = requestToppingIds.stream().sorted().toList();
+        }
+        return sortedToppingIds.equals(existingToppings);
     }
 
     @Transactional

@@ -40,6 +40,10 @@ public class OrderItem {
 
     private Float basePriceAtPurchase;
 
+    private Integer ice;
+
+    private Integer sugar;
+
 
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)

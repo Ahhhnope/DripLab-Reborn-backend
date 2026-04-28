@@ -10,7 +10,7 @@ public interface CartService {
 
     Cart getCartByUserId(int userId);
 
-    Cart addItem(Integer userId, Integer drinkId, Integer quantity, Integer sizeId, List<Integer> toppingIDList);
+    Cart addItem(Integer userId, CartItemRequest cartItemRequest);
 
     Cart updateItem(Integer cartItemId, CartItemRequest cartItemRequest);
 
