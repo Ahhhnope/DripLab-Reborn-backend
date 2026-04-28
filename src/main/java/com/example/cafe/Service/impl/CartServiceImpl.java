@@ -113,7 +113,7 @@ public class CartServiceImpl implements CartService {
         List<Integer> existingToppings = cartItemToppingsRepository.findAll().stream()
                 .filter(cit -> cit.getCartItem().getId().equals(cartItemId)) // Get the cart item from the cartItemId
                 .map(cit -> cit.getTopping().getId()) // Get the toppings of the above cart item
-                .toList();
+                .sorted().toList();
 
         List<Integer> sortedToppingIds = null;
         if (requestToppingIds != null) {
