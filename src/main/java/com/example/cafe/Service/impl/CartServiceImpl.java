@@ -1,6 +1,7 @@
 package com.example.cafe.Service.impl;
 
 import com.example.cafe.DTO.CartItemRequest;
+import com.example.cafe.DTO.CheckoutDTO;
 import com.example.cafe.Entity.Cart.Cart;
 import com.example.cafe.Entity.Cart.CartItem;
 import com.example.cafe.Entity.Cart.CartItemTopping;
@@ -188,5 +189,34 @@ public class CartServiceImpl implements CartService {
         //WIP
     }
 
+    @Override
+    @Transactional
+    public Order checkoutSelected(Integer userId, CheckoutDTO checkoutDTO) {
+        List<Integer> cartItemIds = checkoutDTO.getCartItemIds();
+
+        if (cartItemIds == null || cartItemIds.isEmpty()) {
+            throw new RuntimeException("Vui lòng chọn ít nhất một sản phẩm");
+        }
+
+        Cart cart = cartRepository.findByUserId(userId);
+
+        // ✅ Chỉ lấy item được chọn, đảm bảo thuộc cart của đúng user
+        List<CartItem> selectedItems = cartItemRepository.findAllById(cartItemIds)
+                .stream()
+                .filter(item -> item.getCart().getId().equals(cart.getId()))
+                .toList();
+
+        if (selectedItems.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy sản phẩm hợp lệ");
+        }
+
+        // ✅ Gọi method mới — KHÔNG xóa cart
+        return orderService.createOrderFromSelectedItems(
+                userId,
+                selectedItems,
+                checkoutDTO.getNote(),
+                checkoutDTO.getPaymentMethod()
+        );
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.cafe.Service;
 
 import com.example.cafe.DTO.OrderUpdateDTO;
+import com.example.cafe.Entity.Cart.CartItem;
 import com.example.cafe.Entity.Order.Order;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,6 @@ public interface OrderService {
     List<Order> getOrdersByUserId(Integer userId);
     List<Order> findActiveOrdersByUserId(Integer userId);
     List<Order> findOrderHistoryByUserId(Integer userId);
+    Order createOrderFromSelectedItems(Integer userId, List<CartItem> selectedItems,
+                                       String note, String paymentMethod);
 }

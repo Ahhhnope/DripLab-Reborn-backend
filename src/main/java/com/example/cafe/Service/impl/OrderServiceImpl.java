@@ -337,6 +337,99 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByUser_IdAndStatusInOrderByOrderDateDesc(userId, historyStatuses);
     }
 
+    @Transactional
+    @Override
+    public Order createOrderFromSelectedItems(Integer userId, List<CartItem> selectedItems,
+                                              String note, String paymentMethod) {
+        if (selectedItems == null || selectedItems.isEmpty()) {
+            throw new CustomResourceNotFound("Không có sản phẩm nào được chọn");
+        }
 
+        // Tính giá chỉ từ selectedItems
+        float originalPrice = 0;
+        for (CartItem cartItem : selectedItems) {
+            float drinkPrice = cartItem.getDrink().getBasePrice();
+            if (cartItem.getSize() != null) {
+                drinkPrice += cartItem.getSize().getPrice();
+            }
+            List<CartItemTopping> toppings =
+                    cartItemToppingsRepository.findByCartItemId(cartItem.getId());
+            for (CartItemTopping cit : toppings) {
+                drinkPrice += cit.getTopping().getPrice();
+            }
+            originalPrice += (drinkPrice * cartItem.getQuantity());
+        }
+
+        double taxAmount = 0;
+        double discountAmount = 0;
+        double shippingFee = 0;
+        if (note != null && note.toLowerCase().contains("online")) {
+            shippingFee = (originalPrice < 100000) ? 20000 : 0;
+        }
+        double finalPrice = originalPrice + taxAmount + shippingFee - discountAmount;
+
+        // Tạo Order
+        Order order = new Order();
+        order.setOrderNumber((int)(System.currentTimeMillis() % 1000000));
+        order.setOrderDate(LocalDateTime.now());
+        order.setCreatedAt(LocalDateTime.now());
+        order.setUpdatedAt(LocalDateTime.now());
+        order.setPaymentMethod(paymentMethod);
+        order.setNote(note);
+        order.setOriginalPrice(originalPrice);
+        order.setTaxAmount((float) taxAmount);
+        order.setShippingFee((float) shippingFee);
+        order.setDiscountAmount((float) discountAmount);
+        order.setFinalPrice((float) finalPrice);
+
+        if (note != null && note.toLowerCase().contains("online")) {
+            order.setStatus("Chờ xác nhận");
+            order.setType("Online");
+        } else {
+            order.setStatus("Đã giao");
+            order.setType("POS");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomResourceNotFound("Không tìm thấy user: " + userId));
+        order.setUser(user);
+
+        Order savedOrder = orderRepository.save(order);
+
+        // Tạo OrderItem từ selectedItems
+        for (CartItem cartItem : selectedItems) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(savedOrder);
+            orderItem.setDrink(cartItem.getDrink());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setBasePriceAtPurchase(cartItem.getDrink().getBasePrice());
+            orderItem.setSize(cartItem.getSize());
+
+            OrderItem savedOrderItem = orderItemRepository.save(orderItem);
+
+            List<CartItemTopping> toppings =
+                    cartItemToppingsRepository.findByCartItemId(cartItem.getId());
+            for (CartItemTopping cit : toppings) {
+                OrderItemTopping orderItemTopping = new OrderItemTopping();
+                orderItemTopping.setOrderItem(savedOrderItem);
+                orderItemTopping.setTopping(cit.getTopping());
+                orderItemTopping.setBasePriceAtPurchase(cit.getTopping().getPrice());
+                orderItemToppingsRepository.save(orderItemTopping);
+            }
+        }
+
+        // ✅ Xóa ĐÚNG các item đã checkout khỏi DB — chỉ xóa selectedItems
+        for (CartItem cartItem : selectedItems) {
+            cartItemToppingsRepository.deleteByCartItemId(cartItem.getId());
+            cartItemRepository.deleteById(cartItem.getId());
+        }
+
+        // Tạo invoice nếu là POS
+        if ("Đã giao".equals(savedOrder.getStatus())) {
+            generateInvoice(savedOrder);
+        }
+
+        return savedOrder;
+    }
     //genuinely tweaking out rn
 }

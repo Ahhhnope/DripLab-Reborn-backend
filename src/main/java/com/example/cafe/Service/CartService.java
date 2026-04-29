@@ -1,7 +1,9 @@
 package com.example.cafe.Service;
 
 import com.example.cafe.DTO.CartItemRequest;
+import com.example.cafe.DTO.CheckoutDTO;
 import com.example.cafe.Entity.Cart.Cart;
+import com.example.cafe.Entity.Order.Order;
 
 import java.util.List;
 
@@ -19,4 +21,6 @@ public interface CartService {
     Cart removeItem(Integer cartItemId);
 
     void checkout(Integer userId);
+
+    Order checkoutSelected(Integer userId, CheckoutDTO checkoutDTO);
 }

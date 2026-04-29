@@ -1,8 +1,10 @@
 package com.example.cafe.Controller;
 
 import com.example.cafe.DTO.CartItemRequest;
+import com.example.cafe.DTO.CheckoutDTO;
 import com.example.cafe.Entity.Cart.Cart;
 import com.example.cafe.Entity.Cart.CartItem;
+import com.example.cafe.Entity.Order.Order;
 import com.example.cafe.Repository.Cart.CartItemRepository;
 import com.example.cafe.Service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,5 +59,18 @@ public class CartController {
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<Cart> deleteCartItem(@PathVariable Integer id) {
         return new ResponseEntity<>(cartService.removeItem(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/user/{userId}/checkout-selected")
+    public ResponseEntity<?> checkoutSelected(
+            @PathVariable Integer userId,
+            @RequestBody CheckoutDTO checkoutDTO) {
+        try {
+            Order order = cartService.checkoutSelected(userId, checkoutDTO);
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", e.getMessage()));
+        }
     }
 }
