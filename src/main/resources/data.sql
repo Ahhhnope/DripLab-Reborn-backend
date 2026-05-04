@@ -18,7 +18,7 @@ insert into tiers (name, min_point) values
 ('GOD', 1000);
 
 if not exists (select 1 from tables)
-insert into tables (tableNumber, status) values
+insert into tables (table_number, status) values
 (1, N'Còn trống'),
 (2, N'Còn trống'),
 (3, N'Còn trống'),
@@ -33,7 +33,7 @@ insert into tables (tableNumber, status) values
 (12, N'Còn trống'),
 (13, N'Còn trống'),
 (14, N'Còn trống'),
-(15, N'Còn trống'),
+(15, N'Còn trống');
 
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
