@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_promo_codes")
+@CafeTable(name = "user_promo_codes")
 @Data
 @NoArgsConstructor
 public class UserPromoCode {

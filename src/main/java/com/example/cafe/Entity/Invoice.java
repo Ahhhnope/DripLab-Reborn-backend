@@ -1,7 +1,6 @@
 package com.example.cafe.Entity;
 
 import com.example.cafe.Entity.Order.Order;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Table(name = "invoices")
+@CafeTable(name = "invoices")
 @Entity
 @Data
 @NoArgsConstructor

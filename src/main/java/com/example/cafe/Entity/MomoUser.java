@@ -2,13 +2,12 @@ package com.example.cafe.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "momo_users")
+@CafeTable(name = "momo_users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

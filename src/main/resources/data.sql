@@ -17,6 +17,23 @@ insert into tiers (name, min_point) values
 ('HACKER', 500),
 ('GOD', 1000);
 
+if not exists (select 1 from tables)
+insert into tables (tableNumber, status) values
+(1, N'Còn trống'),
+(2, N'Còn trống'),
+(3, N'Còn trống'),
+(4, N'Còn trống'),
+(5, N'Còn trống'),
+(6, N'Còn trống'),
+(7, N'Còn trống'),
+(8, N'Còn trống'),
+(9, N'Còn trống'),
+(10, N'Còn trống'),
+(11, N'Còn trống'),
+(12, N'Còn trống'),
+(13, N'Còn trống'),
+(14, N'Còn trống'),
+(15, N'Còn trống'),
 
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
