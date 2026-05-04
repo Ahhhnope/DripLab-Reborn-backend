@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@CafeTable(name = "store_reviews")
+@Table(name = "store_reviews")
 @Getter
 @Setter
 public class StoreReview {

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@CafeTable(name = "tiers")
+@Table(name = "tiers")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

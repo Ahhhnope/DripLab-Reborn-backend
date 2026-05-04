@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@CafeTable(name = "invoices")
+@Table(name = "invoices")
 @Entity
 @Data
 @NoArgsConstructor

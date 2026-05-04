@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@CafeTable(name = "momo_users")
+@Table(name = "momo_users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

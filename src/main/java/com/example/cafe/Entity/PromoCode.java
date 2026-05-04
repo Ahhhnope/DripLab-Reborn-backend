@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@CafeTable(name = "promo_codes")
+@Table(name = "promo_codes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
