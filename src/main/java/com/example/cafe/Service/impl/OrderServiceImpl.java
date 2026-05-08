@@ -340,7 +340,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Order createOrderFromSelectedItems(Integer userId, List<CartItem> selectedItems,
-                                              String note, String paymentMethod) {
+                                              String note, String paymentMethod,String receiverName, String receiverPhone,
+                                              String shippingAddress) {
         if (selectedItems == null || selectedItems.isEmpty()) {
             throw new CustomResourceNotFound("Không có sản phẩm nào được chọn");
         }
@@ -381,6 +382,9 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingFee((float) shippingFee);
         order.setDiscountAmount((float) discountAmount);
         order.setFinalPrice((float) finalPrice);
+        order.setReceiverName(receiverName);
+        order.setReceiverPhone(receiverPhone);
+        order.setShippingAddress(shippingAddress);
 
         if (note != null && note.toLowerCase().contains("online")) {
             order.setStatus("Chờ xác nhận");

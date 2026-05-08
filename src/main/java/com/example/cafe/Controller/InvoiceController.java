@@ -1,8 +1,10 @@
 package com.example.cafe.Controller;
 
+import com.example.cafe.DTO.InvoiceDTO;
 import com.example.cafe.Entity.Invoice;
 import com.example.cafe.Exception.CustomResourceNotFound;
 import com.example.cafe.Repository.InvoiceRepository;
+import com.example.cafe.Service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +20,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InvoiceController {
     private final InvoiceRepository invoiceRepository;
+    private final InvoiceService invoiceService;  // ✅ thêm
 
+    // ✅ Trả DTO thay vì entity
     @GetMapping
-    public ResponseEntity<List<Invoice>> getAllInvoices() {
-        return new ResponseEntity<>(invoiceRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<InvoiceDTO>> getAllInvoices() {
+        return new ResponseEntity<>(invoiceService.getAllInvoices(), HttpStatus.OK);
     }
 
+    // ✅ Trả DTO thay vì entity
     @GetMapping("/{id}")
-    public ResponseEntity<Invoice> getInvoiceById(@PathVariable int id) {
-        return new ResponseEntity<>(invoiceRepository.findById(id).orElseThrow(() -> new CustomResourceNotFound("Invoice not found: "+id)), HttpStatus.OK);
+    public ResponseEntity<InvoiceDTO> getInvoiceById(@PathVariable int id) {
+        return new ResponseEntity<>(invoiceService.getInvoiceById(id), HttpStatus.OK);
     }
 
+    // 2 endpoint dưới ít dùng, giữ nguyên entity cũng được
     @GetMapping("/order/{id}")
     public ResponseEntity<Invoice> getInvoiceByOrderId(@PathVariable int id) {
         return new ResponseEntity<>(invoiceRepository.findByOrderId(id), HttpStatus.OK);

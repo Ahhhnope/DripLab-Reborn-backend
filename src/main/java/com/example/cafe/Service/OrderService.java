@@ -20,5 +20,7 @@ public interface OrderService {
     List<Order> findActiveOrdersByUserId(Integer userId);
     List<Order> findOrderHistoryByUserId(Integer userId);
     Order createOrderFromSelectedItems(Integer userId, List<CartItem> selectedItems,
-                                       String note, String paymentMethod);
+                                       String note, String paymentMethod,
+                                       String receiverName, String receiverPhone,
+                                       String shippingAddress);
 }

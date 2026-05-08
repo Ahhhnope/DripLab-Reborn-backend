@@ -34,6 +34,12 @@ public class Order {
     @Column(columnDefinition = "nvarchar(255)")
     private String paymentMethod;
 
+    @Column(columnDefinition = "nvarchar(255)")
+    private String receiverName;
+
+    @Column(columnDefinition = "nvarchar(20)")
+    private String receiverPhone;
+
 
     private Float originalPrice;
 
