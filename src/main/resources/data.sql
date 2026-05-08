@@ -33,7 +33,8 @@ insert into tables (table_number, status) values
 (12, N'Còn trống'),
 (13, N'Còn trống'),
 (14, N'Còn trống'),
-(15, N'Còn trống');
+(15, N'Còn trống'),
+(16, N'Còn trống');
 
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)
@@ -388,11 +389,11 @@ INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, m
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Aeon Mall Hà Đông')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Aeon Mall Hà Đông', N'Khu Dân cư Hoàng Văn Thụ, Dương Nội, Hà Đông, Hà Nội', '/IMG/HinhAnh4Coffee.png', 20.9812, 105.7469, '09:00', '21:30', 'https://maps.app.goo.gl/example4', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Chỗ Đậu Xe Rộng"]');
+(N'Drip Lab-Aeon Mall Hà Đông', N'Khu Dân cư Hoàng Văn Thụ, Dương Nội, Hà Đông, Hà Nội', '/IMG/HinhAnh4Coffee.png', 20.9812, 105.7469, '08:00', '22:00', 'https://maps.app.goo.gl/example4', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Chỗ Đậu Xe Rộng"]');
 
 IF NOT EXISTS (SELECT 1 FROM stores WHERE code = N'Drip Lab-Aeon Mall Long Biên')
 INSERT INTO stores (code, address, image_url, lat, lng, open_time, close_time, maps_url, amenities) VALUES
-(N'Drip Lab-Aeon Mall Long Biên', N'27 Cổ Linh, Long Biên, Hà Nội', '/IMG/HinhAnh5Coffee.png', 21.0486, 105.9001, '09:00', '21:30', 'https://maps.app.goo.gl/example5', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Khu Vui Chơi Trẻ Em"]');
+(N'Drip Lab-Aeon Mall Long Biên', N'27 Cổ Linh, Long Biên, Hà Nội', '/IMG/HinhAnh5Coffee.png', 21.0486, 105.9001, '08:00', '22:00', 'https://maps.app.goo.gl/example5', N'["Wi-Fi Miễn Phí","Trong Trung Tâm Thương Mại","Khu Vui Chơi Trẻ Em"]');
 
 -- SEED REVIEWS Store 1
 IF NOT EXISTS (SELECT 1 FROM store_reviews WHERE store_id = 1 AND reviewer_name = N'Nguyễn Thanh')

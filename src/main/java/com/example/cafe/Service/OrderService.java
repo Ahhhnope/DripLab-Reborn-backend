@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface OrderService {
     List<Order> getAllOrders();
-    Order createOrder(Integer userID, String note, String paymentMethod);
+    Order createOrder(Integer userID, String note, String paymentMethod, List<Integer> tables);
     Order getOrderById(Integer orderID);
     Order updateOrderStatus(Integer orderId, String status);
     void cancelOrderForUser(Integer orderID, OrderUpdateDTO dto);
