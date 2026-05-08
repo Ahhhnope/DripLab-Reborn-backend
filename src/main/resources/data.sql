@@ -33,7 +33,8 @@ insert into tables (table_number, status) values
 (12, N'Còn trống'),
 (13, N'Còn trống'),
 (14, N'Còn trống'),
-(15, N'Còn trống');
+(15, N'Còn trống'),
+(16, N'Còn trống');
 
 -- users
 -- admin@gmail.com     : bcrypt of "lmao"  (fixed from plain text!)

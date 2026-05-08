@@ -58,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
     private final IceCreamRepository iceCreamRepository;
     private final InstructionRepository instructionRepository;
     private final UserRepository userRepository;
+    private final CafeTableRepository cafeTableRepository;
 
 
     @Override
@@ -67,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order createOrder(Integer userID, String note, String paymentMethod) {
+    public Order createOrder(Integer userID, String note, String paymentMethod, List<Integer> tables) {
         //Boi this is long asf
 
         // Takes out all items in cart into a list
@@ -123,6 +124,10 @@ public class OrderServiceImpl implements OrderService {
         order.setDiscountAmount((float) discountAmount);
         order.setFinalPrice((float) finalPrice);
 
+        if (tables != null && !tables.isEmpty()) {
+            order.setTableNumbers(tables.toString().replace("[", "").replace("]", ""));
+        }
+
         if ("Online Order".equalsIgnoreCase(note)) {
             order.setStatus("Chờ xác nhận");
             order.setType("Online");
@@ -144,7 +149,16 @@ public class OrderServiceImpl implements OrderService {
         // save that boi to get the ID for below
         Order savedOrder = orderRepository.save(order);
 
+        if (tables != null) {
+            for (Integer tableId : tables) {
+                CafeTable tableFound = cafeTableRepository.findById(tableId).orElseThrow(() -> new CustomResourceNotFound("Không tìm thấy bàn id: " + tableId));
 
+                tableFound.setStatus("Đang sử dụng");
+                tableFound.setCurrentOrder(savedOrder);
+
+                cafeTableRepository.save(tableFound);
+            }
+        }
 
         // Save the items for when displaying orders
         for (CartItem cartItem : cartItems) {

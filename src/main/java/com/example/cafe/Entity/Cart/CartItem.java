@@ -2,6 +2,7 @@ package com.example.cafe.Entity.Cart;
 
 import com.example.cafe.Entity.Drink.Drink;
 import com.example.cafe.Entity.Drink.Size;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    @JsonBackReference
     private Cart cart;
 
     @ManyToOne

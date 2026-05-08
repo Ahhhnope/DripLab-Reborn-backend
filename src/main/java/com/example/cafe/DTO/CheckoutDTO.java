@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CheckoutDTO {
+public class  CheckoutDTO {
     private List<Integer> cartItemIds;
     private String note;
     private String paymentMethod;

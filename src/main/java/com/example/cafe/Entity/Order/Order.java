@@ -46,6 +46,7 @@ public class Order {
     private Float finalPrice;
 
 
+    private String tableNumbers;
 
     @Column(columnDefinition = "nvarchar(255)")
     private String note;
