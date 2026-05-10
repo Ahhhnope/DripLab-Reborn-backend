@@ -24,6 +24,11 @@ public class TableController {
         return new ResponseEntity<>(cafeTableRepository.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{currentOrderId}")
+    public ResponseEntity<List<CafeTable>> getTableFromCurrentOrderId(@PathVariable int currentOrderId) {
+        return new ResponseEntity<>(cafeTableRepository.findAllByCurrentOrder_Id(currentOrderId), HttpStatus.OK);
+    }
+
     @PutMapping("/reserve/{tableID}")
     public ResponseEntity<CafeTable> reserveTable(@PathVariable("tableID") int tableID) {
         CafeTable tableFound = cafeTableRepository.findById(tableID).orElseThrow(() -> new CustomResourceNotFound("không tìm thấy bàn với id: " + tableID));

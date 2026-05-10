@@ -405,7 +405,7 @@ public class OrderServiceImpl implements OrderService {
             order.setType("Online");
         } else {
             order.setStatus("Đã giao");
-            order.setType("POS");
+            order.setType("Tại quầy");
         }
 
         User user = userRepository.findById(userId)
