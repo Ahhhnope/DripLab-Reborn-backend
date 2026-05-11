@@ -69,8 +69,10 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestParam Integer userId,
                                          @RequestParam(required = false) String note,
                                          @RequestParam(defaultValue = "Tiền mặt") String paymentMethod,
-                                         @RequestParam(required = false) List<Integer> tables) {
-        return new ResponseEntity<>(orderService.createOrder(userId, note, paymentMethod, tables), HttpStatus.CREATED);
+                                         @RequestParam(required = false) List<Integer> tables,
+                                         @RequestParam(required = false) String receiverName,
+                                         @RequestParam(required = false) String receiverPhone) {
+        return new ResponseEntity<>(orderService.createOrder(userId, note, paymentMethod, tables, receiverName, receiverPhone), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/remove/{id}")
@@ -83,7 +85,7 @@ public class OrderController {
     public ResponseEntity<Order> checkoutOrder(@PathVariable Integer id, @RequestBody CheckoutDTO dto) {
         String note = dto.getNote() == null ? "Online order" : dto.getNote();
         String method = dto.getPaymentMethod() == null ? "Tiền mặt" : dto.getPaymentMethod();
-        return new ResponseEntity<>(orderService.createOrder(id, note, method, List.of()), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.createOrder(id, note, method, List.of(), null, null), HttpStatus.OK);
     }
 
 }

@@ -86,7 +86,7 @@ public class AuthController {
                 .httpOnly(true)
                 .path("/")
                 .domain("localhost")
-                .maxAge(60 * 60) //1 hour
+                .maxAge(60 * 120) //2 hour
                 .build();
 
         return ResponseEntity.status(201)
