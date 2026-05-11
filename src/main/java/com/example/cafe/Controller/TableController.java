@@ -29,12 +29,15 @@ public class TableController {
         return new ResponseEntity<>(cafeTableRepository.findAllByCurrentOrder_Id(currentOrderId), HttpStatus.OK);
     }
 
+    // đặt bàn
     @PutMapping("/reserve/{tableID}")
     public ResponseEntity<CafeTable> reserveTable(@PathVariable("tableID") int tableID) {
         CafeTable tableFound = cafeTableRepository.findById(tableID).orElseThrow(() -> new CustomResourceNotFound("không tìm thấy bàn với id: " + tableID));
-//        Order orderFound = orderRepository.findById(orderId).orElseThrow(() -> new CustomResourceNotFound("không tìm thấy order: "+orderId));
+//        Order orderFound = orderRepository.findById(orderID).orElseThrow(() -> new CustomResourceNotFound("không tìm thấy order: "+orderID));
 
         tableFound.setStatus("Đang sử dụng");
+
+
 //        tableFound.setCurrentOrder(orderFound);
 
         CafeTable saved = cafeTableRepository.save(tableFound);
