@@ -101,11 +101,22 @@ insert into sizes (name, price) values
 -- drinks
 IF NOT EXISTS (SELECT 1 FROM drinks)
 insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy_cream_id, ice_cream_id, milk_id, instruction_id, active) values
-(N'Matcha Latte', N'Trà', 45000, '/IMG/geisha.png', null, null, null, null, 2, 1),
-(N'Trà Đào', N'Trà', 25000, '/IMG/hong-tra-sua.jpg', null, 1, 1, 1, 1, 1),
-(N'Cà Phê Sữa Đá', N'Cà phê', 35000, '/IMG/classic-latte.png', 2, 1, 2, 2, 1, 1),
-(N'Cà Phê Muối', N'Cà phê', 45000, '/IMG/anh-1.jpg', 1, null, null, 1, 1, 1),
-(N'Bạc Xỉu', N'Cà phê', 55000, '/IMG/bac_xiu.jpg', 2, null, null, 1, 1, 1);
+-- Cà phê (A1)
+(N'Bạc Xỉu',        N'Cà phê', 55000, '/IMG/A1_BXKX.jpg',        2, null, null, 1, 1, 1),
+(N'Cappuccino',      N'Cà phê', 45000, '/IMG/A1_Capu.jpg',         2, 1,    null, 1, 1, 1),
+(N'Cà Phê Sữa Đá',  N'Cà phê', 35000, '/IMG/A1_ClassicLatte.jpg', 2, 1,    2,    2, 1, 1),
+(N'Cà Phê Phin',    N'Cà phê', 30000, '/IMG/A1_Fein.jpg',         1, null, null, null, 1, 1),
+(N'Latte',           N'Cà phê', 45000, '/IMG/A1_late.jpg',          2, null, null, 1, 1, 1),
+(N'Cà Phê Phin Nâu',N'Cà phê', 35000, '/IMG/A1_PhinNau.png',      1, null, null, 1, 1, 1),
+-- Trà (A2)
+(N'Trà Geisha',      N'Trà',    45000, '/IMG/A2_Geisha.jpg',       null, null, null, null, 2, 1),
+(N'Matcha Latte',    N'Trà',    45000, '/IMG/A2_Matcha.jpg',       null, null, null, null, 2, 1),
+(N'Matcha Nóng',     N'Trà',    40000, '/IMG/A2_MatchaNong.jpg',   null, null, null, null, 2, 1),
+(N'Mocha',           N'Trà',    45000, '/IMG/A2_Mocha.png',        null, null, null, null, 2, 1),
+(N'Trà Đào',         N'Trà',    25000, '/IMG/A2_TraDao.jpg',       null, 1,    1,    1,    1, 1),
+(N'Trà Gừng',        N'Trà',    30000, '/IMG/A2_TraGung.jpg',      null, null, null, null, 2, 1),
+(N'Trà Sen Vàng',    N'Trà',    35000, '/IMG/A2_TraSenVang.jpg',   null, null, null, null, 2, 1),
+(N'Trà Vải',         N'Trà',    30000, '/IMG/A2_TraVai.jpg',       null, null, null, null, 2, 1);
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
    -- hoặc dùng db online
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),

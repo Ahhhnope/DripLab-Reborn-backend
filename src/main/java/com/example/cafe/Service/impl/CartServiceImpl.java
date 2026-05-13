@@ -200,10 +200,6 @@ public class CartServiceImpl implements CartService {
 
         Cart cart = cartRepository.findByUserId(userId);
 
-<<<<<<< HEAD
-=======
-        //chỉ lấy item được chọn, đảm bảo thuộc cart của đúng user
->>>>>>> 87457aeb3a699962c736380163a439984092b615
         List<CartItem> selectedItems = cartItemRepository.findAllById(cartItemIds)
                 .stream()
                 .filter(item -> item.getCart().getId().equals(cart.getId()))
@@ -213,10 +209,6 @@ public class CartServiceImpl implements CartService {
             throw new RuntimeException("Không tìm thấy sản phẩm hợp lệ");
         }
 
-<<<<<<< HEAD
-=======
-        //gọi method mới — KHÔNG xóa cart
->>>>>>> 87457aeb3a699962c736380163a439984092b615
         return orderService.createOrderFromSelectedItems(
                 userId,
                 selectedItems,
