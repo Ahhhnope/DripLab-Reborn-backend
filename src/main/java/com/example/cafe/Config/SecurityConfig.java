@@ -42,6 +42,7 @@ public class SecurityConfig {
                         //after login for users
                         .requestMatchers("/api/carts/**").authenticated()
                         .requestMatchers("/api/orders/**").authenticated()
+                        .requestMatchers("/api/tiers/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/invoices/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/users/me").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/users/me").authenticated()

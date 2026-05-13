@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order createOrder(Integer userID, String note, String paymentMethod, List<Integer> tables) {
+    public Order createOrder(Integer userID, String note, String paymentMethod, List<Integer> tables, String receiverName, String receiverPhone) {
         //Boi this is long asf
 
         // Takes out all items in cart into a list
@@ -123,6 +123,8 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingFee((float) shippingFee);
         order.setDiscountAmount((float) discountAmount);
         order.setFinalPrice((float) finalPrice);
+        order.setReceiverName(receiverName);
+        order.setReceiverPhone(receiverPhone);
 
         if (tables != null && !tables.isEmpty()) {
             order.setTableNumbers(tables.toString().replace("[", "").replace("]", ""));
@@ -133,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
             order.setType("Online");
         } else {
             order.setStatus("Đã giao");
-            order.setType("POS");
+            order.setType("Tại quầy");
         }
 
 
@@ -405,7 +407,7 @@ public class OrderServiceImpl implements OrderService {
             order.setType("Online");
         } else {
             order.setStatus("Đã giao");
-            order.setType("POS");
+            order.setType("Tại quầy");
         }
 
         User user = userRepository.findById(userId)
