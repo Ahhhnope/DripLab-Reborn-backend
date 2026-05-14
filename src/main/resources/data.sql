@@ -116,7 +116,8 @@ insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy
 (N'Trà Đào',         N'Trà',    25000, '/IMG/A2_TraDao.jpg',       null, 1,    1,    1,    1, 1),
 (N'Trà Gừng',        N'Trà',    30000, '/IMG/A2_TraGung.jpg',      null, null, null, null, 2, 1),
 (N'Trà Sen Vàng',    N'Trà',    35000, '/IMG/A2_TraSenVang.jpg',   null, null, null, null, 2, 1),
-(N'Trà Vải',         N'Trà',    30000, '/IMG/A2_TraVai.jpg',       null, null, null, null, 2, 1);
+(N'Trà Vải',         N'Trà',    30000, '/IMG/A2_TraVai.jpg',       null, null, null, null, 2, 1),
+(N'Custom coffee', N'Cà phê',    30000, '/IMG/lel.png',       null, null, null, null, null, 0);
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
    -- hoặc dùng db online
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
