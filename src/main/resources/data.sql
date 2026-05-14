@@ -4,6 +4,19 @@ insert into workers (full_name, account, password) values
 (N'americano', 'abc123', 'lmao'),
 (N'robusta', 'kikiki', 'lol');
 
+INSERT INTO workers (full_name, account, password)
+SELECT v.* FROM (VALUES
+                     (N'Nguyễn Văn An',   'nguyenvanan',  'pass1234'),
+                     (N'Trần Thị Bảo',    'trантhibao',   'pass1234'),
+                     (N'Lê Minh Châu',    'leminhchau',   'pass1234'),
+                     (N'Phạm Quốc Dũng',  'phamquocdung', 'pass1234'),
+                     (N'Hoàng Thị Em',    'hoangthiem',   'pass1234'),
+                     (N'Đỗ Văn Phúc',     'dovanhphuc',   'pass1234')
+                ) AS v(full_name, account, password)
+WHERE NOT EXISTS (
+    SELECT 1 FROM workers w WHERE w.account = v.account
+);
+
 -- momo_users
 IF NOT EXISTS (SELECT 1 FROM momo_users)
 insert into momo_users (full_name, phone) values
@@ -148,6 +161,23 @@ insert into promo_codes (code, category, name, min_order_value, value, start_dat
   ('VIP30',     N'PHẦN TRĂM', N'VIP giảm 30%', 100000,    30.00, '2025-12-22 00:00:00', '2026-12-22 23:59:59', 1, N'trên web', 67),
   ('SAVE50K',   N'TRỪ TIỀN',  N'Giảm 50.000đ', 0,      50000.00, '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1, N'đổi thưởng', 69);
 
+
+INSERT INTO promo_codes (code, category, name, min_order_value, value, start_date, end_date, status, display_location, quantity)
+SELECT v.* FROM (VALUES
+                     ('WELCOME15',  N'PHẦN TRĂM', N'Chào mừng giảm 15%',       0,         15.00, '2026-06-01', '2026-12-31 23:59:59', 1, N'trên web',    500),
+                     ('FLASH20',    N'PHẦN TRĂM', N'Flash sale 20%',        150000,        20.00, '2026-07-07', '2026-07-07 23:59:59', 1, N'trên web',    200),
+                     ('SUMMER25',   N'PHẦN TRĂM', N'Hè giảm 25%',           200000,        25.00, '2026-06-01', '2026-08-31 23:59:59', 1, N'trên web',    300),
+                     ('FREESHIP',   N'TRỪ TIỀN',  N'Miễn phí vận chuyển',   100000,     30000.00, '2026-06-01', '2026-09-30 23:59:59', 1, N'trên web',    999),
+                     ('BIRTHDAY50', N'TRỪ TIỀN',  N'Sinh nhật giảm 50.000đ', 80000,     50000.00, '2026-01-01', '2026-12-31 23:59:59', 1, N'đổi thưởng', 100),
+                     ('MEGA100K',   N'TRỪ TIỀN',  N'Giảm 100.000đ đơn lớn', 500000,   100000.00, '2026-06-15', '2026-12-31 23:59:59', 1, N'trên web',     50),
+                     ('APP10',      N'PHẦN TRĂM', N'App giảm 10%',           50000,         10.00, '2026-06-01', '2026-12-31 23:59:59', 1, N'trên app',   999),
+                     ('REFER200K',  N'TRỪ TIỀN',  N'Giới thiệu bạn 200.000đ',300000,   200000.00, '2026-06-01', '2026-12-31 23:59:59', 1, N'đổi thưởng', 200),
+                     ('ENDYEAR40',  N'PHẦN TRĂM', N'Cuối năm giảm 40%',      250000,        40.00, '2026-12-20', '2026-12-31 23:59:59', 1, N'trên web',   150),
+                     ('NEWMEM20K',  N'TRỪ TIỀN',  N'Thành viên mới 20.000đ',      0,     20000.00, '2026-06-01', '2026-12-31 23:59:59', 1, N'trên web',   999)
+                ) AS v(code, category, name, min_order_value, value, start_date, end_date, status, display_location, quantity)
+WHERE NOT EXISTS (
+    SELECT 1 FROM promo_codes p WHERE p.code = v.code
+);
 
 -- orders
 IF NOT EXISTS (SELECT 1 FROM sys.default_constraints WHERE name = 'DF_Orders_CreatedAt')
