@@ -208,7 +208,14 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setDrink(cartItem.getDrink());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setBasePriceAtPurchase(cartItem.getDrink().getBasePrice());
+            orderItem.setIce(cartItem.getIce());
+            orderItem.setSugar(cartItem.getSugar());
             orderItem.setSize(cartItem.getSize());
+
+
+            if (cartItem.getBase() != null || !cartItem.getBase().isBlank()) orderItem.setBaseName(cartItem.getBase());
+            if (cartItem.getCoffeeBean() != null) orderItem.setBeanName(cartItem.getCoffeeBean().getName());
+            if (cartItem.getMilk() != null) orderItem.setMilkName(cartItem.getMilk().getName());
 
             // same thing as savedOrder
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
@@ -424,6 +431,13 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setBasePriceAtPurchase(cartItem.getDrink().getBasePrice());
             orderItem.setSize(cartItem.getSize());
+            orderItem.setIce(cartItem.getIce());
+            orderItem.setSugar(cartItem.getSugar());
+
+            // SNAPSHOT NAMES
+            if (cartItem.getBase() != null) orderItem.setBaseName(cartItem.getBase());
+            if (cartItem.getCoffeeBean() != null) orderItem.setBeanName(cartItem.getCoffeeBean().getName());
+            if (cartItem.getMilk() != null) orderItem.setMilkName(cartItem.getMilk().getName());
 
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
 

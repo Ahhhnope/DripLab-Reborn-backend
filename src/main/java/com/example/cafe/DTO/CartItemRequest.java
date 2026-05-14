@@ -18,5 +18,10 @@ public class CartItemRequest {
     private Integer sugar;
     private List<Integer> toppings;
 
+    private String base;
+    private Integer beanId;
+    private Integer milkId;
+    private Boolean isCustom;
+
     //ze payload
 }

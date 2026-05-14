@@ -1,6 +1,8 @@
 package com.example.cafe.Entity.Cart;
 
 import com.example.cafe.Entity.Drink.Drink;
+import com.example.cafe.Entity.Drink.Ingredient.CoffeeBean;
+import com.example.cafe.Entity.Drink.Ingredient.Milk;
 import com.example.cafe.Entity.Drink.Size;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -36,6 +38,18 @@ public class CartItem {
     private Integer ice;
 
     private Integer sugar;
+
+    private Boolean isCustom;
+
+    private String base;
+
+    @ManyToOne
+    @JoinColumn(name = "coffee_bean_id")
+    private CoffeeBean coffeeBean;
+
+    @ManyToOne
+    @JoinColumn(name = "milk_id")
+    private Milk milk;
 
     @ManyToOne
     @JoinColumn(name = "size_id", referencedColumnName = "id")

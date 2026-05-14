@@ -56,7 +56,7 @@ insert into tables (table_number, status) values
 IF NOT EXISTS (SELECT 1 FROM users)
 insert into users (full_name, email, password, phone, default_address, avatar, loyalty_point, used_point, tier_id, role) values
 (N'admin', 'admin@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', '0123456789', N'Hà Nội', '/IMG/lel.png', 200000, 0, 3, N'ADMIN'),
-(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', '/IMG/lel.png', 9000000, 0, 3, N'ADMIN'),
+(N'POS', 'posSystem@gmail.com', '$2a$12$pFOPW6MiM8N9ctlwN0SoPehWv.NLB1/A5QMnJegidMUU2Ucj.umzu', null, N'POS', '/IMG/lel.png', 9000000, 0, 3, N'EMPLOYEE'),
 (N'Nguyễn Văn A', 'a@gmail.com', '$2a$12$8fKVVkzn7BVFBA2cKIH.D.9QZUf9vWK2KdmUcuIAsWPlY07bbNToW', '0988888888', N'Hà Nội', '/IMG/lel.png', 99, 0, 1, N'USER');
 
 -- customers
@@ -129,7 +129,8 @@ insert into drinks (name, category, base_price, image_url, coffee_bean_id, heavy
 (N'Trà Đào',         N'Trà',    25000, '/IMG/A2_TraDao.jpg',       null, 1,    1,    1,    1, 1),
 (N'Trà Gừng',        N'Trà',    30000, '/IMG/A2_TraGung.jpg',      null, null, null, null, 2, 1),
 (N'Trà Sen Vàng',    N'Trà',    35000, '/IMG/A2_TraSenVang.jpg',   null, null, null, null, 2, 1),
-(N'Trà Vải',         N'Trà',    30000, '/IMG/A2_TraVai.jpg',       null, null, null, null, 2, 1);
+(N'Trà Vải',         N'Trà',    30000, '/IMG/A2_TraVai.jpg',       null, null, null, null, 2, 1),
+(N'Custom coffee', N'Cà phê',    30000, '/IMG/lel.png',       null, null, null, null, null, 0);
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),
    -- hoặc dùng db online
 -- (N'Lmao', N'Trà', 22000, null, 2, 1, 3, 2, 3, 1),

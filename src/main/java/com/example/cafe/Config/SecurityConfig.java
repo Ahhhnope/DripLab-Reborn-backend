@@ -51,6 +51,9 @@ public class SecurityConfig {
                         .requestMatchers("/IMG/**").permitAll()
                         .requestMatchers("/api/upload/**").permitAll()
 
+                        //employee can only do POS, tables, orders and invoices
+                        .requestMatchers("/api/tables/**").hasRole("EMPLOYEE")
+
                         //admin can just do everything ;-;
                         .anyRequest().hasRole("ADMIN")
                 )

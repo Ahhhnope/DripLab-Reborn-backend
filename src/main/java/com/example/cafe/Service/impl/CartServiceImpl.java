@@ -12,6 +12,8 @@ import com.example.cafe.Repository.Cart.CartItemRepository;
 import com.example.cafe.Repository.Cart.CartItemToppingRepository;
 import com.example.cafe.Repository.Cart.CartRepository;
 import com.example.cafe.Repository.Drink.DrinkRepository;
+import com.example.cafe.Repository.Drink.Ingredient.CoffeeBeanRepository;
+import com.example.cafe.Repository.Drink.Ingredient.MilkRepository;
 import com.example.cafe.Repository.Drink.ToppingRepository;
 import com.example.cafe.Repository.SizeRepository;
 import com.example.cafe.Service.CartService;
@@ -33,6 +35,8 @@ public class CartServiceImpl implements CartService {
     private final SizeRepository sizeRepository;
     private final CartItemToppingRepository cartItemToppingsRepository;
     private final OrderService orderService;
+    private final CoffeeBeanRepository coffeeBeanRepository;
+    private final MilkRepository milkRepository;
 
 
     @Override
@@ -52,6 +56,10 @@ public class CartServiceImpl implements CartService {
         Integer quantity = cartItemRequest.getQuantity();
         Integer ice = cartItemRequest.getIce();
         Integer sugar = cartItemRequest.getSugar();
+        Boolean isCustom = cartItemRequest.getIsCustom();
+        String base = cartItemRequest.getBase();
+        Integer beanId = cartItemRequest.getBeanId();
+        Integer milkId = cartItemRequest.getMilkId();
         List<Integer> toppingIDList = cartItemRequest.getToppings();
 
         System.out.println("Processing add for User: " + userId + " Drink: " + drinkId);
@@ -62,7 +70,7 @@ public class CartServiceImpl implements CartService {
         Drink drink = drinkRepository.findById(drinkId).orElseThrow(() -> new CustomResourceNotFound("Drink not found: " + drinkId));
 
         //check if the drink is "active"
-        if (!drink.getActive()) {
+        if (!drink.getActive() && !cartItemRequest.getIsCustom()) {
             throw new CustomResourceNotFound("Đồ uống này hiện không có trong thực đơn");
         }
 
@@ -90,6 +98,10 @@ public class CartServiceImpl implements CartService {
             cartItem.setIce(ice);
             cartItem.setSugar(sugar);
             cartItem.setQuantity(quantity);
+            cartItem.setIsCustom(isCustom);
+            cartItem.setBase(base);
+            cartItem.setCoffeeBean(coffeeBeanRepository.findById(beanId).orElseThrow(() -> new CustomResourceNotFound("Coffee bean not found: " + beanId)));
+            if (milkId != null) cartItem.setMilk(milkRepository.findById(milkId).orElseThrow(() -> new CustomResourceNotFound("Milk not found: " + milkId)));
 
             CartItem savedCartItem = cartItemRepository.save(cartItem);
 
@@ -200,7 +212,6 @@ public class CartServiceImpl implements CartService {
 
         Cart cart = cartRepository.findByUserId(userId);
 
-
         List<CartItem> selectedItems = cartItemRepository.findAllById(cartItemIds)
                 .stream()
                 .filter(item -> item.getCart().getId().equals(cart.getId()))
@@ -209,7 +220,6 @@ public class CartServiceImpl implements CartService {
         if (selectedItems.isEmpty()) {
             throw new RuntimeException("Không tìm thấy sản phẩm hợp lệ");
         }
-
 
         return orderService.createOrderFromSelectedItems(
                 userId,
