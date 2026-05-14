@@ -213,7 +213,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setSize(cartItem.getSize());
 
 
-            if (cartItem.getBase() != null || !cartItem.getBase().isEmpty()) orderItem.setBaseName(cartItem.getBase());
+            if (cartItem.getBase() != null) orderItem.setBaseName(cartItem.getBase());
             if (cartItem.getCoffeeBean() != null) orderItem.setBeanName(cartItem.getCoffeeBean().getName());
             if (cartItem.getMilk() != null) orderItem.setMilkName(cartItem.getMilk().getName());
 
