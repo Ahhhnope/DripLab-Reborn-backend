@@ -99,9 +99,11 @@ public class CartServiceImpl implements CartService {
             cartItem.setSugar(sugar);
             cartItem.setQuantity(quantity);
             cartItem.setIsCustom(isCustom);
-            cartItem.setBase(base);
-            cartItem.setCoffeeBean(coffeeBeanRepository.findById(beanId).orElseThrow(() -> new CustomResourceNotFound("Coffee bean not found: " + beanId)));
-            if (milkId != null) cartItem.setMilk(milkRepository.findById(milkId).orElseThrow(() -> new CustomResourceNotFound("Milk not found: " + milkId)));
+            if (isCustom) {
+                cartItem.setBase(base);
+                if (beanId != null) cartItem.setCoffeeBean(coffeeBeanRepository.findById(beanId).orElseThrow(() -> new CustomResourceNotFound("Coffee bean not found: " + beanId)));
+                if (milkId != null) cartItem.setMilk(milkRepository.findById(milkId).orElseThrow(() -> new CustomResourceNotFound("Milk not found: " + milkId)));
+            }
 
             CartItem savedCartItem = cartItemRepository.save(cartItem);
 
