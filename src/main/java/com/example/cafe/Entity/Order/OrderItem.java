@@ -45,6 +45,15 @@ public class OrderItem {
     private Integer sugar;
 
 
+    private Boolean isCustom;
+
+    private String baseName;
+
+    private String beanName;
+
+    private String milkName;
+
+
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     @JsonManagedReference
