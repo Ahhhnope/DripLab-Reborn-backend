@@ -1,13 +1,17 @@
 package com.example.cafe.Controller;
 
+import com.example.cafe.DTO.ForgotPasswordRequest;
 import com.example.cafe.DTO.LoginRequest;
+import com.example.cafe.DTO.ResetPasswordRequest;
 import com.example.cafe.DTO.UserRequest;
+import com.example.cafe.DTO.VerifyOtpRequest;
 import com.example.cafe.Entity.Cart.Cart;
 import com.example.cafe.Entity.User;
 import com.example.cafe.Exception.CustomResourceNotFound;
 import com.example.cafe.Repository.Cart.CartRepository;
 import com.example.cafe.Repository.UserRepository;
 import com.example.cafe.Security.JwtService;
+import com.example.cafe.Service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +31,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
@@ -38,8 +43,6 @@ public class AuthController {
 
         String token = jwtService.generateToken(user.getEmail());
 
-
-        //save that token to a cookie =w=
         ResponseCookie tokenCookie = ResponseCookie.from("token", token)
                 .httpOnly(true)
                 .path("/")
@@ -48,14 +51,14 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, tokenCookie.toString()).body(Map.of(
-                        "user", Map.of(
-                                "id", user.getId(),
-                                "fullName", user.getFullName(),
-                                "email", user.getEmail(),
-                                "role", user.getRole(),
-                                "avatar", user.getAvatar() != null ? user.getAvatar() : "null"
-                        )
-                ));
+                "user", Map.of(
+                        "id", user.getId(),
+                        "fullName", user.getFullName(),
+                        "email", user.getEmail(),
+                        "role", user.getRole(),
+                        "avatar", user.getAvatar() != null ? user.getAvatar() : "null"
+                )
+        ));
     }
 
     @PostMapping("/register")
@@ -74,11 +77,9 @@ public class AuthController {
 
         User saved = userRepository.save(user);
 
-        //assign a cart to them :)
         Cart cart = new Cart();
         cart.setUser(saved);
         cartRepository.save(cart);
-
 
         String token = jwtService.generateToken(saved.getEmail());
 
@@ -86,7 +87,7 @@ public class AuthController {
                 .httpOnly(true)
                 .path("/")
                 .domain("localhost")
-                .maxAge(60 * 120) //2 hour
+                .maxAge(60 * 120)
                 .build();
 
         return ResponseEntity.status(201)
@@ -104,16 +105,62 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
-        //create an expired cookie to clear the token on client
         ResponseCookie tokenCookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
                 .path("/")
                 .domain("localhost")
-                .maxAge(0) //immediately expires lmao
+                .maxAge(0)
                 .build();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, tokenCookie.toString())
                 .body(Map.of("message", "Logged out successfully"));
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  FORGOT PASSWORD FLOW
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * Bước 1: Nhận email → tạo OTP → gửi về mail
+     */
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        try {
+            passwordResetService.sendOtp(request.getEmail());
+            return ResponseEntity.ok(Map.of("message", "Mã OTP đã được gửi tới email của bạn."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
+     * Bước 2: Xác nhận OTP
+     */
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody VerifyOtpRequest request) {
+        try {
+            passwordResetService.verifyOtp(request.getEmail(), request.getOtp());
+            return ResponseEntity.ok(Map.of("message", "OTP hợp lệ."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
+     * Bước 3: Đặt lại mật khẩu mới
+     */
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        try {
+            passwordResetService.resetPassword(
+                    request.getEmail(),
+                    request.getOtp(),
+                    request.getNewPassword()
+            );
+            return ResponseEntity.ok(Map.of("message", "Mật khẩu đã được cập nhật thành công."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+        }
     }
 }
