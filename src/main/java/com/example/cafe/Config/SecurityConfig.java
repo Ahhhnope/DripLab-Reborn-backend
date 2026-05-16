@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/upload/**").permitAll()
 
                         //employee can only do POS, tables, orders and invoices
-                        .requestMatchers("/api/tables/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/tables/**").hasAnyRole("EMPLOYEE", "ADMIN")
 
                         //admin can just do everything ;-;
                         .anyRequest().hasRole("ADMIN")
